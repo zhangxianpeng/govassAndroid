@@ -1,14 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragment.HomeFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.lihang.selfmvvm.customview.LeoTitleBar
+        android:id="@+id/my_title"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="@dimen/dp_48"
+        app:hl_textTitle="@string/app_name"
+        app:hl_background="@color/status_background"
+        app:hl_textTitleColor="#fff"
+        app:hl_showLeftBtn="false" />
 
-</FrameLayout>
+    <com.youth.banner.Banner
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_160"
+        android:background="@color/line"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:layout_marginRight="@dimen/dp_15"
+        app:layout_scrollFlags="scroll|snap" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="@dimen/dp_64"
+        android:layout_height="@dimen/dp_22"
+        android:layout_marginTop="@dimen/dp_10"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dp_15"
+        android:text="消息提醒"
+        android:textColor="#ff131008"
+        android:textSize="16sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_project_msg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
