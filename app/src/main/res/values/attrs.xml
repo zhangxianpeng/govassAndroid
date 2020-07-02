@@ -10,23 +10,6 @@
         <attr name="hl_showRightText" format="string" />
         <attr name="hl_rightBtnDrawable" format="reference" />
         <attr name="hl_divideColor" format="color" />
-
-
-
-
-        <!--        <attr name="rightBtnDrawable" format="reference" />-->
-        <!--        <attr name="backgroundDrawable" format="reference" />-->
-        <!--        <attr name="leftBtnText" format="string" />-->
-        <!--        <attr name="rightBtnText" format="string" />-->
-        <!--        <attr name="barTips" format="string" />-->
-        <!--        <attr name="barTitle" format="string" />-->
-        <!--        <attr name="isShowTips" format="boolean" />-->
-        <!--        <attr name="isShowTitle" format="boolean" />-->
-        <!--        <attr name="isShowLeft" format="boolean" />-->
-        <!--        <attr name="isShowRight" format="boolean" />-->
-        <!--        <attr name="barBackground" format="reference" />-->
-        <!--        <attr name="isShowRightImage" format="boolean" />-->
-        <!--        <attr name="isShowClose" format="boolean" />-->
     </declare-styleable>
 
-</resources>
+ </resources>
