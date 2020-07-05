@@ -3,6 +3,7 @@ package com.lihang.selfmvvm.ui.main;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
@@ -27,6 +28,9 @@ public class BottonNavigationActivity extends AppCompatActivity {
     private int[] selectIcon = {R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
 
     private List<Fragment> fragments = new ArrayList<>();
+
+    //沉浸式状态栏
+    protected ImmersionBar mImmersionBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

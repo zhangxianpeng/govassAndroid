@@ -53,7 +53,6 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeTestBi
         return R.layout.activity_home_test;
     }
 
-
     public void openDrawLayout() {
         if (binding.drawerLayout.isDrawerOpen(binding.txtTest)) {
             binding.drawerLayout.closeDrawer(binding.txtTest);
@@ -288,7 +287,6 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeTestBi
     private void initBanner() {
         binding.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
         binding.banner.setImageLoader(new GlideImageLoader());
-
     }
 
 
