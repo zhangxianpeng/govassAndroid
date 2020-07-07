@@ -12,19 +12,15 @@ package com.lihang.selfmvvm.customview;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Rect;
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.TypedValue;
-import android.view.MotionEvent;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-
-import com.lihang.selfmvvm.R;
-
-import androidx.annotation.RequiresApi;
 
 /**
  * @ClassName: SearchEditText
@@ -33,19 +29,32 @@ import androidx.annotation.RequiresApi;
  * @Date: 2020/7/4 21:45
  */
 @SuppressLint("AppCompatCustomView")
-public class SearchEditText extends EditText {
+public class SearchEditText extends EditText implements View.OnFocusChangeListener, View.OnKeyListener {
+    private static final String TAG = SearchEditText.class.getSimpleName();
+    /**
+     * 是否是默认图标再左边的样式
+     */
+    private boolean isLeft = false;
+    /**
+     * 是否点击软键盘搜索
+     */
+    private boolean pressSearch = false;
+    /**
+     * 软键盘搜索键监听
+     */
+    private OnSearchClickListener listener;
 
-    private static final String TAG = "SearchEditText";
-
-    private Drawable searchImg;
+    public void setOnSearchClickListener(OnSearchClickListener listener) {
+        this.listener = listener;
+    }
 
     public SearchEditText(Context context) {
-        super(context);
+        this(context, null);
         init();
     }
 
     public SearchEditText(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, android.R.attr.editTextStyle);
         init();
     }
 
@@ -54,67 +63,57 @@ public class SearchEditText extends EditText {
         init();
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    public SearchEditText(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init();
-    }
-
     private void init() {
-        int pxDimension = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16,
-                getContext().getResources().getDisplayMetrics());
-        setPadding(pxDimension, 0, pxDimension, 0);
-        searchImg = getContext().getResources().getDrawable(R.mipmap.nav_search);
-//        delImg = getContext().getResources().getDrawable(R.drawable.ic_delete_forever_red_500_24dp);
-        addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setDrawables();//内容变换后
-            }
-        });
-        setDrawables();
+        setOnFocusChangeListener(this);
+        setOnKeyListener(this);
     }
 
-    private void setDrawables() {
-        if (length() < 1) {
-            setCompoundDrawablesWithIntrinsicBounds(searchImg, null, null, null);
-        } else {
-//            setCompoundDrawablesWithIntrinsicBounds(searchImg, null, delImg, null);
-            Drawable[] compoundDrawables = getCompoundDrawables();
-            // 0 ,1 ,2, 3对应左，上，右，下
-            //如果图片小可以拉伸下,代码如下
-//            Rect bounds = compoundDrawables[2].getBounds();
-//            int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2,
-//                    getContext().getResources().getDisplayMetrics());
-//            compoundDrawables[2].setBounds(bounds.left, bounds.top, bounds.right + size, bounds.bottom + size);
-//            setCompoundDrawables(compoundDrawables[0], compoundDrawables[1], compoundDrawables[2], compoundDrawables[3]);
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (isLeft) { // 如果是默认样式，则直接绘制
+            super.onDraw(canvas);
+        } else { // 如果不是默认样式，需要将图标绘制在中间
+            Drawable[] drawables = getCompoundDrawables();
+            if (drawables != null) {
+                Drawable drawableLeft = drawables[0];
+                if (drawableLeft != null) {
+                    float textWidth = getPaint().measureText(getHint().toString());
+                    int drawablePadding = getCompoundDrawablePadding();
+                    int drawableWidth = drawableLeft.getIntrinsicWidth();
+                    float bodyWidth = textWidth + drawableWidth + drawablePadding;
+                    canvas.translate((getWidth() - bodyWidth - getPaddingLeft() - getPaddingRight()) / 2, 0);
+                }
+            }
+            super.onDraw(canvas);
         }
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        Drawable[] compoundDrawables = getCompoundDrawables();
-        if (compoundDrawables[2] != null && event.getAction() == MotionEvent.ACTION_UP) {
-            int eventX = (int) event.getRawX();
-            int eventY = (int) event.getRawY();
-            Rect rect = new Rect();
-            getGlobalVisibleRect(rect);
-            rect.left = rect.right - 100;
-            if (rect.contains(eventX, eventY)) {
-                setText("");
-            }
+    public void onFocusChange(View v, boolean hasFocus) {
+        Log.d(TAG, "onFocusChange execute");
+        // 恢复EditText默认的样式
+        if (!pressSearch && TextUtils.isEmpty(getText().toString())) {
+            isLeft = hasFocus;
         }
-        return super.onTouchEvent(event);
     }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        pressSearch = (keyCode == KeyEvent.KEYCODE_ENTER);
+        if (pressSearch && listener != null) {
+            /*隐藏软键盘*/
+            InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm.isActive()) {
+                imm.hideSoftInputFromWindow(v.getApplicationWindowToken(), 0);
+            }
+            listener.onSearchClick(v);
+        }
+        return false;
+    }
+
+    public interface OnSearchClickListener {
+        void onSearchClick(View view);
+    }
+
 }
 

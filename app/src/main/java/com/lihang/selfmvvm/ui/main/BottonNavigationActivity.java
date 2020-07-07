@@ -2,6 +2,7 @@ package com.lihang.selfmvvm.ui.main;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.lihang.selfmvvm.R;
@@ -9,6 +10,7 @@ import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
 import com.lihang.selfmvvm.ui.fragment.ProjectFragment;
 import com.lihang.selfmvvm.ui.fragment.UserFragment;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.next.easynavigation.view.EasyNavigationBar;
 
 import java.util.ArrayList;
@@ -21,7 +23,7 @@ public class BottonNavigationActivity extends AppCompatActivity {
 
     private EasyNavigationBar navigationBar;
 
-    private String[] tabText = {"首页", "消息", "项目", "个人中心"};
+    private String[] tabText;
     //未选中icon
     private int[] normalIcon = {R.mipmap.tabar_default_home, R.mipmap.tabar_default_address, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
     //选中时icon
@@ -38,9 +40,22 @@ public class BottonNavigationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_botton_navigation);
 
         navigationBar = findViewById(R.id.navigationBar);
-
+        CheckPermissionUtils.getInstance().setGovernment(true);
         fragments.add(new HomeFragment());
-        fragments.add(new MsgFragment());
+        boolean isGovernment = CheckPermissionUtils.getInstance().isGovernment();
+
+        if (!isGovernment) {
+            tabText = new String[]{"首页", "通讯录", "项目", "个人中心"};
+            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_address, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
+            selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
+            fragments.add(new MsgFragment());
+        } else {
+            tabText = new String[]{"首页", "企业项目", "个人中心"};
+            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
+            selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
+            fragments.add(new MsgFragment(isGovernment));
+        }
+
         fragments.add(new ProjectFragment());
         fragments.add(new UserFragment());
 

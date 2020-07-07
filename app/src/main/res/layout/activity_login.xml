@@ -20,11 +20,8 @@
             app:hl_background="@color/status_background"
             app:hl_textTitle="玩安卓登录"
             app:hl_textTitleColor="#fff"
-            android:id="@+id/leoTitleBar"
-            />
-
-
-
+            android:id="@+id/leoTitleBar"/>
+        
         <RelativeLayout
             android:layout_below="@+id/leoTitleBar"
             android:id="@+id/relative_phone"

@@ -20,4 +20,6 @@
 
     <color name="tab_default">#C6CBCF</color>
     <color name="tab_select">#222222</color>
+
+    <color name="gray_white">#ffcccccc</color>
 </resources>

@@ -31,6 +31,13 @@ public class MsgFragment extends Fragment {
     }
 
     /**
+     * 根据 此字段切换不同的 ui 显示
+     * @param isGovernment
+     */
+    public MsgFragment(boolean isGovernment) {
+    }
+
+    /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *

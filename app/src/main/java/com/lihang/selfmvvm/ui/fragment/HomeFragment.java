@@ -10,6 +10,7 @@ import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.main.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.main.ProjectListAdapter;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
 import com.youth.banner.BannerConfig;
