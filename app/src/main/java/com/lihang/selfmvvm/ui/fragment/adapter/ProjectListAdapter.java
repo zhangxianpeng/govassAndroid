@@ -8,13 +8,12 @@
  * <author> <time> <version> <desc>
  * 作者姓名 修改时间 版本号 描述
  */
-package com.lihang.selfmvvm.ui.main;
+package com.lihang.selfmvvm.ui.fragment.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 

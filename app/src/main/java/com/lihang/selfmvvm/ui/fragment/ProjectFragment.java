@@ -1,66 +1,119 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
+import com.lihang.nbadapter.BaseAdapter;
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.base.BaseFragment;
+import com.lihang.selfmvvm.bean.ProjectBean;
+import com.lihang.selfmvvm.databinding.FragmentProjectBinding;
+import com.lihang.selfmvvm.ui.activity.WelComeActivity;
+import com.lihang.selfmvvm.ui.fragment.adapter.ProjectAdapter;
+import com.lihang.selfmvvm.ui.main.BottonNavigationActivity;
+import com.lihang.selfmvvm.ui.mydeclare.MyDeclareActivity;
+import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link ProjectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class ProjectFragment extends Fragment {
+import java.util.ArrayList;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import androidx.recyclerview.widget.LinearLayoutManager;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+public class ProjectFragment extends BaseFragment<HomeFragmentViewModel, FragmentProjectBinding> implements BaseAdapter.OnItemClickListener<ProjectBean> {
 
-    public ProjectFragment() {
-        // Required empty public constructor
-    }
+    private static final String TAG = "ProjectFragment";
+    private ArrayList<ProjectBean> projectList = new ArrayList<>();
+    private ProjectAdapter adapter;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment ProjectFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static ProjectFragment newInstance(String param1, String param2) {
-        ProjectFragment fragment = new ProjectFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onItemClick(ProjectBean item, int position) {
+
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    protected int getContentViewId() {
+        return R.layout.fragment_project;
+    }
+
+    @Override
+    protected void processLogic(Bundle savedInstanceState) {
+        getProjectList();
+        updateUi();
+    }
+
+    private void updateUi() {
+        boolean isGovenment = CheckPermissionUtils.getInstance().isGovernment();
+        if (isGovenment) {
+            binding.tvTitle.setText("企业申报项目");
+            binding.tvProjectDeclare.setText("待审批项目");
+            binding.tvMyDeclare.setText("已审批项目");
+        } else {
+            binding.tvTitle.setText("企业项目");
+            binding.tvProjectDeclare.setText("项目申报");
+            binding.tvMyDeclare.setText("我的申报");
         }
     }
 
+    private void getProjectList() {
+        ProjectBean testBean1 = new ProjectBean();
+        testBean1.setProjectTitle("2020年南宁服务机构能力提升研修班项目（第八期）");
+        testBean1.setProjectTime("2020年6月17日");
+        projectList.add(testBean1);
+
+        ProjectBean testBean2 = new ProjectBean();
+        testBean2.setProjectTitle("2020年创客南宁大赛项目");
+        testBean2.setProjectTime("2020年6月17日");
+        projectList.add(testBean2);
+
+        ProjectBean testBean3 = new ProjectBean();
+        testBean3.setProjectTitle("高考加油！为芊芊学子助力！");
+        testBean3.setProjectTime("2020年6月17日");
+        projectList.add(testBean3);
+
+        ProjectBean testBean4 = new ProjectBean();
+        testBean4.setProjectTitle("在变革中求发展 在发展中求突破项目");
+        testBean4.setProjectTime("2020年6月17日");
+        projectList.add(testBean4);
+
+        ProjectBean testBean5 = new ProjectBean();
+        testBean5.setProjectTitle("关于疫情下外贸营销的困难与机遇");
+        testBean5.setProjectTime("2020年6月17日");
+        projectList.add(testBean5);
+
+        ProjectBean testBean6 = new ProjectBean();
+        testBean6.setProjectTitle("直播营销“带货南宁”项目");
+        testBean6.setProjectTime("2020年6月17日");
+        projectList.add(testBean6);
+
+        adapter = new ProjectAdapter(getContext(), projectList, "project");
+        binding.rvProject.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvProject.setAdapter(adapter);
+        adapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "menuClick===" + position));
+    }
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_project, container, false);
+    protected void setListener() {
+        binding.tvProjectDeclare.setOnClickListener(this::onClick);
+        binding.tvMyDeclare.setOnClickListener(this::onClick);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_project_declare:
+                ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
+                break;
+            case R.id.tv_my_declare:
+                ActivityUtils.startActivity(getContext(), MyDeclareActivity.class);
+                break;
+            default:
+                break;
+        }
     }
 }
+
+
+
+

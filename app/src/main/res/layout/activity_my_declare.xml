@@ -1,43 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".ui.mydeclare.MyDeclareActivity">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
-        android:id="@+id/rl_title_bar"
+    <data></data>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_48"
-        android:layout_alignParentTop="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.mydeclare.MyDeclareActivity">
 
-        <ImageButton
-            android:id="@+id/ibtn_title_bar_back"
-            android:layout_width="@dimen/dp_22"
-            android:layout_height="@dimen/dp_22"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/nav_ic_back" />
+        <RelativeLayout
+            android:id="@+id/rl_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentTop="true">
 
-        <TextView
-            android:layout_width="wrap_content"
+            <ImageButton
+                android:id="@+id/ibtn_title_bar_back"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/nav_ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="我的申报"
+                android:textColor="#ff222222"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_113"
+            android:src="@mipmap/project_banner2_img" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lv_my_declare"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="我的申报"
-            android:textColor="#ff222222"
-            android:textSize="18sp" />
-    </RelativeLayout>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_113"
-        android:src="@mipmap/project_banner2_img"/>
-
-    <ListView
-        android:id="@+id/lv_my_declare"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10" />
-</LinearLayout>
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:overScrollMode="never"/>
+    </LinearLayout>
+</layout>

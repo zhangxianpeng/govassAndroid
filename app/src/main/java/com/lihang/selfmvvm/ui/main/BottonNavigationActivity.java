@@ -53,7 +53,6 @@ public class BottonNavigationActivity extends AppCompatActivity {
             tabText = new String[]{"首页", "企业项目", "个人中心"};
             normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
             selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
-            fragments.add(new MsgFragment(isGovernment));
         }
 
         fragments.add(new ProjectFragment());

@@ -8,9 +8,8 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
-import com.lihang.selfmvvm.ui.main.HomeMenuAdapter;
-import com.lihang.selfmvvm.ui.main.ProjectListAdapter;
-import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
+import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
 import com.youth.banner.BannerConfig;
@@ -25,7 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 /**
  * 主界面 fragment
  */
-public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements BaseAdapter.OnItemClickListener<HomeMenuBean> {
+public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> {
     private static final String TAG = "HomeFragment";
     private HomeMenuAdapter homeMenuAdapter;
     private ProjectListAdapter projectListAdapter;
@@ -152,11 +151,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     public void onClick(View view) {
-
-    }
-
-    @Override
-    public void onItemClick(HomeMenuBean item, int position) {
 
     }
 }

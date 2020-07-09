@@ -19,7 +19,6 @@
         <activity android:name=".ui.documentdetail.DocumentDetailActivity" />
         <activity android:name=".ui.senddocument.SendDocumentctivity" />
         <activity android:name=".ui.declaredetail.DeclareDetailActivity" />
-        <activity android:name=".ui.mydeclare.MyDeclareActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.login.GovassLoginctivity" />
         <activity
@@ -46,6 +45,14 @@
             android:theme="@style/WhiteFront_AppTheme" />
         <activity
             android:name=".ui.home.HomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/WhiteFront_AppTheme" />
+        <activity
+            android:name=".ui.projrctdeclare.ProjectDeclareActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/WhiteFront_AppTheme" />
+        <activity
+            android:name=".ui.mydeclare.MyDeclareActivity"
             android:screenOrientation="portrait"
             android:theme="@style/WhiteFront_AppTheme" />
         <activity
