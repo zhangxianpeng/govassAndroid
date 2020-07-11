@@ -1,73 +1,132 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.base.BaseFragment;
+import com.lihang.selfmvvm.bean.ChildDataBean;
+import com.lihang.selfmvvm.bean.GroupDataBean;
+import com.lihang.selfmvvm.databinding.FragmentMsgBinding;
+import com.lihang.selfmvvm.ui.communicate.CommunicateActivity;
+import com.lihang.selfmvvm.ui.fragment.adapter.ExListViewAdapter;
+import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.ToastUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link MsgFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * 通讯录
  */
-public class MsgFragment extends Fragment {
+public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgBinding> {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public MsgFragment() {
-        // Required empty public constructor
-    }
-
+    private ExListViewAdapter adapter;
     /**
-     * 根据 此字段切换不同的 ui 显示
-     * @param isGovernment
+     * 分组头
      */
-    public MsgFragment(boolean isGovernment) {
-    }
-
+    private List<GroupDataBean> groupList = new ArrayList<>();
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment MsgFragment.
+     * 子列表
      */
-    // TODO: Rename and change types and number of parameters
-    public static MsgFragment newInstance(String param1, String param2) {
-        MsgFragment fragment = new MsgFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    private List<List<ChildDataBean>> childList = new ArrayList<>();
+    ;
+    /**
+     * 头像列表 （测试写死）
+     */
+    private String[] url;
+
+    @Override
+    protected int getContentViewId() {
+        return R.layout.fragment_msg;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    protected void processLogic(Bundle savedInstanceState) {
+        initData();
+        adapter = new ExListViewAdapter(getContext(), groupList, childList);
+        binding.exListView.setAdapter(adapter);
+
+        //默认所有group全部展开
+        int groupCount = binding.exListView.getCount();
+        for (int i = 0; i < groupCount; i++) {
+            binding.exListView.expandGroup(i);
+        }
+
+        adapter.setOnItemClickListener(((view, position) -> ToastUtils.showToast("群发消息===" + position)));
+
+//        binding.exListView.setOnGroupClickListener((parent, view, groupPosition, id) -> {
+//            if (view.getId() == R.id.img_msg) {
+//                ToastUtils.showToast("群发消息");
+//                return false;
+//            }
+//
+//            if (parent.isGroupExpanded(groupPosition)) {
+//                parent.collapseGroup(groupPosition);
+//            } else {
+//                //第二个参数false表示展开时是否触发默认滚动动画
+//                parent.expandGroup(groupPosition, false);
+//            }
+//            return true;
+//        });
+
+
+        binding.exListView.setOnChildClickListener((expandableListView, view, groupPosition, childPosition, id) -> {
+            ActivityUtils.startActivity(getContext(), CommunicateActivity.class);
+            return true;
+        });
+    }
+
+    /**
+     * 加载数据
+     */
+    private void initData() {
+        url = new String[]{
+                "http://cdn.duitang.com/uploads/item/201506/07/20150607125903_vFWC5.png",
+                "http://upload.qqbody.com/ns/20160915/202359954jalrg3mqoei.jpg",
+                "http://tupian.qqjay.com/tou3/2016/0726/8529f425cf23fd5afaa376c166b58e29.jpg",
+                "http://cdn.duitang.com/uploads/item/201607/13/20160713094718_Xe3Tc.png",
+                "http://img3.imgtn.bdimg.com/it/u=1808104956,526590423&fm=11&gp=0.jpg",
+                "http://tupian.qqjay.com/tou3/2016/0725/5d6272a4acd7e21b2391aff92f765018.jpg"
+        };
+
+        List<String> group = new ArrayList<>();
+        group.add("王者一区");
+        group.add("吃鸡二区");
+        group.add("飞车三区");
+        group.add("炫舞四区");
+
+        for (int i = 0; i < group.size(); i++) {
+            GroupDataBean gd = new GroupDataBean(group.get(i), (i + 2) + "/" + (2 * i + 2));
+            groupList.add(gd);
+        }
+
+        for (int i = 0; i < group.size(); i++) {
+            List<ChildDataBean> list = new ArrayList<>();
+            for (int j = 0; j < 2 * i + 2; j++) {
+                ChildDataBean cd = null;
+                if (i == 0) {
+                    cd = new ChildDataBean("null", "小张");
+                    list.add(cd);
+                    cd = new ChildDataBean("null", "小黄");
+                    list.add(cd);
+                    break;
+                } else {
+                    cd = new ChildDataBean(url[j % url.length], "张三" + j);
+                    list.add(cd);
+                }
+            }
+            childList.add(list);
         }
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_msg, container, false);
+    protected void setListener() {
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 }

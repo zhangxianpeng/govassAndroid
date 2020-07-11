@@ -15,7 +15,7 @@
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginRight="@dimen/dp_15">
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/imabtn_filter"
                 android:layout_width="@dimen/dp_22"
                 android:layout_height="@dimen/dp_22"

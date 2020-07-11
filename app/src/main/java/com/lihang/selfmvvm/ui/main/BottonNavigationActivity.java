@@ -1,11 +1,12 @@
 package com.lihang.selfmvvm.ui.main;
 
 import android.graphics.Color;
-import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.base.BaseActivity;
+import com.lihang.selfmvvm.databinding.ActivityBottonNavigationBinding;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
 import com.lihang.selfmvvm.ui.fragment.ProjectFragment;
@@ -16,12 +17,9 @@ import com.next.easynavigation.view.EasyNavigationBar;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-public class BottonNavigationActivity extends AppCompatActivity {
-
-    private EasyNavigationBar navigationBar;
+public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewModel, ActivityBottonNavigationBinding> {
 
     private String[] tabText;
     //未选中icon
@@ -31,34 +29,37 @@ public class BottonNavigationActivity extends AppCompatActivity {
 
     private List<Fragment> fragments = new ArrayList<>();
 
-    //沉浸式状态栏
-    protected ImmersionBar mImmersionBar;
+    @Override
+    protected int getContentViewId() {
+        return R.layout.activity_botton_navigation;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_botton_navigation);
-
-        navigationBar = findViewById(R.id.navigationBar);
+    protected void processLogic() {
         CheckPermissionUtils.getInstance().setGovernment(true);
-        fragments.add(new HomeFragment());
         boolean isGovernment = CheckPermissionUtils.getInstance().isGovernment();
+        updateUi(isGovernment);
+    }
 
-        if (!isGovernment) {
+    private void updateUi(boolean isGovernment) {
+        if (isGovernment) {
             tabText = new String[]{"首页", "通讯录", "项目", "个人中心"};
             normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_address, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
             selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
+            fragments.add(new HomeFragment());
             fragments.add(new MsgFragment());
+            fragments.add(new ProjectFragment());
+            fragments.add(new UserFragment());
         } else {
             tabText = new String[]{"首页", "企业项目", "个人中心"};
             normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
             selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
+            fragments.add(new HomeFragment());
+            fragments.add(new ProjectFragment());
+            fragments.add(new UserFragment());
         }
 
-        fragments.add(new ProjectFragment());
-        fragments.add(new UserFragment());
-
-        navigationBar.titleItems(tabText)
+        binding.navigationBar.titleItems(tabText)
                 .normalIconItems(normalIcon)
                 .selectIconItems(selectIcon)
                 .fragmentList(fragments)
@@ -68,8 +69,17 @@ public class BottonNavigationActivity extends AppCompatActivity {
                 .build();
     }
 
-    public EasyNavigationBar getNavigationBar() {
-        return navigationBar;
+    @Override
+    protected void setListener() {
+
     }
 
+    public EasyNavigationBar getNavigationBar() {
+        return binding.navigationBar;
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
 }

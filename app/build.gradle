@@ -83,4 +83,6 @@ dependencies {
 
     //bottomNavigation
     implementation 'com.github.Vincent7Wong:EasyNavigation:2.0.5'
+    //permission
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }

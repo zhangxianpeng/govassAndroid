@@ -3,6 +3,7 @@ package com.lihang.selfmvvm.ui.fragment;
 import android.os.Bundle;
 import android.view.View;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.lihang.nbadapter.BaseAdapter;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
@@ -32,7 +33,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private ArrayList<String> bannerTitleList = new ArrayList<>();
     private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
     private ArrayList<String> projectList = new ArrayList<>();
-
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_home;
@@ -40,9 +40,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+
         //默认 banner
         //默认菜单
         //默认 projectList
+
         initData();
         initBanner();
         initMenu();

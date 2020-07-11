@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, ActivityMyDeclareBinding> {
 
-    private static final  String TAG = "MyDeclareActivity";
+    private static final String TAG = "MyDeclareActivity";
     private ArrayList<ProjectBean> myDecalreList = new ArrayList<>();
     private ProjectAdapter myDeclareAdapter;
 
@@ -29,7 +29,7 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
 
     @Override
     protected void processLogic() {
-         getMyDeclareList();
+        getMyDeclareList();
     }
 
     private void getMyDeclareList() {
@@ -71,11 +71,16 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
 
     @Override
     protected void setListener() {
-
+        binding.ivTitleBarBack.setOnClickListener(this::onClick);
     }
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.iv_title_bar_back:
+                finish();
+            default:
+                break;
+        }
     }
 }

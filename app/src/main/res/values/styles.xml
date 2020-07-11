@@ -41,7 +41,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="colorPrimary">@color/black</item> <!-- 系统toolbar上的字体颜色值 -->
-        <item name="colorPrimaryDark">@color/status_background</item>   <!-- 状态栏背景颜色 -->
+        <item name="colorPrimaryDark">@color/white</item>   <!-- 状态栏背景颜色 -->
         <item name="colorAccent">@color/colorPrimary</item>  <!-- 指的是手指按下，系统控件的颜色值 -->
         <item name="android:windowBackground">@color/white</item> <!-- 设置app背景颜色的默认值 -->
 <!--        <item name="android:navigationBarColor">@color/red</item> &lt;!&ndash; 底部导航栏的颜色值 &ndash;&gt;-->
@@ -78,20 +78,30 @@
 
     <style name="StyleEditText">
         <item name="android:background">@drawable/bg_search_bar</item>
-        <item name="android:drawablePadding">5dp</item>
+        <item name="android:drawablePadding">@dimen/dp_5</item>
         <item name="android:drawableStart">@mipmap/nav_search</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:imeOptions">actionSearch</item>
-        <item name="android:paddingStart">15dp</item>
+        <item name="android:paddingStart">@dimen/dp_15</item>
         <item name="android:singleLine">true</item>
         <item name="android:textColorHint">#B0B0B0</item>
         <item name="android:textSize">16sp</item>
         <item name="android:hint">搜索内容</item>
     </style>
 
+    <style name="AppovalEditTextStyle">
+        <item name="android:background">@drawable/bg_search_bar</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:gravity">start</item>
+        <item name="android:padding">@dimen/dp_10</item>
+        <item name="android:textColorHint">#B0B0B0</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:hint">请填写审批意见</item>
+    </style>
+
     <style name="StyleTextView">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_height">@dimen/dp_40</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">20sp</item>
     </style>
