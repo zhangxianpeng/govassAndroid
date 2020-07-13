@@ -40,7 +40,6 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-
     //okhttp、retrofit、rxjava
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -85,4 +84,8 @@ dependencies {
     implementation 'com.github.Vincent7Wong:EasyNavigation:2.0.5'
     //permission
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+    //预览 pdf/doc/ppt/excel
+
+    // baseAdapter
+    implementation 'com.zhy:base-rvadapter:3.0.3'
 }
