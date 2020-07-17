@@ -22,4 +22,6 @@
     <color name="tab_select">#222222</color>
 
     <color name="gray_white">#ffcccccc</color>
+
+    <color name="blue_gray">#ffcccccc</color>
 </resources>

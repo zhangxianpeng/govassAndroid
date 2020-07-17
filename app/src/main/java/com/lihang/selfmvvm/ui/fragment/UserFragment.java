@@ -6,6 +6,8 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentUserBinding;
+import com.lihang.selfmvvm.ui.TestActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 
 public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUserBinding> {
 
