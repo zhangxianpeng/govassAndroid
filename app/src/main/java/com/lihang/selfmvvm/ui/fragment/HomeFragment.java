@@ -98,33 +98,38 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         //菜单
         HomeMenuBean surveyBean = new HomeMenuBean();
         surveyBean.setImageUrl(R.mipmap.home_ic_survey);
-        surveyBean.setTitle("调查问卷");
+        surveyBean.setTitle(getContext().getString(R.string.questionnaire));
         homeMenuPathList.add(surveyBean);
 
         HomeMenuBean declareBean = new HomeMenuBean();
         declareBean.setImageUrl(R.mipmap.home_ic_declare);
-        declareBean.setTitle("项目申报");
+        declareBean.setTitle(getContext().getString(R.string.project_application));
         homeMenuPathList.add(declareBean);
 
         HomeMenuBean accountBean = new HomeMenuBean();
         accountBean.setImageUrl(R.mipmap.home_ic_account);
-        accountBean.setTitle("企业账户管理");
+        accountBean.setTitle(getContext().getString(R.string.enterprise_account_management));
         homeMenuPathList.add(accountBean);
 
         HomeMenuBean announcementBean = new HomeMenuBean();
         announcementBean.setImageUrl(R.mipmap.home_ic_announcement);
-        announcementBean.setTitle("系统公告");
+        announcementBean.setTitle(getContext().getString(R.string.system_announcement));
         homeMenuPathList.add(announcementBean);
 
         HomeMenuBean callBean = new HomeMenuBean();
         callBean.setImageUrl(R.mipmap.home_ic_call);
-        callBean.setTitle("联系客服");
+        callBean.setTitle(getContext().getString(R.string.contact_customer_service));
         homeMenuPathList.add(callBean);
 
         HomeMenuBean mybusinessBean = new HomeMenuBean();
         mybusinessBean.setImageUrl(R.mipmap.home_ic_mybusiness);
-        mybusinessBean.setTitle("我的企业");
+        mybusinessBean.setTitle(getContext().getString(R.string.my_business));
         homeMenuPathList.add(mybusinessBean);
+
+        HomeMenuBean msgBean = new HomeMenuBean();
+        mybusinessBean.setImageUrl(R.mipmap.home_ic_alerts);
+        mybusinessBean.setTitle(getContext().getString(R.string.message_notification));
+        homeMenuPathList.add(msgBean);
     }
 
     private void initProjectList() {

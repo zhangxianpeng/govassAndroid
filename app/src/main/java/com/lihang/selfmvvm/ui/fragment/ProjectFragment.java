@@ -46,13 +46,13 @@ public class ProjectFragment extends BaseFragment<HomeFragmentViewModel, Fragmen
     private void updateUi() {
         boolean isGovenment = CheckPermissionUtils.getInstance().isGovernment();
         if (isGovenment) {
-            binding.tvTitle.setText("企业申报项目");
-            binding.tvProjectDeclare.setText("待审批项目");
-            binding.tvMyDeclare.setText("已审批项目");
+            binding.tvTitle.setText(getContext().getString(R.string.project_approval));
+            binding.tvProjectDeclare.setText(getContext().getString(R.string.projects_to_be_approved));
+            binding.tvMyDeclare.setText(getContext().getString(R.string.approved_projects));
         } else {
-            binding.tvTitle.setText("企业项目");
-            binding.tvProjectDeclare.setText("项目申报");
-            binding.tvMyDeclare.setText("我的申报");
+            binding.tvTitle.setText(getContext().getString(R.string.enterprise_project));
+            binding.tvProjectDeclare.setText(getContext().getString(R.string.project_application));
+            binding.tvMyDeclare.setText(getContext().getString(R.string.my_declaration));
         }
     }
 

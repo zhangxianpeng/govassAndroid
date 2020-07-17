@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:text="个人中心"
+                android:text="@string/personal_center"
                 android:textColor="#ff222222"
                 android:textSize="20sp" />
         </RelativeLayout>
@@ -70,7 +70,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_toRightOf="@+id/iv_head"
-                android:text="专业团队"
+                android:text="政府用户"
                 android:textColor="#ff222222"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -105,7 +105,7 @@
                     android:layout_gravity="center"
                     android:textColor="#ff303030"
                     android:textSize="14sp"
-                    android:text="个人资料" />
+                    android:text="@string/personal_data" />
             </LinearLayout>
 
             <LinearLayout
@@ -128,7 +128,7 @@
                     android:layout_gravity="center"
                     android:textColor="#ff303030"
                     android:textSize="14sp"
-                    android:text="我的申报" />
+                    android:text="@string/project_approval" />
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +151,7 @@
                     android:layout_gravity="center"
                     android:textColor="#ff303030"
                     android:textSize="14sp"
-                    android:text="我的收文" />
+                    android:text="@string/my_post" />
             </LinearLayout>
 
             <LinearLayout
@@ -174,7 +174,7 @@
                     android:layout_gravity="center"
                     android:textColor="#ff303030"
                     android:textSize="14sp"
-                    android:text="我的收藏" />
+                    android:text="@string/my_collect" />
             </LinearLayout>
 
         </LinearLayout>
@@ -201,7 +201,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="认证中心"
+                android:text="@string/authentication_center"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_25"
@@ -236,7 +236,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="推广下载"
+                android:text="@string/promotion_download"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_25"
@@ -271,7 +271,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="联系客服"
+                android:text="@string/contact_customer_service"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_25"
@@ -306,7 +306,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="切换账号"
+                android:text="@string/switch_account"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_25"
@@ -341,7 +341,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="退出"
+                android:text="@string/exit"
                 android:layout_centerVertical="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_25"

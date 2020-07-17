@@ -45,7 +45,7 @@ public class X5WebView extends WebView {
                 if (url.startsWith("http:") || url.startsWith("https:")) {
                     view.loadUrl(url);
                     return false;
-                } else {
+                } else  {
                     Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                     getContext().startActivity(intent);
                     return true;
