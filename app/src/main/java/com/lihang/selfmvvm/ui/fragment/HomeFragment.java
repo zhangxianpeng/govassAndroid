@@ -3,14 +3,14 @@ package com.lihang.selfmvvm.ui.fragment;
 import android.os.Bundle;
 import android.view.View;
 
-import com.gyf.barlibrary.ImmersionBar;
-import com.lihang.nbadapter.BaseAdapter;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
+import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
 import com.youth.banner.BannerConfig;
@@ -33,6 +33,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private ArrayList<String> bannerTitleList = new ArrayList<>();
     private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
     private ArrayList<String> projectList = new ArrayList<>();
+
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_home;
@@ -91,7 +92,29 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList);
         binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
         binding.rvMenu.setAdapter(homeMenuAdapter);
-        homeMenuAdapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "menuClick===" + position));
+        homeMenuAdapter.setOnItemClickListener((view, position) -> {
+            switch (position) {
+                case 0:  //调查问卷
+                    ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+                    break;
+                case 1: //项目申报
+                    break;
+                case 2: //企业账户管理
+                    break;
+                case 3: //系统公告
+                    break;
+                case 4: //联系客服
+                    break;
+                case 5: //我的企业
+                    break;
+                case 6: //消息通知
+                    break;
+//                case 7:
+//                    break;
+                default:
+                    break;
+            }
+        });
     }
 
     private void initMenuData() {
@@ -134,7 +157,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     private void initProjectList() {
         initProjectLitData();
-        projectListAdapter = new ProjectListAdapter(getContext(),projectList);
+        projectListAdapter = new ProjectListAdapter(getContext(), projectList);
         binding.rvProjectMsg.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvProjectMsg.setAdapter(projectListAdapter);
         projectListAdapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "project===" + position));

@@ -22,6 +22,16 @@ public class ProjectBean implements Serializable {
 
     private int imagePath;
     private String projectTitle;
+    private String uiFlag;
+
+    public String getUiFlag() {
+        return uiFlag;
+    }
+
+    public void setUiFlag(String uiFlag) {
+        this.uiFlag = uiFlag;
+    }
+
     private String projectTime;
 
     public int getImagePath() {

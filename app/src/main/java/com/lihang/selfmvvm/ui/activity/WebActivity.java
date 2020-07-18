@@ -16,9 +16,9 @@ public class WebActivity extends BaseActivity<NormalViewModel, ActivityWebBindin
 
     @Override
     protected void processLogic() {
-        String url = getIntent().getStringExtra("url");
+//        String url = getIntent().getStringExtra("url");
         binding.webViewX5.setTextView(binding.leoTitleBar.txt_title);
-        binding.webViewX5.loadUrl(url);
+        binding.webViewX5.loadUrl("www.baidu.com");
         binding.leoTitleBar.bar_left_btn.setOnClickListener(this);
     }
 

@@ -24,4 +24,7 @@
     <color name="gray_white">#ffcccccc</color>
 
     <color name="blue_gray">#ffcccccc</color>
+
+    <color name="tab_selected">#3C66E4</color>
+    <color name="tab_normal">#E9E9E9</color>
 </resources>
