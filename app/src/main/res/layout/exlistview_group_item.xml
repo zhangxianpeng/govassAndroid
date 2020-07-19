@@ -9,30 +9,31 @@
 
     <ImageView
         android:id="@+id/iv_left"
-        android:layout_width="@dimen/dp_24"
-        android:layout_height="@dimen/dp_24"
+        android:layout_width="@dimen/dp_6"
+        android:layout_height="@dimen/dp_6"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
-        android:src="@mipmap/address_ic_grouping" />
+        android:src="@mipmap/address_ic_group" />
 
-    <ImageView
-        android:id="@+id/img_group"
-        android:layout_width="@dimen/dp_20"
-        android:layout_height="@dimen/dp_20"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/tv_group_num"
-        android:scaleType="fitXY"
-        android:src="@mipmap/address_ic_open" />
+    <!--<ImageView-->
+        <!--android:id="@+id/img_group"-->
+        <!--android:layout_width="@dimen/dp_20"-->
+        <!--android:layout_height="@dimen/dp_20"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_toRightOf="@+id/tv_group_num"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:src="@mipmap/address_ic_open" />-->
 
-    <ImageView
-        android:id="@+id/img_msg"
-        android:layout_width="@dimen/dp_20"
-        android:layout_height="@dimen/dp_20"
+    <TextView
+        android:id="@+id/tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:scaleType="fitXY"
-        android:src="@mipmap/address_ic_message" />
+        android:text="@string/group_msg"
+        android:textColor="#ff5379a0"
+        android:textSize="14sp"/>
 
     <TextView
         android:id="@+id/tv_group_name"
@@ -43,15 +44,6 @@
         android:layout_toRightOf="@+id/iv_left"
         android:text="某某2组"
         android:textColor="#ff303030"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/tv_group_num"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_toRightOf="@+id/tv_group_name"
         android:textSize="16sp" />
     </RelativeLayout>
 </RelativeLayout>

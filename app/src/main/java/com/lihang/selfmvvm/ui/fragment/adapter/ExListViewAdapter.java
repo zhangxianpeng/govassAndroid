@@ -99,8 +99,8 @@ public class ExListViewAdapter implements ExpandableListAdapter, View.OnClickLis
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.exlistview_group_item, null);
             holder = new GroupViewHolder();
-            holder.img = (ImageView) convertView.findViewById(R.id.img_group);
-            holder.img_msg = (ImageView) convertView.findViewById(R.id.img_msg);
+            holder.img = (ImageView) convertView.findViewById(R.id.iv_left);
+            holder.tv_msg = (TextView) convertView.findViewById(R.id.tv_msg);
             holder.tv_group_name = (TextView) convertView.findViewById(R.id.tv_group_name);
             convertView.setTag(holder);
         } else {
@@ -108,14 +108,14 @@ public class ExListViewAdapter implements ExpandableListAdapter, View.OnClickLis
         }
         GroupDataBean groupData = groupDataList.get(groupPosition);
         //是否展开
-        if (isExpanded) {
-            holder.img.setImageResource(R.mipmap.address_ic_open);
-        } else {
-            holder.img.setImageResource(R.mipmap.address_ic_close);
-        }
+//        if (isExpanded) {
+//            holder.img.setImageResource(R.mipmap.address_ic_open);
+//        } else {
+//            holder.img.setImageResource(R.mipmap.address_ic_close);
+//        }
         holder.tv_group_name.setText(groupData.getName());
-        holder.img_msg.setTag(groupPosition);
-        holder.img_msg.setOnClickListener(this::onClick);
+        holder.tv_msg.setTag(groupPosition);
+        holder.tv_msg.setOnClickListener(this::onClick);
         return convertView;
     }
 
@@ -191,7 +191,7 @@ public class ExListViewAdapter implements ExpandableListAdapter, View.OnClickLis
     class GroupViewHolder {
         ImageView img;
         TextView tv_group_name;
-        ImageView img_msg;
+        TextView tv_msg;
     }
 
     class ChildViewHolder {

@@ -41,15 +41,7 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
     //所有监听放这里
     protected abstract void setListener();
 
-    /**
-     * 权限组
-     */
-    private static final String[] permissionsGroup = new String[]{
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
-    //动态权限
-    RxPermissions rxPermissions = new RxPermissions(this);
 
     protected VM mViewModel;
     protected VDB binding;
@@ -64,26 +56,6 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
         createViewModel();
         processLogic();
         setListener();
-        initPermission();
-    }
-
-    private void initPermission() {
-        rxPermissions.requestEach(permissionsGroup)
-                .subscribe(new Consumer<Permission>() {
-                    @Override
-                    public void accept(Permission permission) throws Exception {
-                        if (permission.granted) {
-                            // 用户已经同意该权限
-                            ToastUtils.showToast("用户已经同意该权限");
-                        } else if (permission.shouldShowRequestPermissionRationale) {
-                            ToastUtils.showToast("用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框");
-                            // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
-                        } else {
-                            ToastUtils.showToast("用户拒绝了该权限，而且选中『不再询问』那么下次启动时，就不会提示出来了");
-                            // 用户拒绝了该权限，而且选中『不再询问』那么下次启动时，就不会提示出来了，
-                        }
-                    }
-                });
     }
 
     public void createViewModel() {
