@@ -106,4 +106,13 @@
     <string name="all_user_msg">全员消息</string>
     <string name="group_msg">分组消息</string>
 
+    <string name="add_msg">新增消息</string>
+    <string name="edit_msg">编辑通知</string>
+    <string name="title">标题</string>
+    <string name="text">正文</string>
+    <string name="hint_declare">请填写审批意见</string>
+    <string name="hint_msg_title">请输入通知标题</string>
+    <string name="hint_msg_text">请输入通知正文</string>
+    <string name="add_attachment">添加附件</string>
+    <string name="send">发送</string>
 </resources>

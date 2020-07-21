@@ -72,7 +72,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
 
 
         binding.exListView.setOnChildClickListener((expandableListView, view, groupPosition, childPosition, id) -> {
-            ActivityUtils.startActivity(getContext(), CommunicateActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("nickName", childList.get(groupPosition).get(childPosition).getNickName());
+            ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class,bundle);
             return true;
         });
     }
