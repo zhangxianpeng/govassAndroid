@@ -23,9 +23,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class ProjectFragment extends BaseFragment<HomeFragmentViewModel, FragmentProjectBinding> implements BaseAdapter.OnItemClickListener<ProjectBean> {
 
-    private static final String TAG = "ProjectFragment";
     private ArrayList<ProjectBean> projectList = new ArrayList<>();
     private ProjectAdapter adapter;
+
+    private static final String TAG = ProjectFragment.class.getSimpleName();
 
     @Override
     public void onItemClick(ProjectBean item, int position) {
@@ -87,7 +88,7 @@ public class ProjectFragment extends BaseFragment<HomeFragmentViewModel, Fragmen
         testBean6.setProjectTime("2020年6月17日");
         projectList.add(testBean6);
 
-        adapter = new ProjectAdapter(getContext(), projectList, "project");
+        adapter = new ProjectAdapter(getContext(), projectList, TAG);
         binding.rvProject.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvProject.setAdapter(adapter);
         adapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "menuClick===" + position));

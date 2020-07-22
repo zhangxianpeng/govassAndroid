@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.base.BaseConstant;
 import com.lihang.selfmvvm.bean.ProjectBean;
 
 import java.util.ArrayList;
@@ -50,7 +51,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.e(TAG, this.flag);
         View view = null;
-        if (this.flag == "myDeclare") {
+        if (this.flag.equals(BaseConstant.UI_MY_DECLARE_ACTIVITY)) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_clare_list_item, parent, false);
         } else {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.project_list_item, parent, false);
@@ -95,7 +96,7 @@ public class ProjectAdapter extends RecyclerView.Adapter<ProjectAdapter.MyViewHo
 
         public MyViewHolder(View itemView, String flag) {
             super(itemView);
-            if (flag == "myDeclare") {
+            if (flag.equals(BaseConstant.UI_MY_DECLARE_ACTIVITY)) {
                 rightImage = itemView.findViewById(R.id.iv_right);
                 projectTitle = itemView.findViewById(R.id.tv_title);
                 projectTime = itemView.findViewById(R.id.tv_time);

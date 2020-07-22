@@ -11,12 +11,15 @@
 package com.lihang.selfmvvm.ui.projrctdeclare;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.base.BaseConstant;
 
 import java.util.List;
 
@@ -29,21 +32,31 @@ import androidx.recyclerview.widget.RecyclerView;
  * @Date: 2020/7/12 0:15
  */
 public class AttchmentListAdapter extends RecyclerView.Adapter<AttchmentListAdapter.MyViewHolder> implements View.OnClickListener {
+    private String TAG = "AttchmentListAdapter";
     private Context context;
     private List<String> attachmentPathList;
 
     private AttchmentListAdapter.OnItemClickListener mOnItemClickListener;
 
-    public AttchmentListAdapter(Context context, List<String> attachmentPathList) {
+    // 界面
+    private String flag;
+
+    public AttchmentListAdapter(Context context, String flag, List<String> attachmentPathList) {
         this.context = context;
+        this.flag = flag;
         this.attachmentPathList = attachmentPathList;
     }
 
     @Override
     public AttchmentListAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        Log.e(TAG, this.flag);
         View view = null;
-        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.attachment_list_item, parent, false);
-        AttchmentListAdapter.MyViewHolder viewHolder = new AttchmentListAdapter.MyViewHolder(view);
+        if (this.flag.equals(BaseConstant.UI_PROJECT_DECLARE_ACTIVITY)) {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.attachment_list_item, parent, false);
+        } else {
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addmsg_attachment_list_item, parent, false);
+        }
+        AttchmentListAdapter.MyViewHolder viewHolder = new AttchmentListAdapter.MyViewHolder(view, flag);
         return viewHolder;
     }
 
@@ -51,8 +64,14 @@ public class AttchmentListAdapter extends RecyclerView.Adapter<AttchmentListAdap
     public void onBindViewHolder(AttchmentListAdapter.MyViewHolder holder, final int position) {
         String filePathName = attachmentPathList.get(position);
         holder.filePathName.setText(filePathName);
-        holder.deleteTextView.setTag(position);
-        holder.deleteTextView.setOnClickListener(this);
+        if (holder.deleteTextView != null) {
+            holder.deleteTextView.setTag(position);
+            holder.deleteTextView.setOnClickListener(this);
+        }
+        if (holder.deleteImageView != null) {
+            holder.deleteImageView.setTag(position);
+            holder.deleteImageView.setOnClickListener(this);
+        }
     }
 
     @Override
@@ -79,11 +98,18 @@ public class AttchmentListAdapter extends RecyclerView.Adapter<AttchmentListAdap
 
         private TextView filePathName;
         private TextView deleteTextView;
+        private ImageView deleteImageView;
 
-        public MyViewHolder(View itemView) {
+
+        public MyViewHolder(View itemView, String flag) {
             super(itemView);
-            filePathName = itemView.findViewById(R.id.tv_file_path);
-            deleteTextView = itemView.findViewById(R.id.tv_delete);
+            if (flag.equals(BaseConstant.UI_PROJECT_DECLARE_ACTIVITY)) {
+                filePathName = itemView.findViewById(R.id.tv_file_path);
+                deleteTextView = itemView.findViewById(R.id.tv_delete);
+            } else {
+                filePathName = itemView.findViewById(R.id.tv_file_path);
+                deleteImageView = itemView.findViewById(R.id.iv_delete);
+            }
         }
     }
 }

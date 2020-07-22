@@ -1,8 +1,12 @@
 package com.lihang.selfmvvm.ui.communicate;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,17 +17,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityCommunicateBinding;
+import com.lihang.selfmvvm.ui.projrctdeclare.AttchmentListAdapter;
+import com.lihang.selfmvvm.utils.CommonUtils;
+import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,7 +40,18 @@ import androidx.recyclerview.widget.RecyclerView;
  * im 聊天界面
  */
 public class CommunicateActivity extends BaseActivity<CommunicateViewModel, ActivityCommunicateBinding> implements PopupWindow.OnDismissListener {
+    private static final String TAG = CommunicateActivity.class.getSimpleName();
+    /**
+     * 消息列表
+     */
     private ArrayList<String> projectList = new ArrayList<>();
+
+
+    /**
+     * 附件列表
+     */
+    private List<String> attachmentList = new ArrayList<>();
+    private AttchmentListAdapter attchmentListAdapter;
 
     private String nickName = "";
     private PopupWindow addMsgPop;
@@ -110,10 +129,23 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
         RecyclerView attachmentRv = view.findViewById(R.id.rv_attachment);
         RelativeLayout addAttachmentRl = view.findViewById(R.id.rl_add_attachment);
         Button sendBtn = view.findViewById(R.id.btn_send);
+        setAdapter(attachmentRv);
+//        attachmentRv.setLayoutManager(new LinearLayoutManager(getContext()));
+//        attachmentRv.setAdapter(new CommonAdapter<String>(getContext(), R.layout.addmsg_attachment_list_item, attachmentList) {
+//
+//            @Override
+//            protected void convert(ViewHolder holder, String msg, int position) {
+//                holder.setText(R.id.tv_file_path, attachmentList.get(position));
+//                holder.setOnClickListener(R.id.iv_delete, (view -> {
+//                    //刪除position
+//                }));
+//            }
+//        });
+
 
         closeIv.setOnClickListener((view1 -> onDismiss()));
         sendBtn.setOnClickListener(view1 -> ToastUtils.showToast("hahah"));
-        addAttachmentRl.setOnClickListener(view1 -> ToastUtils.showToast("hahah"));
+        addAttachmentRl.setOnClickListener(view1 -> CommonUtils.getInstance().selectFileFromLocal(this));
         textEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -148,6 +180,16 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
         });
     }
 
+    private void setAdapter(RecyclerView attachmentRv) {
+        attchmentListAdapter = new AttchmentListAdapter(getContext(), TAG, attachmentList);
+        attachmentRv.setLayoutManager(new LinearLayoutManager(this));
+        attachmentRv.setAdapter(attchmentListAdapter);
+        attchmentListAdapter.setOnItemClickListener((view, position) -> {
+            attachmentList.remove(position);
+            attchmentListAdapter.notifyDataSetChanged();
+        });
+    }
+
     private void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         //0.0-1.0
@@ -161,4 +203,26 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
         if (addMsgPop != null) addMsgPop.dismiss();
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+            //Get the Uri of the selected file
+            if (data.getClipData() != null) {   //多选
+                int count = data.getClipData().getItemCount();
+                Log.i("zhangxianpeng===", "url count ：  " + count);
+                for (int i = 0; i < count; i++) {
+                    Uri imageUri = data.getClipData().getItemAt(i).getUri();
+                    String imgpath = FileUtils.getPath(this, imageUri);
+                    attachmentList.add(imgpath);
+                }
+                attchmentListAdapter.notifyDataSetChanged();
+            } else if (data.getData() != null) { // 单选
+                String imagePath = FileUtils.getPath(this, data.getData());
+                Log.i("zhangxianpeng===", "Single image path ---- " + imagePath);
+                attachmentList.add(imagePath);
+                attchmentListAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 }

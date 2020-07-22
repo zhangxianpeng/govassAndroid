@@ -15,6 +15,7 @@ import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.LogUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,8 +25,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class ProjectDeclareActivity extends BaseActivity<ProjectDeclareViewModel, ActivityProjectDeclareBinding> {
 
-    private ArrayList<String> attachmentPathList = new ArrayList<>();
+    private List<String> attachmentPathList = new ArrayList<>();
     private AttchmentListAdapter attchmentListAdapter;
+
+    private static final String TAG = ProjectDeclareActivity.class.getSimpleName();
 
     @Override
     protected int getContentViewId() {
@@ -50,7 +53,7 @@ public class ProjectDeclareActivity extends BaseActivity<ProjectDeclareViewModel
     }
 
     private void initAdapter() {
-        attchmentListAdapter = new AttchmentListAdapter(getContext(), attachmentPathList);
+        attchmentListAdapter = new AttchmentListAdapter(getContext(), TAG, attachmentPathList);
         binding.rvAttachment.setLayoutManager(new LinearLayoutManager(this));
         binding.rvAttachment.setAdapter(attchmentListAdapter);
         attchmentListAdapter.setOnItemClickListener((view, position) -> LogUtils.d("zhang delete", "menuClick===" + position));

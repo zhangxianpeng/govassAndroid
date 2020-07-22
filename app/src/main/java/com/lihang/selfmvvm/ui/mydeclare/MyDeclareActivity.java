@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.bean.ProjectBean;
 import com.lihang.selfmvvm.databinding.ActivityMyDeclareBinding;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectAdapter;
+import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
 import com.lihang.selfmvvm.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -18,9 +19,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, ActivityMyDeclareBinding> {
 
-    private static final String TAG = "MyDeclareActivity";
     private ArrayList<ProjectBean> myDecalreList = new ArrayList<>();
     private ProjectAdapter myDeclareAdapter;
+
+    private static final String TAG = MyDeclareActivity.class.getSimpleName();
 
     @Override
     protected int getContentViewId() {
@@ -63,7 +65,7 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
         testBean6.setProjectTime("2020年6月17日 15:03");
         myDecalreList.add(testBean6);
 
-        myDeclareAdapter = new ProjectAdapter(getContext(), myDecalreList, "myDeclare");
+        myDeclareAdapter = new ProjectAdapter(getContext(), myDecalreList, TAG);
         binding.lvMyDeclare.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.lvMyDeclare.setAdapter(myDeclareAdapter);
         myDeclareAdapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "menuClick===" + position));
