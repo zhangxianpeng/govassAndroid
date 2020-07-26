@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.TestActivity;
+import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 
 public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUserBinding> {
@@ -32,6 +33,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
         binding.rlContactUs.setOnClickListener(this::onClick);
         binding.rlChangeAccount.setOnClickListener(this::onClick);
         binding.rlExit.setOnClickListener(this::onClick);
+        binding.flNewMsg.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -54,6 +56,10 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
             case R.id.rl_change_account:
                 break;
             case R.id.rl_exit:
+                ActivityUtils.startActivity(getContext(), TestActivity.class);
+                break;
+            case R.id.fl_new_msg:
+                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                 break;
             default:
                 break;

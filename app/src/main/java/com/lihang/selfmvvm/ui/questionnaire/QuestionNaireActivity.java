@@ -8,7 +8,6 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.bean.ProjectBean;
 import com.lihang.selfmvvm.databinding.ActivityQuestionNaireBinding;
 import com.lihang.selfmvvm.ui.activity.WebActivity;
-import com.lihang.selfmvvm.ui.declaredetail.DeclareDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;

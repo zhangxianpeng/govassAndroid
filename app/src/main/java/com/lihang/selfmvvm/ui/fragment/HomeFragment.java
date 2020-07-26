@@ -9,6 +9,7 @@ import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
+import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
@@ -150,8 +151,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         homeMenuPathList.add(mybusinessBean);
 
         HomeMenuBean msgBean = new HomeMenuBean();
-        mybusinessBean.setImageUrl(R.mipmap.home_ic_alerts);
-        mybusinessBean.setTitle(getContext().getString(R.string.message_notification));
+        msgBean.setImageUrl(R.mipmap.home_ic_alerts);
+        msgBean.setTitle(getContext().getString(R.string.message_notification));
         homeMenuPathList.add(msgBean);
     }
 
@@ -177,10 +178,18 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.banner.setOnBannerListener(position -> {
             LogUtils.d(TAG, "CLICK===" + position);
         });
+
+        binding.flNewMsg.setOnClickListener(this::onClick);
     }
 
     @Override
     public void onClick(View view) {
-
+        switch (view.getId()) {
+            case R.id.fl_new_msg:
+                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                break;
+            default:
+                break;
+        }
     }
 }

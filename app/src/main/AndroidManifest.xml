@@ -52,7 +52,8 @@
             android:name="android.notch_support"
             android:value="true" />
 
-        <activity android:name=".ui.questionnaire.QuestionNaireActivity"></activity>
+        <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
+        <activity android:name=".ui.newmsg.NewMsgActivity"></activity>
     </application>
 
 </manifest>

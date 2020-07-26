@@ -1,6 +1,5 @@
 package com.lihang.selfmvvm.base;
 
-import android.Manifest;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,8 +13,6 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.customview.CustomProgress;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.utils.networks.NetWorkUtils;
-import com.tbruyelle.rxpermissions2.Permission;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.components.support.RxFragmentActivity;
 
 import java.lang.reflect.ParameterizedType;
@@ -27,7 +24,6 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.databinding.ViewDataBinding;
 import androidx.lifecycle.ViewModelProviders;
-import io.reactivex.functions.Consumer;
 
 public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDataBinding> extends RxFragmentActivity
         implements View.OnClickListener {
@@ -40,7 +36,6 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
 
     //所有监听放这里
     protected abstract void setListener();
-
 
 
     protected VM mViewModel;

@@ -116,4 +116,5 @@
     <string name="add_attachment">添加附件</string>
     <string name="send">发送</string>
     <string name="select_file">请选择文件</string>
+    <string name="msg">消息</string>
 </resources>
