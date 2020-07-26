@@ -17,8 +17,8 @@ import java.io.File;
  */
 public class TestActivity extends BaseActivity<TestViewModel, ActivityTestBinding> {
 
-    private String docPath = "file:///assets/政企通需求.doc";
-    private String pdfPath = "file:///assets/政企通需求.pdf";
+    private String docPath = "file:///assets/a.doc";
+    private String pdfPath = "file:///assets/b.pdf";
 
     @Override
     protected int getContentViewId() {

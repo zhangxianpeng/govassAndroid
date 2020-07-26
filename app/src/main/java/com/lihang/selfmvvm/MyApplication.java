@@ -3,12 +3,14 @@ package com.lihang.selfmvvm;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.launchstater.TaskDispatcher;
 import com.lihang.selfmvvm.launchstater.mytasks.SmartRefreshLayoutTask;
 import com.lihang.selfmvvm.launchstater.mytasks.X5WebTask;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
+import com.tencent.smtt.sdk.QbSdk;
 
 public class MyApplication extends Application {
 
@@ -32,6 +34,18 @@ public class MyApplication extends Application {
         dispatcher.addTask(new SmartRefreshLayoutTask())
                 .addTask(new X5WebTask())
                 .start();
+
+        QbSdk.initX5Environment(this, new QbSdk.PreInitCallback() {
+            @Override
+            public void onCoreInitFinished() {
+                Log.e("snow", "========onCoreInitFinished===");
+            }
+
+            @Override
+            public void onViewInitFinished(boolean b) {
+                Log.e("snow", "x5初始化结果====" + b);
+            }
+        });
 
     }
 
