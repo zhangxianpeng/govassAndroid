@@ -34,8 +34,8 @@
         <activity android:name=".ui.documentdetail.DocumentDetailActivity" /> <!-- 已发公文 -->
         <activity android:name=".ui.senddocument.SendDocumentctivity" /> <!-- 申报详情 -->
         <activity android:name=".ui.declaredetail.DeclareDetailActivity" /> <!-- 注册 -->
-        <activity android:name=".ui.register.RegisterActivity" /> <!-- 登录 -->
-        <activity android:name=".ui.login.GovassLoginctivity" /> <!-- 项目申报 -->
+        <activity android:name=".ui.register.RegisterStepOneActivity" /> <!-- 登录 -->
+        <activity android:name=".ui.login.GovassLoginActivity" /> <!-- 项目申报 -->
         <activity android:name=".ui.projrctdeclare.ProjectDeclareActivity" /> <!-- 我的申报 -->
         <activity android:name=".ui.mydeclare.MyDeclareActivity" /> <!-- 主界面 -->
         <activity android:name=".ui.main.BottonNavigationActivity">
@@ -55,7 +55,8 @@
             android:value="true" />
 
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
-        <activity android:name=".ui.newmsg.NewMsgActivity"></activity>
+        <activity android:name=".ui.newmsg.NewMsgActivity" />
+        <activity android:name=".ui.register.RegisterStepTwoActivity"></activity>
     </application>
 
 </manifest>

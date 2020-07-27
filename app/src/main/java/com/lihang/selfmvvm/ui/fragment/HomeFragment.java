@@ -109,6 +109,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 case 5: //我的企业
                     break;
                 case 6: //消息通知
+                    ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                     break;
 //                case 7:
 //                    break;

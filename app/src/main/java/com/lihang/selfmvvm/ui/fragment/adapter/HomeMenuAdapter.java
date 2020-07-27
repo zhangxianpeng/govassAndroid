@@ -37,7 +37,9 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
     private static final String TAG = "HomeMenuAdapter";
 
     private HomeMenuAdapter.OnItemClickListener mOnItemClickListener;
-
+    //两次点击按钮的最小间隔，目前为1000
+    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private long lastClickTime;
     public HomeMenuAdapter(Context context, List<HomeMenuBean> homeMenuBeanList) {
         this.context = context;
         this.homeMenuBeanList = homeMenuBeanList;
@@ -69,7 +71,11 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
     @Override
     public void onClick(View view) {
       if(mOnItemClickListener != null) {
-          mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+          long curClickTime = System.currentTimeMillis();
+          if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+              lastClickTime = curClickTime;
+              mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+          }
       }
     }
 

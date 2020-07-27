@@ -36,6 +36,10 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
     private ProjectListAdapter.OnItemClickListener mOnItemClickListener;
 
+    //两次点击按钮的最小间隔，目前为1000
+    private static final int MIN_CLICK_DELAY_TIME = 1000;
+    private long lastClickTime;
+
     public ProjectListAdapter(Context context, List<String> stringList) {
         this.context = context;
         this.stringList = stringList;
@@ -64,7 +68,11 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     @Override
     public void onClick(View view) {
         if (mOnItemClickListener != null) {
-            mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+            long curClickTime = System.currentTimeMillis();
+            if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+                lastClickTime = curClickTime;
+                mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+            }
         }
     }
 

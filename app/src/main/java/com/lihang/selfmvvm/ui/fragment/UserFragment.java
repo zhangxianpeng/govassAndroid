@@ -7,8 +7,10 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.TestActivity;
+import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 
 public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUserBinding> {
 
@@ -24,45 +26,55 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
 
     @Override
     protected void setListener() {
-        binding.llUserInfo.setOnClickListener(this::onClick);
-        binding.llMyProject.setOnClickListener(this::onClick);
-        binding.llMyArticle.setOnClickListener(this::onClick);
-        binding.llMyCollect.setOnClickListener(this::onClick);
-        binding.rlVerify.setOnClickListener(this::onClick);
-        binding.rlShareDown.setOnClickListener(this::onClick);
-        binding.rlContactUs.setOnClickListener(this::onClick);
-        binding.rlChangeAccount.setOnClickListener(this::onClick);
-        binding.rlExit.setOnClickListener(this::onClick);
-        binding.flNewMsg.setOnClickListener(this::onClick);
+        binding.llUserInfo.setOnClickListener(mNoDoubleClickListener);
+        binding.llMyProject.setOnClickListener(mNoDoubleClickListener);
+        binding.llMyArticle.setOnClickListener(mNoDoubleClickListener);
+        binding.llMyCollect.setOnClickListener(mNoDoubleClickListener);
+        binding.rlVerify.setOnClickListener(mNoDoubleClickListener);
+        binding.rlShareDown.setOnClickListener(mNoDoubleClickListener);
+        binding.rlContactUs.setOnClickListener(mNoDoubleClickListener);
+        binding.rlChangeAccount.setOnClickListener(mNoDoubleClickListener);
+        binding.rlExit.setOnClickListener(mNoDoubleClickListener);
+        binding.flNewMsg.setOnClickListener(mNoDoubleClickListener);
     }
+
+    private NoDoubleClickListener mNoDoubleClickListener = new NoDoubleClickListener() {
+        @Override
+        protected void onNoDoubleClick(View view) {
+            switch (view.getId()) {
+                case R.id.ll_user_info:
+                    break;
+                case R.id.ll_my_project:
+                    break;
+                case R.id.ll_my_article:
+                    break;
+                case R.id.ll_my_collect:
+                    break;
+                case R.id.rl_verify:
+                    break;
+                case R.id.rl_share_down:
+                    break;
+                case R.id.rl_contact_us:
+                    break;
+                case R.id.rl_change_account:
+                    ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+                    break;
+                case R.id.rl_exit:
+                    ActivityUtils.startActivity(getContext(), TestActivity.class);
+                    break;
+                case R.id.fl_new_msg:
+                    ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.ll_user_info:
-                break;
-            case R.id.ll_my_project:
-                break;
-            case R.id.ll_my_article:
-                break;
-            case R.id.ll_my_collect:
-                break;
-            case R.id.rl_verify:
-                break;
-            case R.id.rl_share_down:
-                break;
-            case R.id.rl_contact_us:
-                break;
-            case R.id.rl_change_account:
-                break;
-            case R.id.rl_exit:
-                ActivityUtils.startActivity(getContext(), TestActivity.class);
-                break;
-            case R.id.fl_new_msg:
-                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-                break;
-            default:
-                break;
+
         }
     }
 }
