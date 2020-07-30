@@ -1,6 +1,9 @@
 package com.lihang.selfmvvm.common;
 
 
+import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,10 +37,6 @@ public class PARAMS {
         return map;
     }
 
-
-
-
-
     public static RequestBody changeToRquestBody(String param) {
         return RequestBody.create(MediaType.parse("multipart/form-data"), param);
     }
@@ -67,4 +66,71 @@ public class PARAMS {
     }
 
 
+    /**
+     * 登录-政企通
+     *
+     * @param captcha
+     * @param username
+     * @param password
+     * @param uuid
+     * @return
+     */
+    public static LoginReqVo govassLogin(String captcha, String username, String password, String uuid) {
+        LoginReqVo loginReqVo = new LoginReqVo();
+        loginReqVo.setCaptcha(captcha);
+        loginReqVo.setUsername(username);
+        loginReqVo.setPassword(password);
+        loginReqVo.setUuid(uuid);
+        return loginReqVo;
+    }
+
+    /**
+     * 注册-政企通
+     * @param address
+     * @param businessLicenseImg
+     * @param businessScope
+     * @param businessTerm
+     * @param businessType
+     * @param email
+     * @param enterpriseCode
+     * @param enterpriseName
+     * @param headUrl
+     * @param identityCard
+     * @param legalRepresentative
+     * @param mobile
+     * @param password
+     * @param registeredCapital
+     * @param setUpDate
+     * @param userId
+     * @param username
+     * @return
+     */
+    public static RegisterReqVo govassRegister(String address, String businessLicenseImg,
+                                               String businessScope, String businessTerm,
+                                               String businessType, String email,
+                                               String enterpriseCode, String enterpriseName,
+                                               String headUrl, String identityCard,
+                                               String legalRepresentative, String mobile,
+                                               String password, String registeredCapital,
+                                               String setUpDate, int userId, String username) {
+        RegisterReqVo registerReqVo = new RegisterReqVo();
+        registerReqVo.setAddress(address);
+        registerReqVo.setBusinessLicenseImg(businessLicenseImg);
+        registerReqVo.setBusinessScope(businessScope);
+        registerReqVo.setBusinessTerm(businessTerm);
+        registerReqVo.setBusinessType(businessType);
+        registerReqVo.setEmail(email);
+        registerReqVo.setEnterpriseCode(enterpriseCode);
+        registerReqVo.setEnterpriseName(enterpriseName);
+        registerReqVo.setHeadUrl(headUrl);
+        registerReqVo.setIdentityCard(identityCard);
+        registerReqVo.setLegalRepresentative(legalRepresentative);
+        registerReqVo.setMobile(mobile);
+        registerReqVo.setPassword(password);
+        registerReqVo.setRegisteredCapital(registeredCapital);
+        registerReqVo.setSetUpDate(setUpDate);
+        registerReqVo.setUserId(userId);
+        registerReqVo.setUsername(username);
+        return registerReqVo;
+    }
 }

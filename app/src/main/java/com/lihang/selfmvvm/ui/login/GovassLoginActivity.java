@@ -1,20 +1,25 @@
 package com.lihang.selfmvvm.ui.login;
 
-import android.graphics.Bitmap;
 import android.view.View;
 
+import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
+import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.databinding.ActivityGovassLoginactivityBinding;
 import com.lihang.selfmvvm.ui.register.RegisterStepOneActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CodeUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
+
+import java.util.UUID;
 
 /**
  * 登录界面
  */
 public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, ActivityGovassLoginactivityBinding> {
+    private static final String TAG = "GovassLoginActivity";
     private CodeUtils codeUtils;
 
     @Override
@@ -28,9 +33,11 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
     }
 
     private void initVerifyCode() {
-        codeUtils = CodeUtils.getInstance();
-        Bitmap bitmap = codeUtils.createBitmap();
-        binding.ivVerifycode.setImageBitmap(bitmap);
+        String uuid = UUID.randomUUID().toString();
+        LogUtils.d("zhangxianpenguuid===", uuid);
+        String verifyCodeImgUrl = SystemConst.DEFAULT_SERVER + SystemConst.CAPTCHA + "?uuid=" + uuid;
+        Glide.with(this).load(verifyCodeImgUrl).placeholder(R.mipmap.ic_launcher)
+                .error(R.mipmap.ic_launcher).into(binding.ivVerifycode);
     }
 
     @Override

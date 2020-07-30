@@ -25,6 +25,7 @@ import okio.Buffer;
 import okio.BufferedSource;
 
 public class HttpLogInterceptor implements Interceptor {
+    private static final String TAG = "HttpLogInterceptor";
     private static HashMap<String, String> headerIgnoreMap = new HashMap<>();
 
     static {
@@ -62,15 +63,15 @@ public class HttpLogInterceptor implements Interceptor {
 
         //url
         String url = request.url().toString();
-        log("----------Request Start----------");
-        log("" + request.method() + " " + url);
+        LogUtils.d(TAG,"----------Request Start----------");
+        LogUtils.d(TAG,"" + request.method() + " " + url);
 
         //headers
         Headers headers = request.headers();
         if (null != headers) {
             for (int i = 0, count = headers.size(); i < count; i++) {
                 if (!headerIgnoreMap.containsKey(headers.name(i))) {
-                    log(headers.name(i) + ": " + headers.value(i));
+                    LogUtils.d(TAG,headers.name(i) + ": " + headers.value(i));
                 }
             }
         }
@@ -79,7 +80,7 @@ public class HttpLogInterceptor implements Interceptor {
         RequestBody requestBody = request.body();
         String paramString = readRequestParamString(requestBody);
         if (!TextUtils.isEmpty(paramString)) {
-            log("Params:" + paramString);
+            LogUtils.d(TAG,"Params:" + paramString);
         }
 
         //response
@@ -93,9 +94,9 @@ public class HttpLogInterceptor implements Interceptor {
             }
         }
 
-        log("Response Body:" + responseString);
-        log("Time:" + duration + " ms");
-        log("----------Request End----------");
+        LogUtils.d(TAG,"Response Body:" + responseString);
+        LogUtils.d(TAG,"Time:" + duration + " ms");
+        LogUtils.d(TAG,"----------Request End----------");
         return response;
     }
 

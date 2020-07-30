@@ -2,12 +2,11 @@ package com.lihang.selfmvvm.retrofitwithrxjava;
 
 
 import com.lihang.selfmvvm.bean.BannerBean;
-import com.lihang.selfmvvm.bean.HomeBean;
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.vo.req.LoginReqVo;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +15,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -62,8 +62,7 @@ public interface RetrofitApiService {
     //取消收藏 -- 我的收藏列表
     @FormUrlEncoded
     @POST("lg/uncollect/{id}/json")
-    Observable<ResponModel<String>> unCollectByMe(@Path("id") int id,@Field("originId")int originId);
-
+    Observable<ResponModel<String>> unCollectByMe(@Path("id") int id, @Field("originId") int originId);
 
 
     //退出登录
@@ -93,7 +92,7 @@ public interface RetrofitApiService {
     //单张图片上传
     @POST("upload/picss")
     @Multipart
-    Observable<ResponModel<String>> uploadPicss(@Part("type") RequestBody type,  @PartMap Map<String, RequestBody> maps);
+    Observable<ResponModel<String>> uploadPicss(@Part("type") RequestBody type, @PartMap Map<String, RequestBody> maps);
 
     //Retrofit下载文件
     @GET
@@ -105,4 +104,26 @@ public interface RetrofitApiService {
     @Streaming
     Observable<ResponseBody> downloadFile(@Url String url, @Header("RANGE") String range);
 
+
+    //----------------------------------------------------政企通 api 接口---------------------------------------------------------------
+
+    /**
+     * 登录-政企通
+     *
+     * @param loginReqVo
+     * @return
+     */
+    @POST("sys/login")
+    @FormUrlEncoded
+    Observable<ResponModel<User>> govassLogin(@FieldMap LoginReqVo loginReqVo);
+
+
+    /**
+     * 获取验证码图片
+     *
+     * @param uuid
+     * @return
+     */
+    @GET("captcha.jpg")
+    Call<String> getVerifyCode(@Query("uuid") String uuid);
 }

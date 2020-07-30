@@ -157,14 +157,22 @@
 
             <ImageView
                 android:id="@+id/iv_verifycode"
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_30"
+                android:layout_width="@dimen/dp_80"
+                android:layout_height="@dimen/dp_40"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
                 android:layout_marginRight="@dimen/dp_10"
                 android:src="@drawable/ic_launcher_background" />
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginLeft="@dimen/dp_35"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_35"
+            android:background="#F3F3F3" />
 
         <!--需要自定义 background 实现默认和点击的效果切换-->
         <Button

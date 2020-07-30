@@ -8,6 +8,8 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
+import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.res.BaseResVo;
 
 import java.io.File;
 import java.util.HashMap;
@@ -17,9 +19,10 @@ import java.util.Map;
 import androidx.lifecycle.MutableLiveData;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.Call;
 
 /**
- * 这是所有的网络请求所在的位置
+ * 网络请求api
  */
 public class RepositoryImpl extends BaseModel {
 
@@ -120,5 +123,26 @@ public class RepositoryImpl extends BaseModel {
 //        bodyMap=PARAMS.manyFileToPartBody(files);
         return upLoadFile(getApiService().uploadPicss(PARAMS.changeToRquestBody(type), bodyMap), liveData);
     }
+
+    /**
+     * 登录-政企通
+     * @param loginReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<User>> govassLogin(LoginReqVo loginReqVo) {
+        MutableLiveData<Resource<User>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().govassLogin(loginReqVo), liveData);
+    }
+
+
+    /**
+     * 获取验证码图片
+     * @param uuid
+     * @return
+     */
+//    public MutableLiveData<Resource<BaseResVo>> getVerifyCode(String uuid) {
+//        MutableLiveData<Resource<BaseResVo>> liveData = new MutableLiveData<>();
+//        return getApiService().getVerifyCode(uuid);
+//    }
 
 }
