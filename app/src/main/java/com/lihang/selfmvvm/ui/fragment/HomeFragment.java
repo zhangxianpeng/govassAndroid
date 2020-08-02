@@ -1,6 +1,7 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
@@ -9,18 +10,26 @@ import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
+import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
+import com.lihang.selfmvvm.utils.PreferenceUtil;
+import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 
 /**
@@ -30,10 +39,13 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private static final String TAG = "HomeFragment";
     private HomeMenuAdapter homeMenuAdapter;
     private ProjectListAdapter projectListAdapter;
-    private ArrayList<Integer> bannerImagePathList = new ArrayList<>();
+    private ArrayList<String> bannerImagePathList = new ArrayList<>();
     private ArrayList<String> bannerTitleList = new ArrayList<>();
     private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
     private ArrayList<String> projectList = new ArrayList<>();
+
+    private String token = "";
+
 
     @Override
     protected int getContentViewId() {
@@ -42,28 +54,50 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-
-        //默认 banner
-        //默认菜单
-        //默认 projectList
-
-        initData();
-        initBanner();
+        token = (String) PreferenceUtil.get(USER_LOGIN_TOKEN, "");
+        if (TextUtils.isEmpty(token)) {
+            ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+        } else {
+            initBannerData();
+        }
+        initBannerWidget();
         initMenu();
         initProjectList();
     }
 
-    private void initData() {
+    private void initBannerData() {
+        mViewModel.getGovassBannerList(token).observe(this, res -> {
+            res.handler(new OnCallback<List<ImageDataInfo>>() {
+                @Override
+                public void onSuccess(List<ImageDataInfo> data) {
+                    for (int i = 0; i < data.size(); i++) {
+                        bannerImagePathList.add(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.get(i).getImageUrl());
+                    }
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    super.onFailure(msg);
+                }
+
+                @Override
+                public void onCompleted() {
+                    super.onCompleted();
+                }
+            });
+        });
+
+
         //轮播
-        bannerImagePathList.add(R.mipmap.home_default_img);
-        bannerImagePathList.add(R.mipmap.default_img);
-        bannerImagePathList.add(R.mipmap.default_img);
+//        bannerImagePathList.add(R.mipmap.home_default_img);
+//        bannerImagePathList.add(R.mipmap.default_img);
+//        bannerImagePathList.add(R.mipmap.default_img);
         bannerTitleList.add("");
         bannerTitleList.add("");
         bannerTitleList.add("");
     }
 
-    private void initBanner() {
+    private void initBannerWidget() {
         //样式设置
         binding.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置图片加载器

@@ -96,10 +96,10 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
                             // 用户已经同意该权限
 //                            ToastUtils.showToast("用户已经同意该权限");
                         } else if (permission.shouldShowRequestPermissionRationale) {
-                            ToastUtils.showToast("用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框");
+//                            ToastUtils.showToast("用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框");
                             // 用户拒绝了该权限，没有选中『不再询问』（Never ask again）,那么下次再次启动时。还会提示请求权限的对话框
                         } else {
-                            ToastUtils.showToast("用户拒绝了该权限，而且选中『不再询问』那么下次启动时，就不会提示出来了");
+//                            ToastUtils.showToast("用户拒绝了该权限，而且选中『不再询问』那么下次启动时，就不会提示出来了");
                             // 用户拒绝了该权限，而且选中『不再询问』那么下次启动时，就不会提示出来了，
                         }
                     }

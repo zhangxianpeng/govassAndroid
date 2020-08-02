@@ -53,7 +53,7 @@ public class Resource<T> {
             if (data.isSuccess()) {
                 return new Resource<>(SUCCESS, data.getData(), null);
             }
-            return new Resource<>(FAIL, null, data.getErrorMsg());
+            return new Resource<>(FAIL, null, data.getMsg());
         }
         return new Resource<>(ERROR, null, null);
     }

@@ -30,6 +30,8 @@ public class CommonUtils {
 
     /**
      * 本地选择文件作为附件
+     *
+     * @param activity
      */
     public void selectFileFromLocal(Activity activity) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -44,5 +46,13 @@ public class CommonUtils {
         }
     }
 
+    /**
+     * 底部弹框
+     *
+     * @param viewFlag
+     */
+    public void showPopFromBottom(String viewFlag) {
+
+    }
 
 }

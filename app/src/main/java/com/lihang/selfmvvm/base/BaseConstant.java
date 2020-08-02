@@ -5,4 +5,8 @@ public class BaseConstant {
     public static final String UI_COMMUNICATE_ACTIVITY = "CommunicateActivity";
     public static final String UI_MY_DECLARE_ACTIVITY = "MyDeclareActivity";
     public static final String UI_PROJECT_FRAGMENT = "ProjectFragment";
+
+
+    public static final String USER_LOGIN_TOKEN = "userLoginToken";
+    public static final String DEFAULT_FILE_SERVER = "file-server/";
 }

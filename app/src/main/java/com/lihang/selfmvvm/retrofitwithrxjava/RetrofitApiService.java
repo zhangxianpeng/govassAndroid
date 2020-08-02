@@ -6,6 +6,10 @@ import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.LoginDataVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,6 +20,7 @@ import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -114,16 +119,44 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/login")
-    @FormUrlEncoded
-    Observable<ResponModel<User>> govassLogin(@FieldMap LoginReqVo loginReqVo);
+    Observable<ResponModel<LoginDataVo>> govassLogin(@Body LoginReqVo loginReqVo);
 
 
     /**
-     * 获取验证码图片
-     *
-     * @param uuid
+     * 注册-企业用户
+     * @param registerReqVo
      * @return
      */
-    @GET("captcha.jpg")
-    Call<String> getVerifyCode(@Query("uuid") String uuid);
+    @POST("sys/enterpriseuser/register")
+    Observable<ResponModel<LoginDataVo>> register(@Body RegisterReqVo registerReqVo);
+
+
+    /**
+     * 获取用户信息
+     *
+     * @param token
+     * @return
+     */
+    @GET("sys/user/info")
+    Observable<ResponModel<LoginDataVo>> getUserInfo(@Query("token") String token);
+
+    /**
+     * 获取轮播图
+     *
+     * @param token
+     * @return
+     */
+    @GET("sys/rotationplot/listForApp")
+    Observable<ResponModel<List<ImageDataInfo>>> getBannerList(@Query("token") String token);
+
+
+    /**
+     * 获取客服
+     *
+     * @param token
+     * @return
+     */
+    @GET("sys/customerservice/default")
+    Observable<ResponModel<CsDataInfoVo>> getCustomerService(@Query("token") String token);
+
 }

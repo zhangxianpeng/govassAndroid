@@ -9,7 +9,10 @@ import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
-import com.lihang.selfmvvm.vo.res.BaseResVo;
+import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.File;
 import java.util.HashMap;
@@ -19,7 +22,6 @@ import java.util.Map;
 import androidx.lifecycle.MutableLiveData;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.Call;
 
 /**
  * 网络请求api
@@ -124,19 +126,23 @@ public class RepositoryImpl extends BaseModel {
         return upLoadFile(getApiService().uploadPicss(PARAMS.changeToRquestBody(type), bodyMap), liveData);
     }
 
+    //----------------------------------------------------政企通--------------------------------------------------------------
+
     /**
      * 登录-政企通
+     *
      * @param loginReqVo
      * @return
      */
-    public MutableLiveData<Resource<User>> govassLogin(LoginReqVo loginReqVo) {
-        MutableLiveData<Resource<User>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<LoginDataVo>> govassLogin(LoginReqVo loginReqVo) {
+        MutableLiveData<Resource<LoginDataVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().govassLogin(loginReqVo), liveData);
     }
 
 
     /**
      * 获取验证码图片
+     *
      * @param uuid
      * @return
      */
@@ -145,4 +151,36 @@ public class RepositoryImpl extends BaseModel {
 //        return getApiService().getVerifyCode(uuid);
 //    }
 
+    /**
+     * 获取用户信息
+     *
+     * @param token
+     * @return
+     */
+    public MutableLiveData<Resource<UserInfoVo>> getUserInfo(String token) {
+        MutableLiveData<Resource<UserInfoVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getUserInfo(token), liveData);
+    }
+
+    /**
+     * 获取轮播图
+     *
+     * @param token
+     * @return
+     */
+    public MutableLiveData<Resource<List<ImageDataInfo>>> getGovassBannerList(String token) {
+        MutableLiveData<Resource<List<ImageDataInfo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getBannerList(token), liveData);
+    }
+
+    /**
+     * 获取客服信息
+     *
+     * @param token
+     * @return
+     */
+    public MutableLiveData<Resource<CsDataInfoVo>> getCustomerService(String token) {
+        MutableLiveData<Resource<CsDataInfoVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getCustomerService(token), liveData);
+    }
 }
