@@ -133,7 +133,14 @@
     <string name="register_hint">已经有账号？立即</string>
     <string name="comany_name">企业名称*</string>
     <string name="company_code">统一社会信用代码*</string>
-    <string name="company_verify">营业执照上传</string>
+    <string name="businessType">类型*</string>
+    <string name="businessScope">经营范围*</string>
+    <string name="businessTerm">营业期限*</string>
+    <string name="legalRepresentative">法定代表人*</string>
+    <string name="registeredCapital">注册资本*</string>
+    <string name="setUpDate">成立日期*</string>
+    <string name="com_address">住所*</string>
+    <string name="company_verify">营业执照上传*</string>
 
     <string name="next_step">下一步</string>
     <string name="complete">完成</string>
@@ -142,4 +149,7 @@
     <string name="phone_must">手机号码*</string>
     <string name="mail_must">邮箱*</string>
     <string name="id_must">身份证*</string>
+    <string name="pwd_must">密码*</string>
+
+    <string name="message_must">请输入必填信息</string>
 </resources>

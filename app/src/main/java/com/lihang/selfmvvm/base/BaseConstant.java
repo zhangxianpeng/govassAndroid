@@ -9,4 +9,6 @@ public class BaseConstant {
 
     public static final String USER_LOGIN_TOKEN = "userLoginToken";
     public static final String DEFAULT_FILE_SERVER = "file-server/";
+    public static final String USER_LOGIN_HEAD_URL = "userLoginHeadUrl";
+    public static final String USER_NICK_NAME = "userRealName";
 }

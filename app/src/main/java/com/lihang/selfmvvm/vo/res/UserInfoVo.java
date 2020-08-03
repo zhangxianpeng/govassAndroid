@@ -44,7 +44,7 @@ public class UserInfoVo {
     private String password;
     private String salt;
     /**
-     * 用户类型
+     * 用户类型   0  政府   1 企业
      */
     private int userType;
     /**

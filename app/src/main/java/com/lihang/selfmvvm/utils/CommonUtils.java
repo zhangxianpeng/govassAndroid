@@ -2,7 +2,9 @@ package com.lihang.selfmvvm.utils;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
+import android.widget.PopupWindow;
 
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
@@ -15,6 +17,7 @@ public class CommonUtils {
     private volatile static CommonUtils instacne;
 
     private CommonUtils() {
+
     }
 
     public static CommonUtils getInstance() {
@@ -44,15 +47,6 @@ public class CommonUtils {
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 底部弹框
-     *
-     * @param viewFlag
-     */
-    public void showPopFromBottom(String viewFlag) {
-
     }
 
 }

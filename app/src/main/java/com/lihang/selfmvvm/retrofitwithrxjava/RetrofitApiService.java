@@ -10,6 +10,7 @@ import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -138,7 +139,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/user/info")
-    Observable<ResponModel<LoginDataVo>> getUserInfo(@Query("token") String token);
+    Observable<ResponModel<UserInfoVo>> getUserInfo(@Query("token") String token);
 
     /**
      * 获取轮播图
