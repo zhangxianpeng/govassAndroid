@@ -9,6 +9,7 @@ import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
@@ -99,7 +100,14 @@ public class RepositoryImpl extends BaseModel {
         return downLoadFile(getApiService().downloadFile(SystemConst.QQ_APK, range), liveData, destDir, fileName, currentLength);
     }
 
-    //上传文件(进度监听)
+
+    /**
+     * 上传文件(进度监听)
+     * @param type
+     * @param key
+     * @param file
+     * @return
+     */
     public MutableLiveData<Resource<String>> upLoadPic(String type, String key, File file) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
 
@@ -137,6 +145,16 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<LoginDataVo>> govassLogin(LoginReqVo loginReqVo) {
         MutableLiveData<Resource<LoginDataVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().govassLogin(loginReqVo), liveData);
+    }
+
+    /**
+     * 注册-政企通
+     * @param registerReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<String>> register(RegisterReqVo registerReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().register(registerReqVo), liveData);
     }
 
 

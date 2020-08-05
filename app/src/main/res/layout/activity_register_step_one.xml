@@ -301,6 +301,14 @@
 
 
                 <ImageView
+                    android:id="@+id/iv_preview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_150"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <ImageView
+                    android:id="@+id/iv_add"
                     android:layout_width="@dimen/dp_38"
                     android:layout_height="@dimen/dp_38"
                     android:layout_gravity="center"

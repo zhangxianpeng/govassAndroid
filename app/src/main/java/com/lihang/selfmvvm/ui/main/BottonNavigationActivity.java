@@ -50,7 +50,7 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
     private static final String[] permissionsGroup = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_SETTINGS};
+            Manifest.permission.WRITE_SETTINGS,Manifest.permission.CAMERA};
 
     //动态权限
     RxPermissions rxPermissions = new RxPermissions(this);

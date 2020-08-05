@@ -6,6 +6,7 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityRegisterStepTwoBinding;
+import com.lihang.selfmvvm.utils.AESUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
@@ -83,11 +84,29 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
 
 
         registerReqVo.setUsername(getStringByUI(binding.etUserName));
-        registerReqVo.setUsername(getStringByUI(binding.etPhone));
-        registerReqVo.setUsername(getStringByUI(binding.etMail));
-        registerReqVo.setUsername(getStringByUI(binding.etIdCard));
-        registerReqVo.setUsername(getStringByUI(binding.etPassword));
+        registerReqVo.setMobile(getStringByUI(binding.etPhone));
+        registerReqVo.setEmail(getStringByUI(binding.etMail));
+        registerReqVo.setIdentityCard(getStringByUI(binding.etIdCard));
+        registerReqVo.setPassword(AESUtils.encrypt(getStringByUI(binding.etPassword)));
 
+        mViewModel.register(registerReqVo).observe(this,res-> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+
+                }
+
+                @Override
+                public void onCompleted() {
+                    super.onCompleted();
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    super.onFailure(msg);
+                }
+            });
+        });
 
     }
 }

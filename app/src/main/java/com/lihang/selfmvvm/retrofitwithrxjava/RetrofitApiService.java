@@ -129,7 +129,7 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/enterpriseuser/register")
-    Observable<ResponModel<LoginDataVo>> register(@Body RegisterReqVo registerReqVo);
+    Observable<ResponModel<String>> register(@Body RegisterReqVo registerReqVo);
 
 
     /**
@@ -160,4 +160,18 @@ public interface RetrofitApiService {
     @GET("sys/customerservice/default")
     Observable<ResponModel<CsDataInfoVo>> getCustomerService(@Query("token") String token);
 
+    /**
+     * 单个文件上传
+     */
+//    file/upload
+
+    /**
+     * 多个文件上传
+     */
+//    file/batchUpload
+
+    /**
+     * 文件下载
+     */
+//    file/download
 }
