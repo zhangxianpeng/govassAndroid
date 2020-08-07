@@ -2,8 +2,6 @@ package com.lihang.selfmvvm.retrofitwithrxjava.Interceptor;
 
 import android.text.TextUtils;
 
-
-import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 
 import java.io.IOException;
@@ -12,6 +10,8 @@ import java.util.List;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
+
+import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 
 /**
  * 在有网络的情况下
@@ -53,16 +53,16 @@ public class NetCacheInterceptor implements Interceptor {
 
         //这里坐了自动解析头部和取值。之前一个项目要用头部的Token字段。我也不知道为什么不用cookie
         //(到时候最好用csdn登录来做)
-        String token = (String) PreferenceUtil.get("USER_TOKEN", "");
+        String token = (String) PreferenceUtil.get(USER_LOGIN_TOKEN, "");
         if (!TextUtils.isEmpty(token)) {
-            builder1.addHeader("Token", token)
+            builder1.addHeader("token", token)
                     .build();
         }
         request = builder1.build();
         Response response = chain.proceed(request);
-        List<String> list = response.headers().values("Token");
+        List<String> list = response.headers().values("token");
         if (list.size() > 0) {
-            PreferenceUtil.put("USER_TOKEN", list.get(0));
+            PreferenceUtil.put(USER_LOGIN_TOKEN, list.get(0));
         }
 
         if (onlineCacheTime != 0) {

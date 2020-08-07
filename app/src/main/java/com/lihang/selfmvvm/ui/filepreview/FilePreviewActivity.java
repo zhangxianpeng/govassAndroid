@@ -28,7 +28,7 @@ public class FilePreviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_file_preview);
 //        filePath = getIntent().getExtras().getString("path");
-//        filePath = "/storage/emulated/0/Tencent/TIMfile_recv/offer-聘用意向函-张现鹏.docx";
+//        filePath = "/storage/emulated/0/Tencent/TIMfile_recv/test.jpg";
         Log.e("FilePreviewActivity", filePath);
 
         tbsReaderView = new TbsReaderView(this, readerCallback);

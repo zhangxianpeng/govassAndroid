@@ -8,7 +8,7 @@ public class HEADS {
      */
     public static HashMap<String, String> login(String token) {
         HashMap<String, String> map = new HashMap<String, String>();
-        map.put("Token", token);
+        map.put("token", token);
         return map;
     }
 }

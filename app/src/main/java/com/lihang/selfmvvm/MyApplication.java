@@ -2,7 +2,7 @@ package com.lihang.selfmvvm;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.lihang.selfmvvm.bean.User;
@@ -11,6 +11,8 @@ import com.lihang.selfmvvm.launchstater.mytasks.SmartRefreshLayoutTask;
 import com.lihang.selfmvvm.launchstater.mytasks.X5WebTask;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.tencent.smtt.sdk.QbSdk;
+
+import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 
 public class MyApplication extends Application {
 
@@ -70,4 +72,9 @@ public class MyApplication extends Application {
     public static Context getContext() {
         return context;
     }
+
+    public static String getToken() {
+        return (String) PreferenceUtil.get(USER_LOGIN_TOKEN, "");
+    }
+
 }

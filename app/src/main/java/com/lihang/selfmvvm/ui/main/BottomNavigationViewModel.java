@@ -13,13 +13,9 @@ package com.lihang.selfmvvm.ui.main;
 import android.app.Application;
 
 import com.lihang.selfmvvm.base.BaseViewModel;
-import com.lihang.selfmvvm.base.NormalViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
-import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
-
-import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -37,6 +33,7 @@ public class BottomNavigationViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 获取用户信息
+     *
      * @param token
      * @return
      */

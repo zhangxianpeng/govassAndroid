@@ -119,6 +119,7 @@
                 android:layout_height="@dimen/dp_22"
                 android:layout_alignParentRight="true"
                 android:layout_centerHorizontal="true"
+                android:visibility="gone"
                 android:src="@mipmap/login_delete" />
         </RelativeLayout>
 

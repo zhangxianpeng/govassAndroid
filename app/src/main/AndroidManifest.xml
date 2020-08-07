@@ -9,13 +9,11 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--相机权限-->
+    <!-- 相机权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
 
     <!-- 硬件加速对X5视频播放有利，建议开启 -->
     <uses-permission android:name="android.permission.GET_TASKS" />
-
-
 
     <application
         android:name=".MyApplication"
@@ -43,7 +41,7 @@
         <activity android:name=".ui.login.GovassLoginActivity" /> <!-- 项目申报 -->
         <activity android:name=".ui.projrctdeclare.ProjectDeclareActivity" /> <!-- 我的申报 -->
         <activity android:name=".ui.mydeclare.MyDeclareActivity" /> <!-- 主界面 -->
-        <activity android:name=".ui.main.BottonNavigationActivity">
+        <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -61,7 +59,7 @@
 
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
         <activity android:name=".ui.newmsg.NewMsgActivity" />
-        <activity android:name=".ui.register.RegisterStepTwoActivity"></activity>
+        <activity android:name=".ui.register.RegisterStepTwoActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -72,6 +70,9 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <activity android:name=".ui.customserver.CustomServerActivity" />
+        <activity android:name=".ui.main.BottonNavigationActivity"></activity>
     </application>
 
 </manifest>

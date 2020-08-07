@@ -5,6 +5,7 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 
 import java.io.File;
 
@@ -20,12 +21,11 @@ public class RegisterStepOneViewModel extends BaseViewModel<RepositoryImpl> {
      * 上传营业执照
      * 图片可以拍照、也可以从本地选择
      * @param type
-     * @param key
      * @param file
      * @return
      */
-    public LiveData<Resource<String>> uploadBusinesslicense(String type, String key, File file) {
-        return getRepository().upLoadPic(type, key, file);
+    public LiveData<Resource<UploadSingleResVo>> uploadBusinesslicense(String type, File file) {
+        return getRepository().uploadSigleFile(type, file);
     }
 
 }

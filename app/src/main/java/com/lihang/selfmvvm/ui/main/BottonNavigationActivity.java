@@ -1,10 +1,12 @@
 package com.lihang.selfmvvm.ui.main;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityBottonNavigationBinding;
@@ -14,7 +16,6 @@ import com.lihang.selfmvvm.ui.fragment.MsgFragment;
 import com.lihang.selfmvvm.ui.fragment.ProjectFragment;
 import com.lihang.selfmvvm.ui.fragment.UserFragment;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
-import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -25,11 +26,11 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import io.reactivex.functions.Consumer;
 
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
-import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_NICK_NAME;
 
 public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewModel, ActivityBottonNavigationBinding> {
@@ -42,7 +43,8 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     private List<Fragment> fragments = new ArrayList<>();
 
-    private String token = "";
+    private static final int REQUEST_CODE = 10001;
+    private static final int RESPONSE_CODE = 10002;
 
     /**
      * 权限组
@@ -50,7 +52,7 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
     private static final String[] permissionsGroup = new String[]{
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_SETTINGS,Manifest.permission.CAMERA};
+            Manifest.permission.WRITE_SETTINGS, Manifest.permission.CAMERA};
 
     //动态权限
     RxPermissions rxPermissions = new RxPermissions(this);
@@ -62,9 +64,8 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     @Override
     protected void processLogic() {
-        token = (String) PreferenceUtil.get(USER_LOGIN_TOKEN, "");
-        if (TextUtils.isEmpty(token)) {
-            ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+        if (TextUtils.isEmpty(MyApplication.getToken())) {
+            startGovassLogin();
         } else {
             getUserInfo();
         }
@@ -72,13 +73,13 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
     }
 
     private void getUserInfo() {
-        mViewModel.getUserInfo(token).observe(this, res -> {
+        mViewModel.getUserInfo(MyApplication.getToken()).observe(this, res -> {
             res.handler(new OnCallback<UserInfoVo>() {
                 @Override
                 public void onSuccess(UserInfoVo data) {
                     if (data != null) {
-                        PreferenceUtil.put(USER_LOGIN_HEAD_URL,data.getHeadUrl());
-                        PreferenceUtil.put(USER_NICK_NAME,data.getRealname());
+                        PreferenceUtil.put(USER_LOGIN_HEAD_URL, data.getHeadUrl());
+                        PreferenceUtil.put(USER_NICK_NAME, data.getRealname());
                         if (data.getUserType() == 0) { //政府
                             CheckPermissionUtils.getInstance().setGovernment(true);
                         } else if (data.getUserType() == 1) {  //企业
@@ -92,6 +93,7 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
                 @Override
                 public void onFailure(String msg) {
                     super.onFailure(msg);
+                    startGovassLogin();
                 }
 
                 @Override
@@ -101,6 +103,11 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
             });
         });
 
+    }
+
+    private void startGovassLogin() {
+        Intent intent = new Intent(BottonNavigationActivity.this, GovassLoginActivity.class);
+        startActivityForResult(intent, REQUEST_CODE);
     }
 
     private void updateUi(boolean isGovernment) {
@@ -161,6 +168,15 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     @Override
     public void onClick(View view) {
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE && resultCode == RESPONSE_CODE) {
+            getUserInfo();
+        }
 
     }
 }

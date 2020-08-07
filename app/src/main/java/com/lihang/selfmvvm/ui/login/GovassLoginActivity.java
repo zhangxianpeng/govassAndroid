@@ -1,5 +1,6 @@
 package com.lihang.selfmvvm.ui.login;
 
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,6 +34,7 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
     private String userName = "";
     private String passwprd = "";
     private String verifyCode = "";
+    private static final int RESPONSE_CODE = 10002;
 
     @Override
     protected int getContentViewId() {
@@ -46,7 +48,6 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
 
     private void initVerifyCode() {
         uuid = UUID.randomUUID().toString();
-        LogUtils.d("zhangxianpenguuid===", uuid);
         String verifyCodeImgUrl = SystemConst.DEFAULT_SERVER + SystemConst.CAPTCHA + "?uuid=" + uuid;
         Glide.with(this).load(verifyCodeImgUrl).placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher).into(binding.ivVerifycode);
@@ -57,7 +58,7 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         binding.ivVerifycode.setOnClickListener(mNoDoubleClickListener);
         binding.btnLogin.setOnClickListener(mNoDoubleClickListener);
         binding.tvRegister.setOnClickListener(mNoDoubleClickListener);
-
+        binding.ivClearInputPwd.setOnClickListener(mNoDoubleClickListener);
         binding.etPhone.addTextChangedListener(this);
         binding.etUserPassword.addTextChangedListener(this);
         binding.etVerifycode.addTextChangedListener(this);
@@ -78,6 +79,10 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                 case R.id.tv_register:
                     ActivityUtils.startActivity(getContext(), RegisterStepOneActivity.class);
                     break;
+                case R.id.iv_clear_input_pwd:
+                    passwprd = "";
+                    binding.etUserPassword.setText("");
+                    break;
                 default:
                     break;
             }
@@ -96,14 +101,15 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                     resource.handler(new OnCallback<LoginDataVo>() {
                         @Override
                         public void onSuccess(LoginDataVo data) {
-                                String token = data.getToken();
-                                PreferenceUtil.put(USER_LOGIN_TOKEN, token);
-                                ToastUtils.showToast("登录成功，保存token到本地");
+                            String token = data.getToken();
+                            PreferenceUtil.put(USER_LOGIN_TOKEN, token);
+                            ToastUtils.showToast("登录成功");
+                            backResult(token);
                         }
 
                         @Override
                         public void onFailure(String msg) {
-                            LogUtils.e("HTTP","onFailure==="+msg);
+                            super.onFailure(msg);
                         }
 
                         @Override
@@ -112,6 +118,13 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                         }
                     });
                 });
+    }
+
+    private void backResult(String token) {
+        Intent intent = new Intent();
+        intent.putExtra("token", token);
+        setResult(RESPONSE_CODE, intent);
+        finish();
     }
 
     @Override
@@ -135,21 +148,24 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         passwprd = getStringByUI(binding.etUserPassword);
         verifyCode = getStringByUI(binding.etVerifycode);
 
-        if (TextUtils.isEmpty(userName)) {
-            ToastUtils.showToast("用户名不能为空~");
-            return;
-        }
-
-        if (TextUtils.isEmpty(passwprd)) {
-            ToastUtils.showToast("密码不能为空");
-            return;
-        }
-
-        if (TextUtils.isEmpty(verifyCode)) {
-            ToastUtils.showToast("验证码不能为空");
-            return;
-        }
-        binding.btnLogin.setEnabled(true);
-
+        updateBtn();
+        updateClearBtn();
     }
+
+    private void updateBtn() {
+        if (!TextUtils.isEmpty(userName) && !TextUtils.isEmpty(passwprd) && !TextUtils.isEmpty(verifyCode)) {
+            binding.btnLogin.setEnabled(true);
+        } else {
+            binding.btnLogin.setEnabled(false);
+        }
+    }
+
+    private void updateClearBtn() {
+        if (!TextUtils.isEmpty(passwprd)) {
+            binding.ivClearInputPwd.setVisibility(View.VISIBLE);
+        } else {
+            binding.ivClearInputPwd.setVisibility(View.GONE);
+        }
+    }
+
 }

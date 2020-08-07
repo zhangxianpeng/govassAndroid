@@ -209,7 +209,13 @@ public abstract class BaseModel {
     }
 
 
-    //上传文件只有2个参数，showDialog：是否显示dialog；loadmessage：showDialog显示的文字
+    /**
+     * 上传
+     * @param observable
+     * @param liveData
+     * @param <T>
+     * @return
+     */
     public <T> MutableLiveData<T> upLoadFile(Observable observable, MutableLiveData<T> liveData) {
         return upLoadFile(observable, liveData, null);
     }

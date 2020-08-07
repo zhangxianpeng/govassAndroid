@@ -28,15 +28,15 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityRegisterStepOneBinding;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.CommonUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -255,6 +255,7 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         registerReqVo.setLegalRepresentative(getStringByUI(binding.etLegalRepresentative));
         registerReqVo.setRegisteredCapital(getStringByUI(binding.etRegisteredCapital));
         registerReqVo.setSetUpDate(getStringByUI(binding.etSetUpDate));
+        registerReqVo.setBusinessLicenseImg("https://csdnimg.cn/cdn/content-toolbar/csdn-logo.png?v=20200416.1");
         Bundle bundle = new Bundle();
         bundle.putSerializable("registerReqVo", registerReqVo);
         ActivityUtils.startActivityWithBundle(this, RegisterStepTwoActivity.class, bundle);
@@ -293,11 +294,9 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         TextView cameraTv = view.findViewById(R.id.btn_camera);
         TextView photoTv = view.findViewById(R.id.btn_photo);
         TextView cancelTv = view.findViewById(R.id.btn_cancel);
-
         cameraTv.setOnClickListener(mNoDoubleClickListener);
         photoTv.setOnClickListener(mNoDoubleClickListener);
         cancelTv.setOnClickListener(mNoDoubleClickListener);
-
     }
 
     private void backgroundAlpha(float bgAlpha) {
@@ -325,12 +324,15 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                     binding.ivPreview.setVisibility(View.VISIBLE);
                     binding.ivAdd.setVisibility(View.GONE);
                     binding.ivPreview.setImageURI(mCameraUri);
-//                    upload(mCameraUri);
+                    uploadPic(CommonUtils.uriToFile(mCameraUri, this));
+                    LogUtils.d("photoUri===", mCameraUri.toString());
                 } else {
                     // 使用图片路径加载
                     binding.ivPreview.setVisibility(View.VISIBLE);
                     binding.ivAdd.setVisibility(View.GONE);
                     binding.ivPreview.setImageBitmap(BitmapFactory.decodeFile(mCameraImagePath));
+                    File file = new File(mCameraImagePath);
+                    uploadPic(file);
                 }
             } else {
                 ToastUtils.showToast("取消");
@@ -349,33 +351,10 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         }
     }
 
-    private void upload(Uri uri) {
-        ToastUtils.showToast("上传");
-        File file = null;   //图片地址
-        try {
-            file = new File(new URI(uri.toString()));
-            mViewModel.uploadBusinesslicense("type", "key", file).observe(this, res -> {
-                res.handler(new OnCallback<String>() {
-                    @Override
-                    public void onSuccess(String data) {
-
-                    }
-
-                    @Override
-                    public void onFailure(String msg) {
-                        super.onFailure(msg);
-                    }
-
-                    @Override
-                    public void onCompleted() {
-                        super.onCompleted();
-                    }
-                });
-            });
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
+    private void uploadPic(File file) {
+        CommonUtils.imageUpload(file);
     }
+
 
     @Override
     public void onClick(View view) {

@@ -14,8 +14,13 @@ import android.app.Application;
 
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
+import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
+
+import java.io.File;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 /**
  * @ClassName: UserFragmentViewModel
@@ -29,8 +34,13 @@ public class UserFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
 
-    //getUserInfo
-    public void getUserInfo() {
-
+    public LiveData<Resource<UploadSingleResVo>> testUploadFile(String type, File file) {
+        return getRepository().uploadSigleFile(type, file);
     }
+
+    public LiveData<Resource<String>> govassLogout(Object token) {
+        return getRepository().govassLogout(token);
+    }
+
+
 }

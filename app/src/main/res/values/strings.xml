@@ -51,6 +51,7 @@
     <string name="approved_projects">已审批项目</string>
     <string name="enterprise_project">企业项目</string>
     <string name="my_declaration">我的申报</string>
+    <string name="my_receive_msg">我的收文</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="issued_documents">已发公文</string>
@@ -152,4 +153,9 @@
     <string name="pwd_must">密码*</string>
 
     <string name="message_must">请输入必填信息</string>
+    <string name="cs_contract">客服联系方式</string>
+
+    <string name="phoneNumber">电话</string>
+    <string name="email">邮箱</string>
+
 </resources>

@@ -71,6 +71,7 @@
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_toRightOf="@+id/iv_head"
                 android:text="政府用户"
+                android:textStyle="bold"
                 android:textColor="#ff222222"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -123,6 +124,7 @@
                     android:src="@mipmap/me_ic_mydeclare" />
 
                 <TextView
+                    android:id="@+id/project_declare"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -146,6 +148,7 @@
                     android:src="@mipmap/me_ic_addressee" />
 
                 <TextView
+                    android:id="@+id/my_msg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"

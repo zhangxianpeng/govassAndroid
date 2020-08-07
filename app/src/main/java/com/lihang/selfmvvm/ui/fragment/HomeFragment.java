@@ -4,19 +4,21 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
+import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
-import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -28,7 +30,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
-import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 
@@ -44,8 +45,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
     private ArrayList<String> projectList = new ArrayList<>();
 
-    private String token = "";
-
 
     @Override
     protected int getContentViewId() {
@@ -54,8 +53,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
-        token = (String) PreferenceUtil.get(USER_LOGIN_TOKEN, "");
-        if (TextUtils.isEmpty(token)) {
+        if (TextUtils.isEmpty(MyApplication.getToken())) {
             ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
         } else {
             initBannerData();
@@ -66,7 +64,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     }
 
     private void initBannerData() {
-        mViewModel.getGovassBannerList(token).observe(this, res -> {
+        mViewModel.getGovassBannerList(MyApplication.getToken()).observe(this, res -> {
             res.handler(new OnCallback<List<ImageDataInfo>>() {
                 @Override
                 public void onSuccess(List<ImageDataInfo> data) {
@@ -129,24 +127,23 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.rvMenu.setAdapter(homeMenuAdapter);
         homeMenuAdapter.setOnItemClickListener((view, position) -> {
             switch (position) {
-                case 0:  //调查问卷
+                case 0:
                     ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
                     break;
-                case 1: //项目申报
+                case 1:
                     break;
-                case 2: //企业账户管理
+                case 2:
                     break;
-                case 3: //系统公告
+                case 3:
                     break;
-                case 4: //联系客服
+                case 4:
+                    ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                     break;
-                case 5: //我的企业
+                case 5:
                     break;
-                case 6: //消息通知
+                case 6:
                     ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                     break;
-//                case 7:
-//                    break;
                 default:
                     break;
             }
@@ -154,7 +151,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     }
 
     private void initMenuData() {
-        //菜单
         HomeMenuBean surveyBean = new HomeMenuBean();
         surveyBean.setImageUrl(R.mipmap.home_ic_survey);
         surveyBean.setTitle(getContext().getString(R.string.questionnaire));
@@ -188,7 +184,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         HomeMenuBean msgBean = new HomeMenuBean();
         msgBean.setImageUrl(R.mipmap.home_ic_alerts);
         msgBean.setTitle(getContext().getString(R.string.message_notification));
-        homeMenuPathList.add(msgBean);
+        if (CheckPermissionUtils.getInstance().isGovernment())
+            homeMenuPathList.add(msgBean);
     }
 
     private void initProjectList() {

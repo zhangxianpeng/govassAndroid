@@ -11,8 +11,10 @@ import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.File;
@@ -104,17 +106,16 @@ public class RepositoryImpl extends BaseModel {
     /**
      * 上传文件(进度监听)
      * @param type
-     * @param key
      * @param file
      * @return
      */
-    public MutableLiveData<Resource<String>> upLoadPic(String type, String key, File file) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<UploadSingleResVo>> uploadSigleFile(String type, File file) {
+        MutableLiveData<Resource<UploadSingleResVo>> liveData = new MutableLiveData<>();
 
         UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(file, liveData);
         //"file"  是key
         MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), uploadFileRequestBody);
-        return upLoadFile(getApiService().uploadPic(PARAMS.changeToRquestBody(type), body), liveData);
+        return upLoadFile(getApiService().uploadSigleFile(PARAMS.changeToRquestBody(type), body), liveData);
     }
 
 
@@ -148,6 +149,16 @@ public class RepositoryImpl extends BaseModel {
     }
 
     /**
+     * 注销登录-政企通
+     * @param token
+     * @return
+     */
+    public MutableLiveData<Resource<String>> govassLogout(Object token) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().govassLogout(token), liveData);
+    }
+
+    /**
      * 注册-政企通
      * @param registerReqVo
      * @return
@@ -158,16 +169,6 @@ public class RepositoryImpl extends BaseModel {
     }
 
 
-    /**
-     * 获取验证码图片
-     *
-     * @param uuid
-     * @return
-     */
-//    public MutableLiveData<Resource<BaseResVo>> getVerifyCode(String uuid) {
-//        MutableLiveData<Resource<BaseResVo>> liveData = new MutableLiveData<>();
-//        return getApiService().getVerifyCode(uuid);
-//    }
 
     /**
      * 获取用户信息
@@ -200,5 +201,11 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<CsDataInfoVo>> getCustomerService(String token) {
         MutableLiveData<Resource<CsDataInfoVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getCustomerService(token), liveData);
+    }
+
+    //----------------------------------------------------政企通 通讯录------------------------------------------------------------
+    public MutableLiveData<Resource<GroupResVo>> getGuoupList(String token) {
+        MutableLiveData<Resource<GroupResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getGuoupList(token), liveData);
     }
 }

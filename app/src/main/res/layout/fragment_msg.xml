@@ -99,42 +99,6 @@
             android:layout_marginTop="@dimen/dp_8"
             android:background="#F3F3F3" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_38"
-            android:layout_marginLeft="@dimen/dp_26"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10">
-
-            <ImageView
-                android:id="@+id/iv_all_user"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/address_ic_all" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/all_user"
-                android:textColor="#ff303030"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:layout_toRightOf="@+id/iv_all_user"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_all_user_msg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/all_user_msg"
-                android:textColor="#ff5379a0"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_1"
@@ -143,7 +107,7 @@
             android:layout_marginTop="@dimen/dp_8"
             android:background="#F3F3F3" />
 
-        <ExpandableListView
+        <com.lihang.selfmvvm.customview.swipeview.SwipeExpandableListView
             android:id="@+id/ex_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

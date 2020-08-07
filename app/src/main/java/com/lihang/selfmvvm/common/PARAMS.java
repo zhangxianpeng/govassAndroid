@@ -37,8 +37,9 @@ public class PARAMS {
         return map;
     }
 
-    public static RequestBody changeToRquestBody(String param) {
-        return RequestBody.create(MediaType.parse("multipart/form-data"), param);
+
+    public static RequestBody changeToRquestBody(String type) {
+        return RequestBody.create(MediaType.parse("multipart/form-data"), type);
     }
 
     public static MultipartBody.Part changeToMutiPartBody(String key, File file) {

@@ -8,8 +8,10 @@ import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.util.HashMap;
@@ -20,7 +22,6 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -89,22 +90,12 @@ public interface RetrofitApiService {
     @FormUrlEncoded
     Observable<ResponseBody> postAddGank(@FieldMap HashMap<String, String> map);
 
-    //单张图片上传
-    @POST("upload/pic")
-    @Multipart
-    Observable<ResponModel<String>> uploadPic(@Part("type") RequestBody type, @Part MultipartBody.Part file);
-
 
     //单张图片上传
     @POST("upload/picss")
     @Multipart
     Observable<ResponModel<String>> uploadPicss(@Part("type") RequestBody type, @PartMap Map<String, RequestBody> maps);
 
-    //Retrofit下载文件
-    @GET
-    @Streaming
-    //10以上用@streaming。不会造成oom，反正你用就是了
-    Observable<ResponseBody> downloadFile(@Url String url);
 
     @GET
     @Streaming
@@ -122,15 +113,30 @@ public interface RetrofitApiService {
     @POST("sys/login")
     Observable<ResponModel<LoginDataVo>> govassLogin(@Body LoginReqVo loginReqVo);
 
+    /**
+     * 注销登录-政企通
+     * @param token
+     * @return
+     */
+    @POST("sys/logout")
+    Observable<ResponModel<String>> govassLogout(@Body Object token);
 
     /**
      * 注册-企业用户
+     *
      * @param registerReqVo
      * @return
      */
     @POST("sys/enterpriseuser/register")
     Observable<ResponModel<String>> register(@Body RegisterReqVo registerReqVo);
 
+    /**
+     * 修改注册信息
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/enterpriseuser/updateByEnterprise")
+    Observable<ResponModel<String>> updateRegister(@Body RegisterReqVo registerReqVo);
 
     /**
      * 获取用户信息
@@ -163,7 +169,9 @@ public interface RetrofitApiService {
     /**
      * 单个文件上传
      */
-//    file/upload
+    @POST("file/upload")
+    @Multipart
+    Observable<ResponModel<UploadSingleResVo>> uploadSigleFile(@Part("type") RequestBody type, @Part MultipartBody.Part file);
 
     /**
      * 多个文件上传
@@ -174,4 +182,20 @@ public interface RetrofitApiService {
      * 文件下载
      */
 //    file/download
+    //Retrofit下载文件
+    @GET
+    @Streaming
+    //10以上用@streaming。不会造成oom，反正你用就是了
+    Observable<ResponseBody> downloadFile(@Url String url);
+
+//    sys/group/addUser
+
+    /**
+     * 获取分组列表
+     *
+     * @param token
+     * @return
+     */
+    @GET("sys/group/list")
+    Observable<ResponModel<GroupResVo>> getGuoupList(@Query("token") String token);
 }
