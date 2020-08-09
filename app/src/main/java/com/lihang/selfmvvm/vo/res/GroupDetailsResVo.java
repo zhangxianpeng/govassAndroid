@@ -25,7 +25,7 @@ public class GroupDetailsResVo {
     private String lastUpdateTime;
     private int createUserId;
     private String createTime;
-    private List<Object> userList;
+    private List<MemberDetailResVo> userList;
 
     public int getId() {
         return id;
@@ -91,11 +91,11 @@ public class GroupDetailsResVo {
         this.createTime = createTime;
     }
 
-    public List<Object> getUserList() {
+    public List<MemberDetailResVo> getUserList() {
         return userList;
     }
 
-    public void setUserList(List<Object> userList) {
+    public void setUserList(List<MemberDetailResVo> userList) {
         this.userList = userList;
     }
 }

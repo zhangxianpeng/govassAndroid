@@ -1,8 +1,8 @@
 /**
  * Copyright (C), 2015-2020, XXX有限公司
- * FileName: GroupDataBean
+ * FileName: ChildModel
  * Author: zhang
- * Date: 2020/7/11 17:55
+ * Date: 2020/7/11 17:57
  * Description:
  * History:
  * <author> <time> <version> <desc>
@@ -10,25 +10,19 @@
  */
 package com.lihang.selfmvvm.bean;
 
-import java.io.Serializable;
-
 /**
- * @ClassName: GroupDataBean
+ * @ClassName: ChildModel
  * @Description: java类作用描述
  * @Author: zhang
- * @Date: 2020/7/11 17:55
+ * @Date: 2020/7/11 17:57
  */
-public class GroupDataBean implements Serializable {
+public class ChildModel {
     private String name;
-    private String num;
+    private String sig;
 
-    public GroupDataBean(String name) {
+    public ChildModel(String name, String sig) {
         this.name = name;
-    }
-
-    public GroupDataBean(String name, String num) {
-        this.name = name;
-        this.num = num;
+        this.sig = sig;
     }
 
     public String getName() {
@@ -39,11 +33,11 @@ public class GroupDataBean implements Serializable {
         this.name = name;
     }
 
-    public String getNum() {
-        return num;
+    public String getSig() {
+        return sig;
     }
 
-    public void setNum(String num) {
-        this.num = num;
+    public void setSig(String sig) {
+        this.sig = sig;
     }
 }

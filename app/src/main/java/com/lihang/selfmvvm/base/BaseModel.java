@@ -217,11 +217,11 @@ public abstract class BaseModel {
      * @return
      */
     public <T> MutableLiveData<T> upLoadFile(Observable observable, MutableLiveData<T> liveData) {
-        return upLoadFile(observable, liveData, null);
+        return upLoad(observable, liveData, null);
     }
 
     //上传文件
-    public <T> MutableLiveData<T> upLoadFile(Observable observable, MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
+    public <T> MutableLiveData<T> upLoad(Observable observable, MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
 
         if (paramsBuilder == null) {
             paramsBuilder = paramsBuilder.build();
@@ -238,7 +238,7 @@ public abstract class BaseModel {
                 .observeOn(AndroidSchedulers.mainThread())
                 //防止RxJava内存泄漏
                 .subscribe(o -> {
-                    liveData.postValue((T) Resource.success("成功了"));
+                    liveData.postValue((T) Resource.response((ResponModel<Object>) o));
                 }, throwable -> {
                     liveData.postValue((T) Resource.error((Throwable) throwable));
                 });

@@ -7,10 +7,13 @@ import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -22,6 +25,7 @@ import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
@@ -193,9 +197,56 @@ public interface RetrofitApiService {
     /**
      * 获取分组列表
      *
-     * @param token
+     * @param type
      * @return
      */
     @GET("sys/group/list")
-    Observable<ResponModel<GroupResVo>> getGuoupList(@Query("token") String token);
+    Observable<ResponModel<GroupResVo>> getGuoupList(@Query("type") int type);
+
+    /**
+     * 获取分组列表
+     *
+     * @param type
+     * @return
+     */
+    @GET("sys/group/list")
+    Call<BaseGroupResVo> getGuoupListinCall(@Query("type") int type);
+
+    /**
+     * 获取某个分组下所有用户信息
+     * @param groupId
+     * @return
+     */
+    @GET("sys/group/info/{groupId}")
+    Observable<ResponModel<GroupDetailsResVo>> getGroupAllUser(@Query("groupId") int groupId);
+
+    /**
+     * 获取全部政府用户
+     * @return
+     */
+    @GET("sys/user/listAllGovernment")
+    Observable<ResponModel<List<MemberDetailResVo>>> getAllGovernment();
+
+    /**
+     * 获取全部企业用户
+     * @return
+     */
+    @GET("sys/enterpriseuser/listAllEnterprise")
+    Observable<ResponModel<MemberDetailResVo>> getAllEnterprise();
+
+    /**
+     * 获取政府某个分组下所有用户信息
+     * @param groupId
+     * @return
+     */
+    @GET("sys/user/listAllGovernment")
+    Observable<ResponModel<MemberDetailResVo>> getGovernmentFromId(@Query("groupId") int groupId);
+
+    /**
+     * 获取企业某个分组下所有用户信息
+     * @param groupId
+     * @return
+     */
+    @GET("sys/enterpriseuser/listAllEnterprise")
+    Observable<ResponModel<MemberDetailResVo>> getEnterpriseFromId(@Query("groupId") int groupId);
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.lihang.selfmvvm.customview.swipeview.SwipeItemLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -36,4 +36,30 @@
         android:textColor="#ff303030"
         android:textSize="14sp" />
     </RelativeLayout>
-</RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tv_delete"
+            android:text="删除"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:background="@color/red"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_40"/>
+
+        <TextView
+            android:id="@+id/tv_move"
+            android:text="移动"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:background="@color/gray_white"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_40"/>
+    </LinearLayout>
+</com.lihang.selfmvvm.customview.swipeview.SwipeItemLayout>

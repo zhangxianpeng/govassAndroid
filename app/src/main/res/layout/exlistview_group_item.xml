@@ -14,7 +14,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:scaleType="fitXY"
-        android:src="@mipmap/address_ic_group" />
+        android:src="@mipmap/down" />
 
     <!--<ImageView-->
         <!--android:id="@+id/img_group"-->

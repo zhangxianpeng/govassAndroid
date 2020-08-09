@@ -15,7 +15,7 @@ public class GroupResVo {
     private int pageSize;
     private int totalPage;
     private int currPage;
-    private List<GroupDetailsResVo> groupDetailsResVos;
+    private List<GroupDetailsResVo> list;
 
     public int getTotalCount() {
         return totalCount;
@@ -49,11 +49,11 @@ public class GroupResVo {
         this.currPage = currPage;
     }
 
-    public List<GroupDetailsResVo> getGroupDetailsResVos() {
-        return groupDetailsResVos;
+    public List<GroupDetailsResVo> getList() {
+        return list;
     }
 
-    public void setGroupDetailsResVos(List<GroupDetailsResVo> groupDetailsResVos) {
-        this.groupDetailsResVos = groupDetailsResVos;
+    public void setList(List<GroupDetailsResVo> list) {
+        this.list = list;
     }
 }

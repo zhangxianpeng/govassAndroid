@@ -25,6 +25,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
+import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.databinding.ActivityRegisterStepOneBinding;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
@@ -34,6 +35,7 @@ import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 
 import java.io.File;
 import java.io.IOException;
@@ -64,6 +66,11 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
     private static final int CAMERA_REQUEST_CODE = 1001;
     private static final int RC_CHOOSE_PHOTO = 1002;
 
+    //是否选择的是头像
+    private boolean isClickHead = false;
+
+    RegisterReqVo registerReqVo = new RegisterReqVo();
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_register_step_one;
@@ -73,9 +80,6 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
     protected void processLogic() {
 
     }
-
-    //营业执照
-    private String businessLicenseImg = "";
 
     @Override
     protected void setListener() {
@@ -99,6 +103,7 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                     gotoNextStep();
                     break;
                 case R.id.iv_head:
+                    isClickHead = true;
                     showPicDialog(view);
                     break;
                 case R.id.tv_login:
@@ -244,10 +249,8 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
             return;
         }
 
-        RegisterReqVo registerReqVo = new RegisterReqVo();
         registerReqVo.setEnterpriseName(getStringByUI(binding.etCompanyName));
         registerReqVo.setAddress(getStringByUI(binding.etComAddress));
-        registerReqVo.setBusinessLicenseImg(businessLicenseImg);
         registerReqVo.setBusinessScope(getStringByUI(binding.etBusinessScope));
         registerReqVo.setBusinessTerm(getStringByUI(binding.etBusinessTerm));
         registerReqVo.setBusinessType(getStringByUI(binding.etBusinessType));
@@ -255,7 +258,6 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         registerReqVo.setLegalRepresentative(getStringByUI(binding.etLegalRepresentative));
         registerReqVo.setRegisteredCapital(getStringByUI(binding.etRegisteredCapital));
         registerReqVo.setSetUpDate(getStringByUI(binding.etSetUpDate));
-        registerReqVo.setBusinessLicenseImg("https://csdnimg.cn/cdn/content-toolbar/csdn-logo.png?v=20200416.1");
         Bundle bundle = new Bundle();
         bundle.putSerializable("registerReqVo", registerReqVo);
         ActivityUtils.startActivityWithBundle(this, RegisterStepTwoActivity.class, bundle);
@@ -321,16 +323,25 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
             if (resultCode == RESULT_OK) {
                 if (isAndroidQ) {
                     // Android 10 使用图片uri加载
-                    binding.ivPreview.setVisibility(View.VISIBLE);
-                    binding.ivAdd.setVisibility(View.GONE);
-                    binding.ivPreview.setImageURI(mCameraUri);
+                    if (isClickHead) {
+                        binding.ivHead.setImageURI(mCameraUri);
+                    } else {
+                        binding.ivPreview.setVisibility(View.VISIBLE);
+                        binding.ivAdd.setVisibility(View.GONE);
+                        binding.ivPreview.setImageURI(mCameraUri);
+                    }
+
                     uploadPic(CommonUtils.uriToFile(mCameraUri, this));
                     LogUtils.d("photoUri===", mCameraUri.toString());
                 } else {
                     // 使用图片路径加载
-                    binding.ivPreview.setVisibility(View.VISIBLE);
-                    binding.ivAdd.setVisibility(View.GONE);
-                    binding.ivPreview.setImageBitmap(BitmapFactory.decodeFile(mCameraImagePath));
+                    if (isClickHead) {
+                        binding.ivHead.setImageBitmap(BitmapFactory.decodeFile(mCameraImagePath));
+                    } else {
+                        binding.ivPreview.setVisibility(View.VISIBLE);
+                        binding.ivAdd.setVisibility(View.GONE);
+                        binding.ivPreview.setImageBitmap(BitmapFactory.decodeFile(mCameraImagePath));
+                    }
                     File file = new File(mCameraImagePath);
                     uploadPic(file);
                 }
@@ -340,19 +351,31 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         } else if (requestCode == RC_CHOOSE_PHOTO) {
             Uri uri = data.getData();
             String filePath = FileUtils.getFilePathByUri(this, uri);
-
             if (!TextUtils.isEmpty(filePath)) {
                 RequestOptions requestOptions1 = new RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE);
                 //将照片显示在 ivImage上
                 binding.ivPreview.setVisibility(View.VISIBLE);
                 binding.ivAdd.setVisibility(View.GONE);
                 Glide.with(this).load(filePath).apply(requestOptions1).into(binding.ivPreview);
+                File file = new File(filePath);
+                uploadPic(file);
             }
         }
     }
 
     private void uploadPic(File file) {
-        CommonUtils.imageUpload(file);
+        mViewModel.uploadBusinesslicense("image/jpg", file).observe(this, res -> {
+            res.handler(new OnCallback<UploadSingleResVo>() {
+                @Override
+                public void onSuccess(UploadSingleResVo data) {
+                    registerReqVo.setBusinessLicenseImg(data.getFilePath());
+                    if (isClickHead) {
+                        registerReqVo.setHeadUrl(data.getFilePath());
+                    }
+                }
+            });
+        });
+//        mViewModel.testUploadFile("image/jpg", file);
     }
 
 

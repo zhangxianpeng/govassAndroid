@@ -30,17 +30,27 @@
         android:theme="@style/BlackFront_AppTheme">
 
         <!-- 测试 -->
-        <activity android:name=".ui.TestActivity" /> <!-- 文件预览 -->
-        <activity android:name=".ui.filepreview.FilePreviewActivity" /> <!-- im 聊天 -->
-        <activity android:name=".ui.communicate.CommunicateActivity" /> <!-- 通讯录 -->
-        <activity android:name=".ui.communicationlist.CommunicationListActivity" /> <!-- 公文详情 -->
-        <activity android:name=".ui.documentdetail.DocumentDetailActivity" /> <!-- 已发公文 -->
-        <activity android:name=".ui.senddocument.SendDocumentctivity" /> <!-- 申报详情 -->
-        <activity android:name=".ui.declaredetail.DeclareDetailActivity" /> <!-- 注册 -->
-        <activity android:name=".ui.register.RegisterStepOneActivity" /> <!-- 登录 -->
-        <activity android:name=".ui.login.GovassLoginActivity" /> <!-- 项目申报 -->
-        <activity android:name=".ui.projrctdeclare.ProjectDeclareActivity" /> <!-- 我的申报 -->
-        <activity android:name=".ui.mydeclare.MyDeclareActivity" /> <!-- 主界面 -->
+        <activity android:name=".ui.TestActivity" />
+        <!-- 文件预览 -->
+        <activity android:name=".ui.filepreview.FilePreviewActivity" />
+        <!-- im 聊天 -->
+        <activity android:name=".ui.communicate.CommunicateActivity" />
+        <!-- 通讯录 -->
+        <activity android:name=".ui.communicationlist.CommunicationListActivity" />
+        <!-- 公文详情 -->
+        <activity android:name=".ui.documentdetail.DocumentDetailActivity" />
+        <!-- 已发公文 -->
+        <activity android:name=".ui.senddocument.SendDocumentctivity" />
+        <!-- 申报详情 -->
+        <activity android:name=".ui.declaredetail.DeclareDetailActivity" />
+
+        <!-- 登录 -->
+        <activity android:name=".ui.login.GovassLoginActivity" />
+        <!-- 项目申报 -->
+        <activity android:name=".ui.projrctdeclare.ProjectDeclareActivity" />
+        <!-- 我的申报 -->
+        <activity android:name=".ui.mydeclare.MyDeclareActivity" />
+        <!-- 引导页 -->
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -59,6 +69,8 @@
 
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
         <activity android:name=".ui.newmsg.NewMsgActivity" />
+        <!-- 注册 -->
+        <activity android:name=".ui.register.RegisterStepOneActivity" />
         <activity android:name=".ui.register.RegisterStepTwoActivity" />
 
         <provider
@@ -72,7 +84,10 @@
         </provider>
 
         <activity android:name=".ui.customserver.CustomServerActivity" />
-        <activity android:name=".ui.main.BottonNavigationActivity"></activity>
+        <!--主页面-->
+        <activity android:name=".ui.main.BottonNavigationActivity" />
+        <!--成员管理-->
+        <activity android:name=".ui.mailist.MemberManagerActivity"></activity>
     </application>
 
 </manifest>

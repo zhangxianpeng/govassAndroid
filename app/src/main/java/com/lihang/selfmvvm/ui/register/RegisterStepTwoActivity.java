@@ -1,12 +1,16 @@
 package com.lihang.selfmvvm.ui.register;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityRegisterStepTwoBinding;
+import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.AESUtils;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
@@ -82,6 +86,15 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
             return;
         }
 
+        if (TextUtils.isEmpty(getStringByUI(binding.etPasswordVerify))) {
+            ToastUtils.showToast(getContext().getString(R.string.message_must));
+            return;
+        }
+
+        if(!getStringByUI(binding.etPassword).equals(getStringByUI(binding.etPasswordVerify))) {
+            ToastUtils.showToast(getContext().getString(R.string.pwd_not_equal));
+            return;
+        }
 
         registerReqVo.setUsername(getStringByUI(binding.etUserName));
         registerReqVo.setMobile(getStringByUI(binding.etPhone));
@@ -93,7 +106,9 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
-
+                    ToastUtils.showToast(data);
+                    ActivityUtils.startActivity(RegisterStepTwoActivity.this,GovassLoginActivity.class);
+                    finish();
                 }
 
                 @Override

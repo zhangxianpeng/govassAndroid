@@ -151,11 +151,17 @@
     <string name="mail_must">邮箱*</string>
     <string name="id_must">身份证*</string>
     <string name="pwd_must">密码*</string>
+    <string name="verify_pwd_must">确认密码*</string>
 
     <string name="message_must">请输入必填信息</string>
     <string name="cs_contract">客服联系方式</string>
+    <string name="pwd_not_equal">两次输入的密码不一致</string>
 
     <string name="phoneNumber">电话</string>
     <string name="email">邮箱</string>
 
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="move">移动</string>
+    <string name="select_user">请至少选择一个用户</string>
 </resources>

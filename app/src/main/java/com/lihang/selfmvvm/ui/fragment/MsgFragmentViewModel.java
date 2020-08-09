@@ -15,7 +15,9 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
 import java.util.List;
 
@@ -33,15 +35,46 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-
-    //getUserInfo
-    public void getMsg() {
-
+    /**
+     * 获取分组
+     * @param type
+     * @return
+     */
+    public LiveData<Resource<GroupResVo>> getGroupList(int type) {
+        return getRepository().getGuoupList(type);
     }
 
-    public LiveData<Resource<List<ImageDataInfo>>> getGovassBannerList(String token) {
-        return getRepository().getGovassBannerList(token);
+    /**
+     * 获取全部政府用户
+     * @return
+     */
+    public LiveData<Resource<List<MemberDetailResVo>>> getAllGovernment() {
+        return getRepository().getAllGovernment();
     }
 
+    /**
+     * 获取全部企业用户
+     * @return
+     */
+    public LiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
+        return getRepository().getAllEnterprise();
+    }
 
+    /**
+     * 根据分组id获取分组下所有成员信息（政府）
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
+        return getRepository().getGovernmentFromId(groupId);
+    }
+
+    /**
+     * 根据分组id获取分组下所有成员信息（企业）
+     * @param groupId
+     * @return
+     */
+    public LiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
+        return getRepository().getEnterpriseFromId(groupId);
+    }
 }

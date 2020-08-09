@@ -102,7 +102,6 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
                 }
             });
         });
-
     }
 
     private void startGovassLogin() {

@@ -5,15 +5,18 @@ import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ParamsBuilder;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
+import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -204,8 +207,33 @@ public class RepositoryImpl extends BaseModel {
     }
 
     //----------------------------------------------------政企通 通讯录------------------------------------------------------------
-    public MutableLiveData<Resource<GroupResVo>> getGuoupList(String token) {
+    public MutableLiveData<Resource<GroupResVo>> getGuoupList(int type) {
         MutableLiveData<Resource<GroupResVo>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getGuoupList(token), liveData);
+        return observeGo(getApiService().getGuoupList(type), liveData);
+    }
+
+    public MutableLiveData<Resource<GroupDetailsResVo>> getGroupAllUser(int groupId) {
+        MutableLiveData<Resource<GroupDetailsResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getGroupAllUser(groupId), liveData);
+    }
+
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> getAllGovernment() {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getAllGovernment(), liveData);
+    }
+
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getAllEnterprise(), liveData);
+    }
+
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getGovernmentFromId(groupId), liveData);
+    }
+
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnterpriseFromId(groupId), liveData);
     }
 }
