@@ -232,7 +232,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/enterpriseuser/listAllEnterprise")
-    Observable<ResponModel<MemberDetailResVo>> getAllEnterprise();
+    Observable<ResponModel<List<MemberDetailResVo>>> getAllEnterprise();
 
     /**
      * 获取政府某个分组下所有用户信息
@@ -240,7 +240,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/user/listAllGovernment")
-    Observable<ResponModel<MemberDetailResVo>> getGovernmentFromId(@Query("groupId") int groupId);
+    Observable<ResponModel<List<MemberDetailResVo>>> getGovernmentFromId(@Query("groupId") int groupId);
 
     /**
      * 获取企业某个分组下所有用户信息
@@ -248,5 +248,5 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/enterpriseuser/listAllEnterprise")
-    Observable<ResponModel<MemberDetailResVo>> getEnterpriseFromId(@Query("groupId") int groupId);
+    Observable<ResponModel<List<MemberDetailResVo>>> getEnterpriseFromId(@Query("groupId") int groupId);
 }

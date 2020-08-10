@@ -17,12 +17,14 @@ package com.lihang.selfmvvm.bean;
  * @Date: 2020/7/11 17:57
  */
 public class ChildModel {
+    private String headUrl;
     private String name;
-    private String sig;
+    private String userId;
 
-    public ChildModel(String name, String sig) {
+    public ChildModel(String headUrl, String name, String userId) {
+        this.headUrl = headUrl;
         this.name = name;
-        this.sig = sig;
+        this.userId = userId;
     }
 
     public String getName() {
@@ -33,11 +35,19 @@ public class ChildModel {
         this.name = name;
     }
 
-    public String getSig() {
-        return sig;
+    public String getHeadUrl() {
+        return headUrl;
     }
 
-    public void setSig(String sig) {
-        this.sig = sig;
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

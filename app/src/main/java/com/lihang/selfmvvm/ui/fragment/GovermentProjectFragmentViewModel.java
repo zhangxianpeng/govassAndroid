@@ -23,7 +23,7 @@ import androidx.annotation.NonNull;
  * @Author: zhang
  * @Date: 2020/7/18 1:00
  */
-class GovermentProjectFragmentViewModel extends BaseViewModel<RepositoryImpl> {
+public class GovermentProjectFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     public GovermentProjectFragmentViewModel(@NonNull Application application) {
         super(application);
     }

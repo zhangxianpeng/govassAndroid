@@ -35,6 +35,15 @@
                 android:textColor="#ff303030"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/iv_add_group"
+                android:layout_width="@dimen/dp_15"
+                android:layout_height="@dimen/dp_15"
+                android:src="@mipmap/ic_increase"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_15"/>
         </RelativeLayout>
 
         <EditText

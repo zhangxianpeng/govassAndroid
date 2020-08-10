@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.ChildModel;
@@ -26,6 +27,9 @@ import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 /**
  * 通讯录
@@ -45,6 +49,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     private boolean use_default_indicator = false;
 
     private PopupWindow mailistPop;
+
 
     /**
      * 默认传入的参数
@@ -67,6 +72,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      * 初始化控件
      */
     private void initView() {
+
+        groupArray = new ArrayList<>();
+        childArray = new ArrayList<>();
+
         if (use_default_indicator) {
             //不做处理就是默认
         } else {
@@ -75,9 +84,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
 
         //这里是通过改变默认的setGroupIndicator方式实现自定义指示器 但是效果不好 图标会被拉伸的很难看 不信你可以自己试试
 //        expandableListView.setGroupIndicator(this.getResources().getDrawable(R.drawable.shape_expendable_listview));
-
-        groupArray = new ArrayList<>();
-        childArray = new ArrayList<>();
 
         //创建适配器
         expandableAdapter = new ExpandableAdapter(getContext(), groupArray, R.layout.exlistview_group_item, childArray, R.layout.exlistview_child_item);
@@ -90,30 +96,80 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 if (binding.exListView.isGroupExpanded(groupPosition)) {
                     binding.exListView.collapseGroup(groupPosition);
                 } else {
-//                    //显示对话框
-//                    showDialog("加载Child数据");
-//                    //模拟加载数据 1000后通知handler新增一条数据
-//                    new Timer().schedule(new TimerTask() {
-//                        @Override
-//                        public void run() {
-//                            Message message = handler.obtainMessage();
-//                            message.what = 1;
-//                            message.arg1 = groupPosition;
-//                            handler.sendMessage(message);
-//                        }
-//                    }, 1000);
-
                     if (groupPosition == 0) {  //获取全部
-                        mViewModel.getAllGovernment().observe(getActivity(), res -> {
-                            res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                                @Override
-                                public void onSuccess(List<MemberDetailResVo> data) {
 
-                                }
+                        if (defaultType == 0) {
+                            mViewModel.getAllGovernment().observe(getActivity(), res -> {
+                                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                    @Override
+                                    public void onSuccess(List<MemberDetailResVo> data) {
+                                        List<ChildModel> childModels = childArray.get(0);
+                                        childModels.clear();
+                                        for (int i = 0; i < data.size(); i++) {
+                                            MemberDetailResVo memberDetailResVo = data.get(i);
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                        }
+
+                                        //打开分组
+                                        binding.exListView.expandGroup(groupPosition, true);
+                                    }
+                                });
                             });
-                        });
+                        } else if (defaultType == 1) {
+                            mViewModel.getAllEnterprise().observe(getActivity(), res -> {
+                                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                    @Override
+                                    public void onSuccess(List<MemberDetailResVo> data) {
+                                        List<ChildModel> childModels = childArray.get(0);
+                                        childModels.clear();
+                                        for (int i = 0; i < data.size(); i++) {
+                                            MemberDetailResVo memberDetailResVo = data.get(i);
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                        }
+
+                                        //打开分组
+                                        binding.exListView.expandGroup(groupPosition, true);
+                                    }
+                                });
+                            });
+                        }
                     } else {  //根据id
 
+                        if (defaultType == 0) {
+                            mViewModel.getGovernmentFromId(Integer.parseInt(groupArray.get(groupPosition).getOnline())).observe(getActivity(), res -> {
+                                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                    @Override
+                                    public void onSuccess(List<MemberDetailResVo> data) {
+                                        List<ChildModel> childModels = childArray.get(groupPosition);
+                                        childModels.clear();
+                                        for (int i = 0; i < data.size(); i++) {
+                                            MemberDetailResVo memberDetailResVo = data.get(i);
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                        }
+
+                                        //打开分组
+                                        binding.exListView.expandGroup(groupPosition, true);
+                                    }
+                                });
+                            });
+                        } else if (defaultType == 1) {
+                            mViewModel.getEnterpriseFromId(Integer.parseInt(groupArray.get(groupPosition).getOnline())).observe(getActivity(), res -> {
+                                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                    @Override
+                                    public void onSuccess(List<MemberDetailResVo> data) {
+                                        List<ChildModel> childModels = childArray.get(groupPosition);
+                                        childModels.clear();
+                                        for (int i = 0; i < data.size(); i++) {
+                                            MemberDetailResVo memberDetailResVo = data.get(i);
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                        }
+
+                                        //打开分组
+                                        binding.exListView.expandGroup(groupPosition, true);
+                                    }
+                                });
+                            });
+                        }
                     }
                 }
                 //返回false表示系统自己处理展开和关闭事件 返回true表示调用者自己处理展开和关闭事件
@@ -122,9 +178,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         });
     }
 
-    private void showMenuDialog(View view, String groupName) {
+    private void showMenuDialog(View view, String groupName, String groupId) {
         View contentView = LayoutInflater.from(getContext()).inflate(R.layout.mailistpop, null);
-        initPopView(contentView, groupName);
+        initPopView(contentView, groupName, groupId);
         int height = (int) getResources().getDimension(R.dimen.dp_263);
         mailistPop = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, height, true);
         mailistPop.setAnimationStyle(R.style.ActionSheetDialogAnimation);
@@ -135,18 +191,32 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         mailistPop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
     }
 
-    private void initPopView(View view, String groupName) {
+    private void initPopView(View view, String groupName, String groupId) {
         TextView titleTv = view.findViewById(R.id.tv_title);
-        TextView memManagerTv = view.findViewById(R.id.tv_member_management);
+        TextView memManagerTv = view.findViewById(R.id.tv_member_delete);
         TextView addMemberTv = view.findViewById(R.id.tv_add_member);
+        TextView renameGroupTv = view.findViewById(R.id.tv_rename);
         TextView delGroupTv = view.findViewById(R.id.tv_delete_group);
         TextView cancelTv = view.findViewById(R.id.tv_cancel);
         titleTv.setText(groupName);
-        titleTv.setOnClickListener(this::onClick);
-        memManagerTv.setOnClickListener(this::onClick);
-        addMemberTv.setOnClickListener(this::onClick);
-        delGroupTv.setOnClickListener(this::onClick);
+        memManagerTv.setOnClickListener(view1 -> removeMember(groupName, groupId));
+        renameGroupTv.setOnClickListener(view1 -> renameGroup(groupName, groupId));
+        addMemberTv.setOnClickListener(view1 -> addMember(groupName, groupId));
+        delGroupTv.setOnClickListener(view1 -> deleteGroup(groupName, groupId));
         cancelTv.setOnClickListener(this::onClick);
+    }
+
+    private void removeMember(String groupName, String groupId) {
+        //TODO
+    }
+
+    private void renameGroup(String groupName, String groupId) {
+    }
+
+    private void addMember(String groupName, String groupId) {
+    }
+
+    private void deleteGroup(String groupName, String groupId) {
     }
 
     private void backgroundAlpha(float bgAlpha) {
@@ -179,7 +249,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             res.handler(new OnCallback<GroupResVo>() {
                 @Override
                 public void onSuccess(GroupResVo data) {
-                    groupArray = trasnsfer(inisertDefaultItem(data.getList()));
+                    List<GroupModel> list = trasnsfer(inisertDefaultItem(data.getList()));
+                    groupArray.clear();
+                    groupArray.addAll(list);
                     for (int i = 0; i < groupArray.size(); i++) {
                         List<ChildModel> tempArray = new ArrayList<>();
                         childArray.add(tempArray);
@@ -214,36 +286,11 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     }
 
 
-    private void getAllUser(int type) {
-        switch (type) {
-            case 0:
-                mViewModel.getAllGovernment().observe(this, res -> {
-
-                });
-                break;
-            case 1:
-                mViewModel.getAllEnterprise().observe(this, res -> {
-
-                });
-                break;
-        }
-    }
-
-    private void getUserFromGroupId(int id) {
-        mViewModel.getGovernmentFromId(id).observe(this, res -> {
-            res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                @Override
-                public void onSuccess(List<MemberDetailResVo> data) {
-                    //TODO 把数据加到child
-                }
-            });
-        });
-    }
-
     @Override
     protected void setListener() {
         binding.tvCompanyUser.setOnClickListener(this::onClick);
         binding.tvGovermentUser.setOnClickListener(this::onClick);
+        binding.ivAddGroup.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -252,11 +299,8 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             return;
         }
         switch (view.getId()) {
-            case R.id.tv_member_management:
-                break;
-            case R.id.tv_add_member:
-                break;
-            case R.id.tv_delete_group:
+            case R.id.iv_add_group:
+                //TODO
                 break;
             case R.id.tv_cancel:
                 if (mailistPop != null) mailistPop.dismiss();
@@ -265,6 +309,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 binding.tvCompanyUser.setTextSize((float) 18.0);
                 binding.tvGovermentUser.setTextSize((float) 14.0);
                 binding.allTitle.setText(getString(R.string.company_user));
+                collapseGroup();
                 //选择企业后传参
                 defaultType = 1;
                 initData(defaultType);
@@ -273,11 +318,24 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 binding.tvCompanyUser.setTextSize((float) 14.0);
                 binding.tvGovermentUser.setTextSize((float) 18.0);
                 binding.allTitle.setText(getString(R.string.goverment_user));
+                collapseGroup();
                 defaultType = 0;
                 initData(defaultType);
                 break;
             default:
                 break;
+        }
+    }
+
+    /**
+     * 切换tab默认全部关闭，点击group 后重新去拉数据
+     */
+    private void collapseGroup() {
+        if (expandableAdapter.getGroupCount() != 0) {
+            int count = expandableAdapter.getGroupCount();
+            for (int i = 0; i < count; i++) {
+                binding.exListView.collapseGroup(i);
+            }
         }
     }
 
@@ -385,7 +443,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             TextView tv_title = (TextView) view.findViewById(R.id.tv_group_name);
             TextView tv_online = (TextView) view.findViewById(R.id.tv_msg);
             tv_title.setText(data.getTitle());
-            tv_online.setText(data.getOnline());
+            tv_online.setVisibility(data.getOnline().endsWith("0") ? View.GONE : View.VISIBLE);
             if (!use_default_indicator) {
                 ImageView iv_tip = (ImageView) view.findViewById(R.id.iv_left);
                 if (isExpanded) {
@@ -394,6 +452,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                     iv_tip.setImageResource(R.mipmap.right);
                 }
             }
+
+            tv_online.setOnClickListener(view1 -> {
+                showMenuDialog(view1, data.getTitle(), data.getOnline());
+            });
         }
 
         /**
@@ -405,8 +467,11 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         private void bindChildView(View view, ChildModel data) {
             // 绑定组视图的数据 当然这些都是模拟的
             TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
+            ImageView iv_head = view.findViewById(R.id.iv_head);
 //            TextView tv_sig = ( TextView ) view.findViewById(R.id.tv_sig);
             tv_name.setText(data.getName());
+            Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.ic_launcher)
+                    .error(R.mipmap.ic_launcher).into(iv_head);
 //            tv_sig.setText(data.getSig());
         }
 

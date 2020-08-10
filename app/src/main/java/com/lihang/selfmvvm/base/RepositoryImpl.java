@@ -222,15 +222,16 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getAllGovernment(), liveData);
     }
 
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getGovernmentFromId(groupId), liveData);
+    }
+
     public MutableLiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
         MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getAllEnterprise(), liveData);
     }
 
-    public MutableLiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
-        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getGovernmentFromId(groupId), liveData);
-    }
 
     public MutableLiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
         MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();

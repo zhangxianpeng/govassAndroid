@@ -53,14 +53,6 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
     /**
-     * 获取全部企业用户
-     * @return
-     */
-    public LiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
-        return getRepository().getAllEnterprise();
-    }
-
-    /**
      * 根据分组id获取分组下所有成员信息（政府）
      * @param groupId
      * @return
@@ -68,6 +60,16 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     public LiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
         return getRepository().getGovernmentFromId(groupId);
     }
+
+    /**
+     * 获取全部企业用户
+     * @return
+     */
+    public LiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
+        return getRepository().getAllEnterprise();
+    }
+
+
 
     /**
      * 根据分组id获取分组下所有成员信息（企业）
