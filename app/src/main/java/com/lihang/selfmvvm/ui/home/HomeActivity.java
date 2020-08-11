@@ -217,18 +217,18 @@ public class HomeActivity extends BaseActivity<HomeViewModel, ActivityHomeTestBi
                 break;
 
             case R.id.txt_loginOut:
-                DialogUtil.alertIosDialog(HomeActivity.this, "是否退出登录？", "确定", "取消", () -> {
-                    mViewModel.loginOut().observe(this, resource -> {
-                        resource.handler(new OnCallback<String>() {
-                            @Override
-                            public void onSuccess(String data) {
-                                MyApplication.logOut();
-                                binding.drawerLayout.closeDrawer(binding.txtTest);
-                                binding.smartRefreshLayout.autoRefresh();
-                            }
-                        });
-                    });
-                });
+//                DialogUtil.alertIosDialog(HomeActivity.this, "是否退出登录？", "确定", "取消", () -> {
+//                    mViewModel.loginOut().observe(this, resource -> {
+//                        resource.handler(new OnCallback<String>() {
+//                            @Override
+//                            public void onSuccess(String data) {
+//                                MyApplication.logOut();
+//                                binding.drawerLayout.closeDrawer(binding.txtTest);
+//                                binding.smartRefreshLayout.autoRefresh();
+//                            }
+//                        });
+//                    });
+//                });
                 break;
             case R.id.txt_collect:
                 ActivityUtils.startActivity(this, CollectActivity.class);

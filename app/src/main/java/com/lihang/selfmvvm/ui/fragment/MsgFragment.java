@@ -1,8 +1,10 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +21,20 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.ChildModel;
 import com.lihang.selfmvvm.bean.GroupModel;
+import com.lihang.selfmvvm.customview.iosdialog.DialogUtil;
 import com.lihang.selfmvvm.databinding.FragmentMsgBinding;
+import com.lihang.selfmvvm.ui.mailist.MemberManagerActivity;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.ToastUtils;
+import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.Nullable;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
@@ -207,16 +215,99 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     }
 
     private void removeMember(String groupName, String groupId) {
-        //TODO
+        if (mailistPop != null) mailistPop.dismiss();
+        Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
+        intent.putExtra("type", defaultType);
+        intent.putExtra("flag", "removeMember");
+        intent.putExtra("guoupName", groupName);
+        intent.putExtra("groupId", groupId);
+        getActivity().startActivityForResult(intent, 102);
     }
 
+    /**
+     * 重命名分组
+     *
+     * @param groupName
+     * @param groupId
+     */
     private void renameGroup(String groupName, String groupId) {
+        if (mailistPop != null) mailistPop.dismiss();
+        DialogUtil.alertIosDialog(getActivity(), "修改分组名", true, "确定", "取消", new DialogUtil.DialogAlertListener() {
+            @Override
+            public void yes(String groupName, String groupNameRemark) {
+
+                if (TextUtils.isEmpty(groupName)) {
+                    ToastUtils.showToast("分组名不能为空");
+                    return;
+                } else {
+                    mViewModel.updateGroupName(Integer.parseInt(groupId), defaultType, groupName).observe(getActivity(), res -> {
+                        res.handler(new OnCallback<String>() {
+                            @Override
+                            public void onSuccess(String data) {
+                                initData(defaultType);
+                            }
+                        });
+                    });
+
+                }
+            }
+        });
     }
 
     private void addMember(String groupName, String groupId) {
+        if (mailistPop != null) mailistPop.dismiss();
+        Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
+        intent.putExtra("type", defaultType);
+        intent.putExtra("flag", "addMember");
+        intent.putExtra("guoupName", groupName);
+        intent.putExtra("groupId", groupId);
+        getActivity().startActivityForResult(intent, 101);
     }
 
     private void deleteGroup(String groupName, String groupId) {
+        DialogUtil.alertIosDialog(getActivity(), "确定要删除该分组?", false, "确定", "取消", new DialogUtil.DialogAlertListener() {
+            @Override
+            public void yes(String groupName, String groupNameRemark) {
+                List<Integer> groupIds = new ArrayList<>();
+                groupIds.add(Integer.parseInt(groupId));
+                mViewModel.deleteGroup(groupIds).observe(getActivity(), res -> {
+                    res.handler(new OnCallback<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+                            initData(defaultType);
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    /**
+     * 新增分组名
+     * @param groupName
+     * @param groupNameRemark
+     */
+    private void addGroupName(String groupName, String groupNameRemark) {
+        if (mailistPop != null) mailistPop.dismiss();
+        mViewModel.checkGroupNameRepeat(defaultType, groupName).observe(getActivity(), res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    AddGroupReqVo addGroupReqVo = new AddGroupReqVo();
+                    addGroupReqVo.setName(groupName);
+                    addGroupReqVo.setRemark(groupNameRemark);
+                    addGroupReqVo.setType(defaultType);
+                    mViewModel.saveGroup(addGroupReqVo).observe(getActivity(), res -> {
+                        res.handler(new OnCallback<String>() {
+                            @Override
+                            public void onSuccess(String data) {
+                                initData(defaultType);
+                            }
+                        });
+                    });
+                }
+            });
+        });
     }
 
     private void backgroundAlpha(float bgAlpha) {
@@ -300,7 +391,16 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         }
         switch (view.getId()) {
             case R.id.iv_add_group:
-                //TODO
+                DialogUtil.alertIosDialog(getActivity(), "新增分组", true,"确定", "取消", new DialogUtil.DialogAlertListener() {
+                    @Override
+                    public void yes(String groupName, String groupNameRemark) {
+                        if (!TextUtils.isEmpty(groupName)) {
+                            addGroupName(groupName, groupNameRemark);
+                        } else {
+                            ToastUtils.showToast("分组名不能为空");
+                        }
+                    }
+                });
                 break;
             case R.id.tv_cancel:
                 if (mailistPop != null) mailistPop.dismiss();
@@ -327,6 +427,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         }
     }
 
+
     /**
      * 切换tab默认全部关闭，点击group 后重新去拉数据
      */
@@ -337,6 +438,12 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 binding.exListView.collapseGroup(i);
             }
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     class ExpandableAdapter extends BaseExpandableListAdapter {

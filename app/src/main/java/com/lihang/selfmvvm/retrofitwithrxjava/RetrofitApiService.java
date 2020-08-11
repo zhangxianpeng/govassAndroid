@@ -5,6 +5,7 @@ import com.lihang.selfmvvm.bean.BannerBean;
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
@@ -119,6 +120,7 @@ public interface RetrofitApiService {
 
     /**
      * 注销登录-政企通
+     *
      * @param token
      * @return
      */
@@ -136,6 +138,7 @@ public interface RetrofitApiService {
 
     /**
      * 修改注册信息
+     *
      * @param registerReqVo
      * @return
      */
@@ -194,6 +197,74 @@ public interface RetrofitApiService {
 
 //    sys/group/addUser
 
+
+    //----------------------------------------------------政企通 通讯录 api------------------------------------------------------------
+
+    /**
+     * 添加用户到指定分组
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/group/addUser")
+    Observable<ResponModel<String>> addUser(@Body RegisterReqVo registerReqVo);
+
+    /**
+     * 查询分组名是否重复
+     *
+     * @param type
+     * @return
+     */
+    @GET("sys/group/checkGroupNameRepeat")
+    Observable<ResponModel<String>> checkGroupNameRepeat(@Query("type") int type, @Query("name") String name);
+
+
+    /**
+     * 更新分组名
+     *
+     * @param type
+     * @return
+     */
+    @GET("sys/group/checkGroupNameRepeat")
+    Observable<ResponModel<String>> updateGroupName(@Query("groupId") int groupId, @Query("type") int type, @Query("name") String name);
+
+    /**
+     * 删除通讯录分组
+     *
+     * @param groupIds
+     * @return
+     */
+    @POST("sys/group/delete")
+    Observable<ResponModel<String>> deleteGroup(@Body List<Integer> groupIds);
+
+    /**
+     * 移除用户
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/group/removeUser")
+    Observable<ResponModel<String>> removeUser(@Body RegisterReqVo registerReqVo);
+
+    /**
+     * 保存通讯录分组
+     *
+     * @param addGroupReqVo
+     * @return
+     */
+    @POST("sys/group/save")
+    Observable<ResponModel<String>> saveGroup(@Body AddGroupReqVo addGroupReqVo);
+
+    /**
+     * 修改通讯录分组
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/group/update")
+    Observable<ResponModel<String>> updateGroup(@Body RegisterReqVo registerReqVo);
+
+
     /**
      * 获取分组列表
      *
@@ -214,6 +285,7 @@ public interface RetrofitApiService {
 
     /**
      * 获取某个分组下所有用户信息
+     *
      * @param groupId
      * @return
      */
@@ -222,6 +294,7 @@ public interface RetrofitApiService {
 
     /**
      * 获取全部政府用户
+     *
      * @return
      */
     @GET("sys/user/listAllGovernment")
@@ -229,6 +302,7 @@ public interface RetrofitApiService {
 
     /**
      * 获取全部企业用户
+     *
      * @return
      */
     @GET("sys/enterpriseuser/listAllEnterprise")
@@ -236,6 +310,7 @@ public interface RetrofitApiService {
 
     /**
      * 获取政府某个分组下所有用户信息
+     *
      * @param groupId
      * @return
      */
@@ -244,9 +319,190 @@ public interface RetrofitApiService {
 
     /**
      * 获取企业某个分组下所有用户信息
+     *
      * @param groupId
      * @return
      */
     @GET("sys/enterpriseuser/listAllEnterprise")
     Observable<ResponModel<List<MemberDetailResVo>>> getEnterpriseFromId(@Query("groupId") int groupId);
+
+    //----------------------------------------------------政企通 公文 api------------------------------------------------------------
+
+    /**
+     * 删除公文
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/officialdocument/delete")
+    Observable<ResponModel<String>> deleteOfficalDoc(@Body RegisterReqVo registerReqVo);
+
+    /**
+     * 查询公文详情
+     *
+     * @param id
+     * @return
+     */
+    @GET("sys/officialdocument/info/{id} ")
+    Observable<ResponModel<GroupDetailsResVo>> officalDocInfo(@Query("id") int id);
+
+    /**
+     * 查询我的公文列表
+     *
+     * @return
+     */
+    @GET("sys/officialdocument/list")
+    Observable<ResponModel<List<MemberDetailResVo>>> getOfficalDoc();
+
+    /**
+     * 待审核公文列表
+     *
+     * @return
+     */
+    @GET("sys/officialdocument/list-pending")
+    Observable<ResponModel<List<MemberDetailResVo>>> getWaitPendingOfficalDoc();
+
+    /**
+     * 保存公文
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/officialdocument/save")
+    Observable<ResponModel<String>> saveOfficalDoc(@Body RegisterReqVo registerReqVo);
+
+    /**
+     * 修改公文
+     *
+     * @param registerReqVo
+     * @return
+     */
+    @POST("sys/officialdocument/update")
+    Observable<ResponModel<String>> updateOfficalDoc(@Body RegisterReqVo registerReqVo);
+
+    //----------------------------------------------------政企通 消息 api------------------------------------------------------------
+
+
+    /**
+     * 查询我的公文列表
+     *
+     * @return
+     */
+    @GET("sys/msg/list-me")
+    Observable<ResponModel<List<MemberDetailResVo>>> getMyMsg();
+
+
+    /**
+     * 查询消息详情
+     *
+     * @return
+     */
+    @GET("sys/msg/info/{id}")
+    Observable<ResponModel<List<MemberDetailResVo>>> getMsgDetail(@Query("id") int id);
+
+
+    /**
+     * 获取普通消息的接收者
+     *
+     * @return
+     */
+    @GET("sys/msg/list-receiver")
+    Observable<ResponModel<List<MemberDetailResVo>>> getMsgReceiver();
+
+
+    /**
+     * 标为已读
+     *
+     * @return
+     */
+    @POST("sys/msg/read")
+    Observable<ResponModel<List<MemberDetailResVo>>> read();
+
+
+    /**
+     * 阅读信息
+     *
+     * @return
+     */
+    @POST("sys/msg/readMsg/{id}")
+    Observable<ResponModel<List<MemberDetailResVo>>> readMsg(@Query("id") int id);
+
+    //----------------------------------------------------政企通 普通消息 api------------------------------------------------------------
+
+    /**
+     * 删除普通消息管理
+     *
+     * @return
+     */
+    @POST("sys/plainmsg/delete")
+    Observable<ResponModel<List<MemberDetailResVo>>> deletePlainMsg();
+
+    /**
+     * 保存普通消息管理
+     *
+     * @return
+     */
+    @POST("sys/plainmsg/save")
+    Observable<ResponModel<List<MemberDetailResVo>>> savePlainMsg();
+
+    /**
+     * 修改普通消息管理
+     *
+     * @return
+     */
+    @POST("sys/plainmsg/update")
+    Observable<ResponModel<List<MemberDetailResVo>>> updatePlainMsg();
+
+
+    /**
+     * 查询普通消息管理详情
+     *
+     * @return
+     */
+    @GET("sys/plainmsg/info/{id}")
+    Observable<ResponModel<List<MemberDetailResVo>>> getPlainMsgDetail(@Query("id") int id);
+
+
+    /**
+     * 查询普通消息管理列表
+     *
+     * @return
+     */
+    @GET("sys/plainmsg/list ")
+    Observable<ResponModel<List<MemberDetailResVo>>> getPlainMsgList();
+
+    //----------------------------------------------------政企通 项目申报 api------------------------------------------------------------
+
+    /**
+     * 批量删除 项目填报
+     *
+     * @return
+     */
+    @POST("sys/project/delete")
+    Observable<ResponModel<List<MemberDetailResVo>>> deleteProject();
+
+    /**
+     * 新增 项目填报
+     *
+     * @return
+     */
+    @POST("sys/project/save")
+    Observable<ResponModel<List<MemberDetailResVo>>> saveProject();
+
+    /**
+     * 修改 项目填报
+     *
+     * @return
+     */
+    @POST("sys/project/update")
+    Observable<ResponModel<List<MemberDetailResVo>>> updateProject();
+
+    /**
+     * 查看 项目填报 详情
+     *
+     * @return
+     */
+    @GET("sys/project/info/{id}")
+    Observable<ResponModel<List<MemberDetailResVo>>> getProjectDetail(@Query("id") int id);
+
 }

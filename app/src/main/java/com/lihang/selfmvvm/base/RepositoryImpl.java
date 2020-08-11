@@ -5,10 +5,10 @@ import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ParamsBuilder;
 import com.lihang.selfmvvm.bean.basebean.Resource;
-import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
+import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
@@ -108,6 +108,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 上传文件(进度监听)
+     *
      * @param type
      * @param file
      * @return
@@ -153,6 +154,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 注销登录-政企通
+     *
      * @param token
      * @return
      */
@@ -163,6 +165,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 注册-政企通
+     *
      * @param registerReqVo
      * @return
      */
@@ -170,7 +173,6 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().register(registerReqVo), liveData);
     }
-
 
 
     /**
@@ -236,5 +238,25 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
         MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getEnterpriseFromId(groupId), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> checkGroupNameRepeat(int type, String groupName) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().checkGroupNameRepeat(type, groupName), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> updateGroupName(int groupId, int type, String groupName) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().updateGroupName(groupId, type, groupName), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> saveGroup(AddGroupReqVo addGroupReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().saveGroup(addGroupReqVo), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().deleteGroup(groupIds), liveData);
     }
 }

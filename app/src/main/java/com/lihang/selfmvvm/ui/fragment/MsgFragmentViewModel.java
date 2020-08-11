@@ -15,6 +15,7 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
@@ -79,4 +80,21 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     public LiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
         return getRepository().getEnterpriseFromId(groupId);
     }
+
+    public LiveData<Resource<String>> checkGroupNameRepeat(int type, String groupName) {
+        return getRepository().checkGroupNameRepeat(type,groupName);
+    }
+
+    public LiveData<Resource<String>> saveGroup(AddGroupReqVo addGroupReqVo) {
+        return getRepository().saveGroup(addGroupReqVo);
+    }
+
+    public LiveData<Resource<String>> updateGroupName(int groupId, int type, String groupName) {
+        return getRepository().updateGroupName(groupId,type,groupName);
+    }
+
+    public LiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
+        return getRepository().deleteGroup(groupIds);
+    }
+
 }

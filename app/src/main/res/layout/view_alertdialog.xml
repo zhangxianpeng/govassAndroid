@@ -2,43 +2,67 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lLayout_bg"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_dialog_style">
 
-    <!--android:background="@drawable/alertdialog_bgleo"-->
 
     <RelativeLayout
-        android:layout_width="250dp"
-        android:layout_height="120dp">
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_centerInParent="true">
 
         <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/text_line"
-            android:background="@drawable/shape_dialog_style">
+            android:id="@+id/rl_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
 
             <TextView
                 android:id="@+id/txt_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
+                android:padding="@dimen/dp_10"
                 android:text="这里是内容信息~"
                 android:textColor="#000000"
                 android:textSize="16sp" />
 
         </RelativeLayout>
 
+        <EditText
+            android:id="@+id/et_goup_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_below="@+id/rl_title"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/edit_background"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:hint="@string/hint_group_name" />
+
+        <EditText
+            android:id="@+id/et_goup_name_remark"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:layout_below="@+id/et_goup_name"
+            android:background="@drawable/edit_background"
+            android:hint="@string/group_name_remark" />
+
         <View
-            android:layout_above="@+id/linearBottom"
             android:id="@+id/text_line"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="#c6c6c6"
-            />
+            android:layout_above="@+id/linearBottom"
+            android:background="#c6c6c6" />
+
         <LinearLayout
             android:id="@+id/linearBottom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginTop="@dimen/dp_10"
             android:orientation="horizontal">
 
             <TextView
@@ -55,8 +79,7 @@
             <View
                 android:layout_width="0.5dp"
                 android:layout_height="40dp"
-                android:background="#c6c6c6"
-                />
+                android:background="#c6c6c6" />
 
             <TextView
                 android:id="@+id/btn_cancle"
