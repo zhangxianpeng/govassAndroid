@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -78,6 +79,7 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                     break;
                 case R.id.tv_register:
                     ActivityUtils.startActivity(getContext(), RegisterStepOneActivity.class);
+                    finish();
                     break;
                 case R.id.iv_clear_input_pwd:
                     passwprd = "";
@@ -168,4 +170,8 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -11,6 +11,7 @@
 package com.lihang.selfmvvm.ui.fragment.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
+import com.lihang.selfmvvm.customview.BadgeView;
 
 import java.util.List;
 
@@ -40,9 +42,13 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
     //两次点击按钮的最小间隔，目前为1000
     private static final int MIN_CLICK_DELAY_TIME = 1000;
     private long lastClickTime;
-    public HomeMenuAdapter(Context context, List<HomeMenuBean> homeMenuBeanList) {
+
+    private String unReadMsgCount = "";
+
+    public HomeMenuAdapter(Context context, List<HomeMenuBean> homeMenuBeanList, String unReadMsgCount) {
         this.context = context;
         this.homeMenuBeanList = homeMenuBeanList;
+        this.unReadMsgCount = unReadMsgCount;
     }
 
     @Override
@@ -59,6 +65,10 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
         Integer imagePath = bean.getImageUrl();
         holder.title.setText(name);
         holder.image.setImageResource(imagePath);
+        if (position == homeMenuBeanList.size() - 1 && !TextUtils.isEmpty(unReadMsgCount) && !unReadMsgCount.equals("0")) {
+            holder.badgeView.setVisibility(View.VISIBLE);
+            holder.badgeView.setText(String.valueOf(unReadMsgCount));
+        }
         holder.containerRl.setTag(position);
         holder.containerRl.setOnClickListener(this);
     }
@@ -70,13 +80,13 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
 
     @Override
     public void onClick(View view) {
-      if(mOnItemClickListener != null) {
-          long curClickTime = System.currentTimeMillis();
-          if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
-              lastClickTime = curClickTime;
-              mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
-          }
-      }
+        if (mOnItemClickListener != null) {
+            long curClickTime = System.currentTimeMillis();
+            if ((curClickTime - lastClickTime) >= MIN_CLICK_DELAY_TIME) {
+                lastClickTime = curClickTime;
+                mOnItemClickListener.onItemClick(view, (Integer) view.getTag());
+            }
+        }
     }
 
     public interface OnItemClickListener {
@@ -91,13 +101,15 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
         private RelativeLayout containerRl;
         private TextView title;
         private ImageView image;
+        private BadgeView badgeView;
 
 
         public MyViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.iv_menu);
-            containerRl =itemView.findViewById(R.id.rl_container);
+            containerRl = itemView.findViewById(R.id.rl_container);
             title = itemView.findViewById(R.id.tv_muenu);
+            badgeView = itemView.findViewById(R.id.badgeView);
         }
     }
 }

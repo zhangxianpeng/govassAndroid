@@ -1,0 +1,148 @@
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/rl_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentTop="true">
+
+            <ImageView
+                android:id="@+id/iv_title_bar_back"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:src="@mipmap/nav_ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/project_approval"
+                android:textColor="#ff222222"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_15">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/ll_project_declare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/dp_16"
+                                android:layout_height="@dimen/dp_16"
+                                android:src="@mipmap/project_ic_declare" />
+
+                            <TextView
+                                android:id="@+id/tv_project_declare"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_marginRight="@dimen/dp_10"
+                                android:text="@string/projects_to_be_approved"
+                                android:textColor="#ff222222"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/view_project_declare"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_alignParentBottom="true"
+                            android:background="#3C66E4" />
+                    </RelativeLayout>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_weight="1">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <LinearLayout
+                            android:id="@+id/ll_my_declare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true">
+
+                            <ImageView
+                                android:layout_width="@dimen/dp_16"
+                                android:layout_height="@dimen/dp_16"
+                                android:src="@mipmap/project_ic_mydeclare" />
+
+                            <TextView
+                                android:id="@+id/tv_my_declare"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/dp_5"
+                                android:layout_marginRight="@dimen/dp_10"
+                                android:text="@string/approved_projects"
+                                android:textColor="#ff222222"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+
+                        <View
+                            android:id="@+id/view_my_declare"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/dp_1"
+                            android:layout_alignParentBottom="true"
+                            android:background="#E9E9E9" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_project"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginRight="@dimen/dp_15"
+            android:overScrollMode="never"></androidx.recyclerview.widget.RecyclerView>
+
+        <com.lihang.selfmvvm.customview.SearchEditText
+            android:id="@+id/search_editText"
+            style="@style/StyleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_33"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_15" />
+    </LinearLayout>
+</layout>

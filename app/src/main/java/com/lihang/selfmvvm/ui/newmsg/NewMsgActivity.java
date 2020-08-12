@@ -1,11 +1,15 @@
 package com.lihang.selfmvvm.ui.newmsg;
 
+import android.os.Bundle;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
-import com.lihang.selfmvvm.bean.NewMsgBean;
 import com.lihang.selfmvvm.databinding.ActivityNewMsgBinding;
+import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -17,7 +21,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsgBinding> {
     private static final String TAG = NewMsgActivity.class.getSimpleName();
 
-    private List<NewMsgBean> msgBeanList = new ArrayList<>();
+    private List<MsgMeResVo> msgList = new ArrayList<>();
+    private CommonAdapter msgAdapter;
 
 
     @Override
@@ -27,42 +32,48 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
 
     @Override
     protected void processLogic() {
+        initAdapter();
         initData();
     }
 
-    private void initData() {
-        //测试代码
-        NewMsgBean bean1 = new NewMsgBean();
-        bean1.setStatus(1);
-        bean1.setTime("07.28 13:08");
-        bean1.setDetailInfo("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        msgBeanList.add(bean1);
-
-        NewMsgBean bean2 = new NewMsgBean();
-        bean2.setStatus(0);
-        bean2.setTime("07.29 15:08");
-        bean2.setDetailInfo("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        msgBeanList.add(bean2);
-
-        binding.rvNewMsg.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.rvNewMsg.setAdapter(new CommonAdapter<NewMsgBean>(getContext(), R.layout.new_msg_list_item, msgBeanList) {
+    private void initAdapter() {
+        msgAdapter = new CommonAdapter<MsgMeResVo>(getContext(), R.layout.new_msg_list_item, msgList) {
 
             @Override
-            protected void convert(ViewHolder holder, NewMsgBean projectBean, int position) {
-                if (msgBeanList.get(position).getStatus() == 0) {
-                    holder.setBackgroundRes(R.id.tv_declare_status, R.drawable.circle_shape_fail);
-                    holder.setText(R.id.tv_declare_result, "审核失败通知");
-                } else {
-                    holder.setBackgroundRes(R.id.tv_declare_status, R.drawable.circle_shape_success);
-                    holder.setText(R.id.tv_declare_result, "审核成功通知");
-                }
-                holder.setText(R.id.tv_declare_time, msgBeanList.get(position).getTime());
-                holder.setText(R.id.tv_declare_msg, msgBeanList.get(position).getDetailInfo());
+            protected void convert(ViewHolder holder, MsgMeResVo msgMeResVo, int position) {
 
-//                holder.setOnClickListener(R.id.rl_container, (view -> {
-//                    ActivityUtils.startActivity(getContext(), DocumentDetailActivity.class);
-//                }));
+                if (msgMeResVo.getReadFlag() == 1) {  // 0 未读  1 已读
+                    holder.setVisible(R.id.tv_declare_status, false);
+                    holder.setText(R.id.tv_declare_result, msgMeResVo.getTitle());
+                } else {
+                    holder.setVisible(R.id.tv_declare_status, true);
+                    holder.setBackgroundRes(R.id.tv_declare_status, R.drawable.circle_shape_fail);
+                    holder.setText(R.id.tv_declare_result, msgMeResVo.getTitle());
+                }
+                holder.setText(R.id.tv_declare_time, msgMeResVo.getCreateTime());
+                holder.setText(R.id.tv_declare_msg, msgMeResVo.getContent());
+
+                holder.setOnClickListener(R.id.ll_container, (view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", msgMeResVo.getId());
+                    ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
+                }));
             }
+        };
+        binding.rvNewMsg.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvNewMsg.setAdapter(msgAdapter);
+    }
+
+    private void initData() {
+        mViewModel.getMsgMeList().observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<MsgMeResVo> data) {
+                    msgList.clear();
+                    msgList.addAll(data.getList());
+                    msgAdapter.notifyDataSetChanged();
+                }
+            });
         });
     }
 

@@ -11,12 +11,18 @@ import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -259,4 +265,53 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().deleteGroup(groupIds), liveData);
     }
+
+    public MutableLiveData<Resource<String>> removeUser(RemoveUserReqVo removeUserReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().removeUser(removeUserReqVo), liveData);
+    }
+
+    public MutableLiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, int status) {
+        MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getQuestiontList(page, status), liveData);
+    }
+
+    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
+        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getMsgMeList(), liveData);
+    }
+
+
+    public MutableLiveData<Resource<String>> getMsgUnRead() {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getMsgUnRead(), liveData);
+    }
+
+
+    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getProjectList() {
+        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getMsgMeList(), liveData);
+    }
+
+    public MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList() {
+        MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPlainMsgList(), liveData);
+    }
+
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getWaitPendingOfficalDoc() {
+        MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getWaitPendingOfficalDoc(), liveData);
+    }
+
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
+        MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getOfficalDoc(), liveData);
+    }
+
+    public MutableLiveData<Resource<MsgMeResVo>> getMsgDetail(int id) {
+        MutableLiveData<Resource<MsgMeResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getMsgDetail(id), liveData);
+    }
+
+
 }

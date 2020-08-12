@@ -5,14 +5,16 @@ import android.view.View;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
-import com.lihang.selfmvvm.bean.ProjectBean;
 import com.lihang.selfmvvm.databinding.ActivityQuestionNaireBinding;
 import com.lihang.selfmvvm.ui.activity.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,11 +24,15 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     /**
      * 已填报列表
      */
-    private ArrayList<ProjectBean> completeList = new ArrayList<>();
+    private List<QuestionNaireItemResVo> completeList = new ArrayList<>();
+
+    private int page = 1;
     /**
-     * 未填报列表
+     * 0 未填報 1 已填報
      */
-    private ArrayList<ProjectBean> noCompleteList = new ArrayList<>();
+    private int status = 0;
+
+    private CommonAdapter commonAdapter;
 
     @Override
     protected int getContentViewId() {
@@ -35,59 +41,39 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
 
     @Override
     protected void processLogic() {
-        getCompleteQuestionList();
+        initAdapter();
+        getCompleteQuestionList(page, status);
     }
 
-    private void getCompleteQuestionList() {
-        ProjectBean testBean1 = new ProjectBean();
-        testBean1.setProjectTitle("2020年南宁服务机构能力提升研修班项目（第八期）");
-        testBean1.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean1.setProjectTime("2020年6月17日");
-        completeList.add(testBean1);
-
-        ProjectBean testBean2 = new ProjectBean();
-        testBean2.setProjectTitle("2020年创客南宁大赛项目");
-        testBean2.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean2.setProjectTime("2020年6月17日");
-        completeList.add(testBean2);
-
-        ProjectBean testBean3 = new ProjectBean();
-        testBean3.setProjectTitle("高考加油！为芊芊学子助力！");
-        testBean3.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean3.setProjectTime("2020年6月17日");
-        completeList.add(testBean3);
-
-        ProjectBean testBean4 = new ProjectBean();
-        testBean4.setProjectTitle("在变革中求发展 在发展中求突破项目");
-        testBean4.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean4.setProjectTime("2020年6月17日");
-        completeList.add(testBean4);
-
-        ProjectBean testBean5 = new ProjectBean();
-        testBean5.setProjectTitle("关于疫情下外贸营销的困难与机遇");
-        testBean5.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean5.setProjectTime("2020年6月17日");
-        completeList.add(testBean5);
-
-        ProjectBean testBean6 = new ProjectBean();
-        testBean6.setProjectTitle("直播营销“带货南宁”项目");
-        testBean6.setUiFlag(getContext().getString(R.string.questionnaire));
-        testBean6.setProjectTime("2020年6月17日");
-        completeList.add(testBean6);
-
+    private void initAdapter() {
         binding.rvProject.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.rvProject.setAdapter(new CommonAdapter<ProjectBean>(getContext(), R.layout.goverment_project_list_item, completeList) {
+        commonAdapter = new CommonAdapter<QuestionNaireItemResVo>(getContext(), R.layout.goverment_project_list_item, completeList) {
 
             @Override
-            protected void convert(ViewHolder holder, ProjectBean projectBean, int position) {
-                holder.setText(R.id.tv_title, completeList.get(position).getProjectTitle());
-                holder.setText(R.id.tv_ui_flag, completeList.get(position).getUiFlag());
-                holder.setText(R.id.tv_time, completeList.get(position).getProjectTime());
+            protected void convert(ViewHolder holder, QuestionNaireItemResVo projectBean, int position) {
+                holder.setText(R.id.tv_title, completeList.get(position).getName());
+                holder.setText(R.id.tv_ui_flag, getString(R.string.questionnaire));
+                holder.setText(R.id.tv_time, completeList.get(position).getCreateTime());
                 holder.setOnClickListener(R.id.rl_container, (view -> {
                     ActivityUtils.startActivity(getContext(), WebActivity.class);
                 }));
             }
+        };
+        binding.rvProject.setAdapter(commonAdapter);
+    }
+
+    private void getCompleteQuestionList(int page, int status) {
+        mViewModel.getQuestiontList(page, status).observe(this, res -> {
+            res.handler(new OnCallback<QuestionNaireResVo>() {
+                @Override
+                public void onSuccess(QuestionNaireResVo data) {
+                    completeList.clear();
+                    completeList.addAll(data.getList());
+                    commonAdapter.notifyDataSetChanged();
+                }
+            });
         });
+
     }
 
     @Override
@@ -107,12 +93,14 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
             case R.id.rl_tab_complete:
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
-                getCompleteQuestionList();
+                status = 0;
+                getCompleteQuestionList(page, status);
                 break;
             case R.id.rl_tab_no_complete:
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
-                getNoCompleteQuestionList();
+                status = 1;
+                getCompleteQuestionList(page, status);
                 break;
             default:
                 break;

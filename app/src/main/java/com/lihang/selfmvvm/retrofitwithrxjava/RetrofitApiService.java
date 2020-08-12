@@ -8,13 +8,19 @@ import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -163,6 +169,15 @@ public interface RetrofitApiService {
     @GET("sys/rotationplot/listForApp")
     Observable<ResponModel<List<ImageDataInfo>>> getBannerList(@Query("token") String token);
 
+    /**
+     * 调查问卷
+     *
+     * @param page
+     * @param status
+     * @return
+     */
+    @GET("sys/questionnairerecord/list")
+    Observable<ResponModel<QuestionNaireResVo>> getQuestiontList(@Query("page") int page, @Query("status") int status);
 
     /**
      * 获取客服
@@ -240,11 +255,11 @@ public interface RetrofitApiService {
     /**
      * 移除用户
      *
-     * @param registerReqVo
+     * @param removeUserReqVo
      * @return
      */
     @POST("sys/group/removeUser")
-    Observable<ResponModel<String>> removeUser(@Body RegisterReqVo registerReqVo);
+    Observable<ResponModel<String>> removeUser(@Body RemoveUserReqVo removeUserReqVo);
 
     /**
      * 保存通讯录分组
@@ -352,7 +367,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/officialdocument/list")
-    Observable<ResponModel<List<MemberDetailResVo>>> getOfficalDoc();
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc();
 
     /**
      * 待审核公文列表
@@ -360,7 +375,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/officialdocument/list-pending")
-    Observable<ResponModel<List<MemberDetailResVo>>> getWaitPendingOfficalDoc();
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getWaitPendingOfficalDoc();
 
     /**
      * 保存公文
@@ -384,12 +399,20 @@ public interface RetrofitApiService {
 
 
     /**
+     * 获取未读消息
+     *
+     * @return
+     */
+    @GET("sys/msg/un-read")
+    Observable<ResponModel<String>> getMsgUnRead();
+
+    /**
      * 查询我的公文列表
      *
      * @return
      */
     @GET("sys/msg/list-me")
-    Observable<ResponModel<List<MemberDetailResVo>>> getMyMsg();
+    Observable<ResponModel<ListBaseResVo<MsgMeResVo>>> getMsgMeList();
 
 
     /**
@@ -397,8 +420,8 @@ public interface RetrofitApiService {
      *
      * @return
      */
-    @GET("sys/msg/info/{id}")
-    Observable<ResponModel<List<MemberDetailResVo>>> getMsgDetail(@Query("id") int id);
+    @POST("sys/msg/readMsg/{id}")
+    Observable<ResponModel<MsgMeResVo>> getMsgDetail(@Path("id") int id);
 
 
     /**
@@ -469,7 +492,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/plainmsg/list ")
-    Observable<ResponModel<List<MemberDetailResVo>>> getPlainMsgList();
+    Observable<ResponModel<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList();
 
     //----------------------------------------------------政企通 项目申报 api------------------------------------------------------------
 

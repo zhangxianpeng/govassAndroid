@@ -111,12 +111,12 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     private void updateUi(boolean isGovernment) {
         if (isGovernment) {
-            tabText = new String[]{"首页", "通讯录", "企业项目", "个人中心"};
-            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_address, R.mipmap.tabar_default_project, R.mipmap.tabar_default_home};
-            selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_project, R.mipmap.tabar_selected_user};
+            tabText = new String[]{"首页", "通讯录", "个人中心"};
+            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_address, R.mipmap.tabar_default_home};
+            selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_user};
             fragments.add(new HomeFragment());
             fragments.add(new MsgFragment());
-            fragments.add(new GovermentProjectFragment());
+//            fragments.add(new GovermentProjectFragment());
             fragments.add(new UserFragment());
         } else {
             tabText = new String[]{"首页", "企业项目", "个人中心"};

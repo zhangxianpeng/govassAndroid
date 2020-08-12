@@ -43,5 +43,8 @@ public class UserFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().govassLogout(token);
     }
 
+    public LiveData<Resource<String>> getMsgUnRead() {
+        return getRepository().getMsgUnRead();
+    }
 
 }

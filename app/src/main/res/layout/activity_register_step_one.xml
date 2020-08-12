@@ -30,7 +30,8 @@
                     android:layout_height="@dimen/dp_22"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_10"
-                    android:src="@mipmap/login_esc" />
+                    android:src="@mipmap/login_esc"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_next_step"

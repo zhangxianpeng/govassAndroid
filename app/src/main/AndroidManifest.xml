@@ -84,10 +84,12 @@
         </provider>
 
         <activity android:name=".ui.customserver.CustomServerActivity" />
-        <!--主页面-->
+        <!-- 主页面 -->
         <activity android:name=".ui.main.BottonNavigationActivity" />
-        <!--成员管理-->
-        <activity android:name=".ui.mailist.MemberManagerActivity"></activity>
+        <!-- 成员管理 -->
+        <activity android:name=".ui.mailist.MemberManagerActivity" />
+        <activity android:name=".ui.project.ProjectActivity" />
+        <activity android:name=".ui.msgdetail.MsgDetailActivity"></activity>
     </application>
 
 </manifest>

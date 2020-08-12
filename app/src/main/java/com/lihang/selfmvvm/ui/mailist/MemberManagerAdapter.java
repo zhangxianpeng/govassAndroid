@@ -49,8 +49,8 @@ public class MemberManagerAdapter extends RecyclerView.Adapter<MemberManagerAdap
     @Override
     public void onBindViewHolder(MemberManagerAdapter.MyViewHolder holder, final int position) {
         MemberDetailResVo memberDetailResVo = memberDetailResVoList.get(position);
-        Glide.with(context).load(memberDetailResVo.getHeadUrl()).placeholder(R.mipmap.ic_launcher)
-                .error(R.mipmap.ic_launcher).into(holder.headIv);
+        Glide.with(context).load(memberDetailResVo.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
+                .error(R.mipmap.default_tx_img).into(holder.headIv);
         holder.nameTv.setText(memberDetailResVo.getRealname());
         holder.selectCb.setTag(position);
         holder.selectCb.setOnCheckedChangeListener(this);

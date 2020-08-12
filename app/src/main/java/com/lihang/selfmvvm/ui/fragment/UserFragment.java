@@ -41,8 +41,8 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
         headUrl = (String) PreferenceUtil.get(USER_LOGIN_HEAD_URL, "");
         realName = (String) PreferenceUtil.get(USER_NICK_NAME, "");
         if (!TextUtils.isEmpty(headUrl))
-            Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + headUrl).placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher).into(binding.ivHead);
+            Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + headUrl).placeholder(R.mipmap.default_tx_img)
+                    .error(R.mipmap.default_tx_img).into(binding.ivHead);
         if (!TextUtils.isEmpty(realName)) binding.tvUserName.setText(realName);
 
         if (CheckPermissionUtils.getInstance().isGovernment()) {
@@ -52,6 +52,22 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
             binding.projectDeclare.setText(getString(R.string.my_declaration));
             binding.myMsg.setText(getString(R.string.my_receive_msg));
         }
+
+        getUnReadMsgCount();
+    }
+
+    private void getUnReadMsgCount() {
+        mViewModel.getMsgUnRead().observe(getActivity(), res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    if (!TextUtils.isEmpty(data) && !data.equals("0")) {
+                        binding.badgeView.setVisibility(View.VISIBLE);
+                        binding.badgeView.setText(data);
+                    }
+                }
+            });
+        });
     }
 
     @Override

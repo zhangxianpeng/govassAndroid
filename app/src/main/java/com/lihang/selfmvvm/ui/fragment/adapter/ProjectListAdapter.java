@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 
 import java.util.List;
 
@@ -25,13 +26,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * @ClassName: ProjectListAdapter
- * @Description: java类作用描述
+ * @Description: 首页消息展示
  * @Author: zhang
  * @Date: 2020/7/4 13:34
  */
 public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.MyViewHolder> implements View.OnClickListener {
     private Context context;
-    private List<String> stringList;
+    private List<MsgMeResVo> stringList;
     private static final String TAG = "ProjectListAdapter";
 
     private ProjectListAdapter.OnItemClickListener mOnItemClickListener;
@@ -40,7 +41,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     private static final int MIN_CLICK_DELAY_TIME = 1000;
     private long lastClickTime;
 
-    public ProjectListAdapter(Context context, List<String> stringList) {
+    public ProjectListAdapter(Context context, List<MsgMeResVo> stringList) {
         this.context = context;
         this.stringList = stringList;
     }
@@ -54,8 +55,8 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        String text = stringList.get(position);
-        holder.title.setText(text);
+        MsgMeResVo msgMeResVo = stringList.get(position);
+        holder.title.setText(msgMeResVo.getTitle());
         holder.containerRl.setTag(position);
         holder.containerRl.setOnClickListener(this);
     }

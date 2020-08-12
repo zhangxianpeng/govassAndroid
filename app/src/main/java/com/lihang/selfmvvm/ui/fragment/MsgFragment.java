@@ -23,7 +23,9 @@ import com.lihang.selfmvvm.bean.ChildModel;
 import com.lihang.selfmvvm.bean.GroupModel;
 import com.lihang.selfmvvm.customview.iosdialog.DialogUtil;
 import com.lihang.selfmvvm.databinding.FragmentMsgBinding;
+import com.lihang.selfmvvm.ui.communicate.CommunicateActivity;
 import com.lihang.selfmvvm.ui.mailist.MemberManagerActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
@@ -64,6 +66,11 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      * 政府用户
      */
     private int defaultType = 0;
+
+    private static final int REMOVE_REQUEST_CODE = 101;
+    private static final int ADD_REQUEST_CODE = 102;
+    private static final int REMOVE_RESPONSE_CODE = 103;
+    private static final int ADD_RESPONSE_CODE = 104;
 
     @Override
     protected int getContentViewId() {
@@ -184,6 +191,13 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 return true;
             }
         });
+
+        binding.exListView.setOnChildClickListener((expandableListView, view, groupPosition, childPosition, id) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("realName", childArray.get(groupPosition).get(childPosition).getName());
+            ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
+            return true;
+        });
     }
 
     private void showMenuDialog(View view, String groupName, String groupId) {
@@ -214,15 +228,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         cancelTv.setOnClickListener(this::onClick);
     }
 
-    private void removeMember(String groupName, String groupId) {
-        if (mailistPop != null) mailistPop.dismiss();
-        Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
-        intent.putExtra("type", defaultType);
-        intent.putExtra("flag", "removeMember");
-        intent.putExtra("guoupName", groupName);
-        intent.putExtra("groupId", groupId);
-        getActivity().startActivityForResult(intent, 102);
-    }
 
     /**
      * 重命名分组
@@ -259,9 +264,19 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
         intent.putExtra("type", defaultType);
         intent.putExtra("flag", "addMember");
-        intent.putExtra("guoupName", groupName);
+        intent.putExtra("groupName", groupName);
         intent.putExtra("groupId", groupId);
-        getActivity().startActivityForResult(intent, 101);
+        getActivity().startActivityForResult(intent, ADD_REQUEST_CODE);
+    }
+
+    private void removeMember(String groupName, String groupId) {
+        if (mailistPop != null) mailistPop.dismiss();
+        Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
+        intent.putExtra("type", defaultType);
+        intent.putExtra("flag", "removeMember");
+        intent.putExtra("groupName", groupName);
+        intent.putExtra("groupId", groupId);
+        getActivity().startActivityForResult(intent, REMOVE_REQUEST_CODE);
     }
 
     private void deleteGroup(String groupName, String groupId) {
@@ -376,7 +391,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         return groupNameList;
     }
 
-
     @Override
     protected void setListener() {
         binding.tvCompanyUser.setOnClickListener(this::onClick);
@@ -443,7 +457,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        if(requestCode == REMOVE_REQUEST_CODE && resultCode == REMOVE_RESPONSE_CODE) {
+            initData(defaultType);
+        }
     }
 
     class ExpandableAdapter extends BaseExpandableListAdapter {
@@ -577,8 +593,8 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             ImageView iv_head = view.findViewById(R.id.iv_head);
 //            TextView tv_sig = ( TextView ) view.findViewById(R.id.tv_sig);
             tv_name.setText(data.getName());
-            Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.ic_launcher)
-                    .error(R.mipmap.ic_launcher).into(iv_head);
+            Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
+                    .error(R.mipmap.default_tx_img).into(iv_head);
 //            tv_sig.setText(data.getSig());
         }
 

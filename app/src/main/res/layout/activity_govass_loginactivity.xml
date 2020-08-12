@@ -22,7 +22,8 @@
                 android:layout_height="@dimen/dp_22"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_11"
-                android:src="@mipmap/login_esc" />
+                android:src="@mipmap/login_esc"
+                android:visibility="gone"/>
         </RelativeLayout>
 
         <TextView
@@ -160,10 +161,11 @@
             <ImageView
                 android:id="@+id/iv_verifycode"
                 android:layout_width="@dimen/dp_80"
-                android:layout_height="@dimen/dp_40"
+                android:layout_height="@dimen/dp_30"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_10"
+                android:scaleType="fitXY"
                 android:layout_marginRight="@dimen/dp_10"
                 android:src="@drawable/ic_launcher_background" />
         </RelativeLayout>

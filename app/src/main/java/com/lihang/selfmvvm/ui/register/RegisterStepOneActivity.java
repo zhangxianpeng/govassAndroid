@@ -108,6 +108,7 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                     break;
                 case R.id.tv_login:
                     ActivityUtils.startActivity(RegisterStepOneActivity.this, GovassLoginActivity.class);
+                    finish();
                     break;
                 case R.id.fl_add_company_file:
                     showPicDialog(view);
@@ -375,7 +376,6 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                 }
             });
         });
-//        mViewModel.testUploadFile("image/jpg", file);
     }
 
 

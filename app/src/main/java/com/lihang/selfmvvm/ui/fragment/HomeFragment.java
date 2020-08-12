@@ -14,12 +14,15 @@ import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
+import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
@@ -43,7 +46,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private ArrayList<String> bannerImagePathList = new ArrayList<>();
     private ArrayList<String> bannerTitleList = new ArrayList<>();
     private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
-    private ArrayList<String> projectList = new ArrayList<>();
+
+    private List<MsgMeResVo> projectList = new ArrayList<>();
 
 
     @Override
@@ -53,14 +57,66 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initBannerWidget();
+        initMenuData();
+        initMsgAdapter();
         if (TextUtils.isEmpty(MyApplication.getToken())) {
             ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+            getActivity().finish();
         } else {
             initBannerData();
+            initMsgMeList();
+            getUnReadMsgCount();
         }
-        initBannerWidget();
-        initMenu();
-        initProjectList();
+    }
+
+    private void initMenuAdapter(String unReadMsgCount) {
+        homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList, unReadMsgCount);
+        binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
+        binding.rvMenu.setAdapter(homeMenuAdapter);
+        homeMenuAdapter.setOnItemClickListener((view, position) -> {
+            switch (position) {
+                case 0:
+                    ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+                    break;
+                case 1:
+                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
+
+
+    private void getUnReadMsgCount() {
+        mViewModel.getMsgUnRead().observe(getActivity(), res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    initMenuAdapter(data);
+                }
+            });
+        });
+    }
+
+    private void initMsgAdapter() {
+        projectListAdapter = new ProjectListAdapter(getContext(), projectList);
+        binding.rvProjectMsg.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.rvProjectMsg.setAdapter(projectListAdapter);
+        projectListAdapter.setOnItemClickListener((view, position) -> ActivityUtils.startActivity(getActivity(), NewMsgActivity.class));
     }
 
     private void initBannerData() {
@@ -102,8 +158,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.banner.setImageLoader(new GlideImageLoader());
         //设置轮播的动画效果,里面有很多种特效,可以都看看效果。
         binding.banner.setBannerAnimation(Transformer.ZoomOutSlide);
-        //轮播图片的文字
-//        binding.banner.setBannerTitles(imageTitle);
         //设置轮播间隔时间
         binding.banner.setDelayTime(3000);
         //设置是否为自动轮播，默认是true
@@ -114,40 +168,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.banner.setImages(bannerImagePathList)
                 .setBannerTitles(bannerTitleList)
                 .start();
-
-//        binding.banner.setBannerTitles(titles);
-//        binding.banner.setImages(urls);
-//        binding.banner.start();
-    }
-
-    private void initMenu() {
-        initMenuData();
-        homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList);
-        binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        binding.rvMenu.setAdapter(homeMenuAdapter);
-        homeMenuAdapter.setOnItemClickListener((view, position) -> {
-            switch (position) {
-                case 0:
-                    ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
-                    break;
-                case 1:
-                    break;
-                case 2:
-                    break;
-                case 3:
-                    break;
-                case 4:
-                    ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
-                    break;
-                case 5:
-                    break;
-                case 6:
-                    ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-                    break;
-                default:
-                    break;
-            }
-        });
     }
 
     private void initMenuData() {
@@ -188,22 +208,19 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             homeMenuPathList.add(msgBean);
     }
 
-    private void initProjectList() {
-        initProjectLitData();
-        projectListAdapter = new ProjectListAdapter(getContext(), projectList);
-        binding.rvProjectMsg.setLayoutManager(new LinearLayoutManager(getActivity()));
-        binding.rvProjectMsg.setAdapter(projectListAdapter);
-        projectListAdapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "project===" + position));
+    private void initMsgMeList() {
+        mViewModel.getMsgMeList().observe(getActivity(), res -> {
+            res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<MsgMeResVo> data) {
+                    projectList.clear();
+                    projectList.addAll(data.getList());
+                    projectListAdapter.notifyDataSetChanged();
+                }
+            });
+        });
     }
 
-    private void initProjectLitData() {
-        //项目列表
-        projectList.add("关于《政企消息》的审核结果");
-        projectList.add("关于《活动中心》的通知日期时间");
-        projectList.add("你的项目申请进度已有更新请查看");
-        projectList.add("关于《政企消息》的审核结果");
-        projectList.add("关于《活动中心》的通知日期时间");
-    }
 
     @Override
     protected void setListener() {

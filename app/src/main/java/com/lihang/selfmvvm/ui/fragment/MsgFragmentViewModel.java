@@ -17,7 +17,6 @@ import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
-import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
 import java.util.List;
@@ -38,6 +37,7 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 获取分组
+     *
      * @param type
      * @return
      */
@@ -47,6 +47,7 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 获取全部政府用户
+     *
      * @return
      */
     public LiveData<Resource<List<MemberDetailResVo>>> getAllGovernment() {
@@ -55,6 +56,7 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 根据分组id获取分组下所有成员信息（政府）
+     *
      * @param groupId
      * @return
      */
@@ -64,6 +66,7 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 获取全部企业用户
+     *
      * @return
      */
     public LiveData<Resource<List<MemberDetailResVo>>> getAllEnterprise() {
@@ -71,9 +74,9 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
 
-
     /**
      * 根据分组id获取分组下所有成员信息（企业）
+     *
      * @param groupId
      * @return
      */
@@ -81,18 +84,45 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().getEnterpriseFromId(groupId);
     }
 
+    /**
+     * 查询分组名是否重复
+     *
+     * @param type
+     * @param groupName
+     * @return
+     */
     public LiveData<Resource<String>> checkGroupNameRepeat(int type, String groupName) {
-        return getRepository().checkGroupNameRepeat(type,groupName);
+        return getRepository().checkGroupNameRepeat(type, groupName);
     }
 
+    /**
+     * 保存分组
+     *
+     * @param addGroupReqVo
+     * @return
+     */
     public LiveData<Resource<String>> saveGroup(AddGroupReqVo addGroupReqVo) {
         return getRepository().saveGroup(addGroupReqVo);
     }
 
+    /**
+     * 更新分组名
+     *
+     * @param groupId
+     * @param type
+     * @param groupName
+     * @return
+     */
     public LiveData<Resource<String>> updateGroupName(int groupId, int type, String groupName) {
-        return getRepository().updateGroupName(groupId,type,groupName);
+        return getRepository().updateGroupName(groupId, type, groupName);
     }
 
+    /**
+     * 删除分组
+     *
+     * @param groupIds
+     * @return
+     */
     public LiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
         return getRepository().deleteGroup(groupIds);
     }

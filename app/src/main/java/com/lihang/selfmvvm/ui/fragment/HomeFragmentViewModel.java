@@ -16,6 +16,8 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 
 import java.util.List;
 
@@ -41,5 +43,13 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<List<ImageDataInfo>>> getGovassBannerList(String token) {
         return getRepository().getGovassBannerList(token);
+    }
+
+    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
+        return getRepository().getMsgMeList();
+    }
+
+    public LiveData<Resource<String>> getMsgUnRead() {
+        return getRepository().getMsgUnRead();
     }
 }

@@ -18,7 +18,12 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
 
     @Override
     protected void processLogic() {
+        int id = getIntent().getIntExtra("id", 0);
+        getDetail(id);
+    }
 
+    private void getDetail(int id) {
+        mViewModel.getDeclareDetail();
     }
 
     @Override
@@ -37,7 +42,6 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
             case R.id.btn_adopt:
                 binding.btnNotadopt.setBackground(getContext().getDrawable(R.mipmap.ic_moren));
                 binding.btnAdopt.setBackground(getContext().getDrawable(R.mipmap.ic_pass));
-//                binding.btnAdopt.setTextColor();
                 break;
             case R.id.btn_notadopt:
                 binding.btnNotadopt.setBackground(getContext().getDrawable(R.mipmap.ic_fail));

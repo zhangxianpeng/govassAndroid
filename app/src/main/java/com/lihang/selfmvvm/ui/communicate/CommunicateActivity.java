@@ -25,6 +25,9 @@ import com.lihang.selfmvvm.ui.projrctdeclare.AttchmentListAdapter;
 import com.lihang.selfmvvm.utils.CommonUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -44,7 +47,8 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     /**
      * 消息列表
      */
-    private ArrayList<String> projectList = new ArrayList<>();
+    private List<PlainMsgResVo> projectList = new ArrayList<>();
+    private CommonAdapter projectAdapter;
 
 
     /**
@@ -53,7 +57,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     private List<String> attachmentList = new ArrayList<>();
     private AttchmentListAdapter attchmentListAdapter;
 
-    private String nickName = "";
+    private String realName = "";
     private PopupWindow addMsgPop;
 
     @Override
@@ -63,29 +67,35 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
 
     @Override
     protected void processLogic() {
-        nickName = getIntent().getExtras().getString("nickName");
-        binding.tvUserNickName.setText(nickName);
-        getProjectList();
+        realName = getIntent().getStringExtra("realName");
+        binding.tvUserNickName.setText(realName);
+        initAdapter();
+        getPlainMsgList();
     }
 
-    private void getProjectList() {
-        //项目列表
-        projectList.add("关于《政企消息》的审核结果");
-        projectList.add("关于《活动中心》的通知日期时间");
-        projectList.add("你的项目申请进度已有更新请查看");
-        projectList.add("关于《政企消息》的审核结果");
-        projectList.add("关于《活动中心》的通知日期时间");
-        binding.rvMsg.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.rvMsg.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
-        binding.rvMsg.setAdapter(new CommonAdapter<String>(getContext(), R.layout.home_project_list_item, projectList) {
+    private void initAdapter() {
+        projectAdapter = new CommonAdapter<PlainMsgResVo>(getContext(), R.layout.home_project_list_item, projectList) {
 
             @Override
-            protected void convert(ViewHolder holder, String msg, int position) {
-                holder.setText(R.id.tv_title, projectList.get(position));
-                holder.setOnClickListener(R.id.rl_project_list_item, (view -> {
-//                    ActivityUtils.startActivity(getContext(), DeclareDetailActivity.class);
-                }));
+            protected void convert(ViewHolder holder, PlainMsgResVo msgMeResVo, int position) {
+                holder.setText(R.id.tv_title, msgMeResVo.getTitle());
             }
+        };
+        binding.rvMsg.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvMsg.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        binding.rvMsg.setAdapter(projectAdapter);
+    }
+
+    private void getPlainMsgList() {
+        mViewModel.getPlainMsgList().observe(this,res-> {
+            res.handler(new OnCallback<ListBaseResVo<PlainMsgResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<PlainMsgResVo> data) {
+                    projectList.clear();
+                    projectList.addAll(data.getList());
+                    projectAdapter.notifyDataSetChanged();
+                }
+            });
         });
     }
 
