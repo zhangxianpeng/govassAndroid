@@ -17,8 +17,7 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
-
-import com.lihang.selfmvvm.ui.activity.WelComeActivity;
+import com.lihang.selfmvvm.ui.splash.SplashActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -51,11 +50,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
     //用于格式化日期,作为日志文件名的一部分
     private DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
 
-    /** 保证只有一个CrashHandler实例 */
+    /**
+     * 保证只有一个CrashHandler实例
+     */
     private CrashHandler() {
     }
 
-    /** 获取CrashHandler实例 ,单例模式 */
+    /**
+     * 获取CrashHandler实例 ,单例模式
+     */
     public static CrashHandler getInstance() {
         return INSTANCE;
     }
@@ -86,17 +89,13 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             //暂时把重起APP关掉
             try {
                 Thread.sleep(1000);
-                Intent intent = new Intent(mContext, WelComeActivity.class);
+                Intent intent = new Intent(mContext, SplashActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 mContext.startActivity(intent);
             } catch (InterruptedException e) {
                 Log.e(TAG, "error : ", e);
             }
-
-//            //退出程序
-//            android.os.Process.killProcess(android.os.Process.myPid());
-//            System.exit(0);
 
         }
     }
@@ -130,6 +129,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
     /**
      * 收集设备参数信息
+     *
      * @param ctx
      */
     public void collectDeviceInfo(Context ctx) {

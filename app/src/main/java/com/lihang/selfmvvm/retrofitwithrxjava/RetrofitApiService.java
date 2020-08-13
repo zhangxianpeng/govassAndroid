@@ -434,7 +434,7 @@ public interface RetrofitApiService {
 
 
     /**
-     * 标为已读
+     * 标为已读 （方便做批量标记的）
      *
      * @return
      */
@@ -448,7 +448,7 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/msg/readMsg/{id}")
-    Observable<ResponModel<List<MemberDetailResVo>>> readMsg(@Query("id") int id);
+    Observable<ResponModel<String>> transferReadFlag(@Path("id") int id);
 
     //----------------------------------------------------政企通 普通消息 api------------------------------------------------------------
 
@@ -483,7 +483,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/plainmsg/info/{id}")
-    Observable<ResponModel<List<MemberDetailResVo>>> getPlainMsgDetail(@Query("id") int id);
+    Observable<ResponModel<PlainMsgResVo>> getPlainMsgDetail(@Path("id") int id);
 
 
     /**

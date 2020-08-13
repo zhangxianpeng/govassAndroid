@@ -58,7 +58,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.login.LoginActivity" />
         <activity android:name=".ui.collect.CollectActivity" />
         <activity android:name=".ui.home.HomeActivity" />
         <activity android:name=".ui.activity.WebActivity" />
@@ -89,7 +88,8 @@
         <!-- 成员管理 -->
         <activity android:name=".ui.mailist.MemberManagerActivity" />
         <activity android:name=".ui.project.ProjectActivity" />
-        <activity android:name=".ui.msgdetail.MsgDetailActivity"></activity>
+        <activity android:name=".ui.msgdetail.MsgDetailActivity" />
+        <activity android:name=".ui.communicate.PlainMsgDetailActivity"></activity>
     </application>
 
 </manifest>

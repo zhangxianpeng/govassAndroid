@@ -6,6 +6,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityMsgDetailBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 
 public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, ActivityMsgDetailBinding> {
@@ -18,6 +19,7 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
     @Override
     protected void processLogic() {
         int id = getIntent().getIntExtra("id", 0);
+        int readFlag = getIntent().getIntExtra("readFlag", 0);
         mViewModel.getMsgDetail(id).observe(this, res -> {
             res.handler(new OnCallback<MsgMeResVo>() {
                 @Override
@@ -28,6 +30,17 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
                 }
             });
         });
+
+        if (readFlag != 1) {
+            mViewModel.transferReadFlag(id).observe(this, res -> {
+                res.handler(new OnCallback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        ToastUtils.showToast("已阅");
+                    }
+                });
+            });
+        }
     }
 
     @Override

@@ -1,6 +1,8 @@
 package com.lihang.selfmvvm.vo.res;
 
-public class QuestionNaireItemResVo {
+import java.io.Serializable;
+
+public class QuestionNaireItemResVo implements Serializable {
     private int id;
     private int status;
     private int deleted;

@@ -56,6 +56,7 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
                 holder.setOnClickListener(R.id.ll_container, (view -> {
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", msgMeResVo.getId());
+                    bundle.putInt("readFlag",msgMeResVo.getReadFlag());
                     ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
                 }));
             }

@@ -36,7 +36,7 @@
             android:layout_height="@dimen/dp_113"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginRight="@dimen/dp_15"
-            android:src="@mipmap/project_banner2_img" />
+            android:src="@mipmap/wenjuan_banner_img" />
 
 
         <LinearLayout

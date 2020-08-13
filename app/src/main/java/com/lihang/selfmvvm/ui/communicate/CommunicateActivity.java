@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -22,11 +23,11 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityCommunicateBinding;
 import com.lihang.selfmvvm.ui.projrctdeclare.AttchmentListAdapter;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CommonUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
-import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -79,6 +80,11 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
             @Override
             protected void convert(ViewHolder holder, PlainMsgResVo msgMeResVo, int position) {
                 holder.setText(R.id.tv_title, msgMeResVo.getTitle());
+                holder.setOnClickListener(R.id.rl_project_list_item, view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("id", msgMeResVo.getId());
+                    ActivityUtils.startActivityWithBundle(getContext(), PlainMsgDetailActivity.class, bundle);
+                });
             }
         };
         binding.rvMsg.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -87,7 +93,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     }
 
     private void getPlainMsgList() {
-        mViewModel.getPlainMsgList().observe(this,res-> {
+        mViewModel.getPlainMsgList().observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<PlainMsgResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<PlainMsgResVo> data) {

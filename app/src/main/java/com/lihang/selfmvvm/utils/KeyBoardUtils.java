@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-import com.lihang.selfmvvm.ui.login.LoginActivity;
-
 /**
  * 打开或关闭软键盘
  *

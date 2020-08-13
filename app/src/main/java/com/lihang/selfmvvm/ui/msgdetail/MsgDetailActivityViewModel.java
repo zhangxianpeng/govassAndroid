@@ -21,4 +21,8 @@ public class MsgDetailActivityViewModel extends BaseViewModel<RepositoryImpl> {
     public LiveData<Resource<MsgMeResVo>> getMsgDetail(int id) {
         return getRepository().getMsgDetail(id);
     }
+
+    public LiveData<Resource<String>> transferReadFlag(int id) {
+        return getRepository().transferReadFlag(id);
+    }
 }

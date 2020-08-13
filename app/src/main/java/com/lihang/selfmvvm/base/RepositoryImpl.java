@@ -313,5 +313,14 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getMsgDetail(id), liveData);
     }
 
+    public MutableLiveData<Resource<String>> transferReadFlag(int id) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().transferReadFlag(id), liveData);
+    }
+
+    public MutableLiveData<Resource<PlainMsgResVo>> getPlainMsgDetail(int id) {
+        MutableLiveData<Resource<PlainMsgResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPlainMsgDetail(id), liveData);
+    }
 
 }

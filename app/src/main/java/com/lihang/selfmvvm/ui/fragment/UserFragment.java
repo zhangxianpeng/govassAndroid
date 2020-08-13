@@ -131,6 +131,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 public void onSuccess(String data) {
                     ToastUtils.showToast(data);
                     PreferenceUtil.clear();
+                    android.os.Process.killProcess(android.os.Process.myPid());
                     System.exit(0);
                 }
             });

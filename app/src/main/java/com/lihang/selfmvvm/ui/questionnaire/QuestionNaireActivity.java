@@ -1,6 +1,7 @@
 package com.lihang.selfmvvm.ui.questionnaire;
 
 import android.os.Build;
+import android.os.Bundle;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
@@ -55,7 +56,9 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
                 holder.setText(R.id.tv_ui_flag, getString(R.string.questionnaire));
                 holder.setText(R.id.tv_time, completeList.get(position).getCreateTime());
                 holder.setOnClickListener(R.id.rl_container, (view -> {
-                    ActivityUtils.startActivity(getContext(), WebActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("questionNaireItemResVo", projectBean);
+                    ActivityUtils.startActivityWithBundle(getContext(), WebActivity.class, bundle);
                 }));
             }
         };
