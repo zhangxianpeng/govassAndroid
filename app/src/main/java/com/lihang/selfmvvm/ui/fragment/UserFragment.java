@@ -3,7 +3,6 @@ package com.lihang.selfmvvm.ui.fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.MyApplication;
@@ -13,6 +12,8 @@ import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
+import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
+import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
@@ -91,8 +92,10 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 case R.id.ll_user_info:
                     break;
                 case R.id.ll_my_project:
+                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
                     break;
                 case R.id.ll_my_article:
+                    ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
                     break;
                 case R.id.ll_my_collect:
                     break;

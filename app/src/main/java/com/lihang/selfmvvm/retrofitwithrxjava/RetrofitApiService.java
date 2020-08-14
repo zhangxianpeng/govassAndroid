@@ -20,6 +20,7 @@ import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
+import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -358,8 +359,8 @@ public interface RetrofitApiService {
      * @param id
      * @return
      */
-    @GET("sys/officialdocument/info/{id} ")
-    Observable<ResponModel<GroupDetailsResVo>> officalDocInfo(@Query("id") int id);
+    @GET("sys/officialdocument/info/{id}")
+    Observable<ResponModel<OfficialDocResVo>> getOfficalDocDetail(@Path("id") int id);
 
     /**
      * 查询我的公文列表
@@ -526,6 +527,38 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/project/info/{id}")
-    Observable<ResponModel<List<MemberDetailResVo>>> getProjectDetail(@Query("id") int id);
+    Observable<ResponModel<ProjectResVo>> getProjectDetail(@Path("id") int id);
+
+    /**
+     * 待审核项目  （政府端）
+     *
+     * @return
+     */
+    @GET("sys/project/list-pending")
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getWaitPendingProject();
+
+    /**
+     * 已审核项目  （政府端）
+     *
+     * @return
+     */
+    @GET("sys/project/list-handled")
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getPendingProject();
+
+    /**
+     * 待审核项目  （企业端）
+     *
+     * @return
+     */
+    @GET("sys/project/listMePending")
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getListMePending();
+
+    /**
+     * 已审核项目  （企业端）
+     *
+     * @return
+     */
+    @GET("sys/project/listMeHandled")
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> listMeHandled();
 
 }

@@ -11,7 +11,7 @@ import com.lihang.selfmvvm.ui.declaredetail.DeclareDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
-import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, ActivityProjectBinding> {
 
-    private List<OfficialDocResVo> projectList = new ArrayList<>();
+    private List<ProjectResVo> projectList = new ArrayList<>();
     private CommonAdapter projectAdapter;
 
 
@@ -34,15 +34,14 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
     @Override
     protected void processLogic() {
         initAdapter();
-        getWaitPendingOfficalDoc();
+        getWaitPendingProject();
     }
 
     private void initAdapter() {
-        projectAdapter = new CommonAdapter<OfficialDocResVo>(getContext(), R.layout.goverment_project_list_item, projectList) {
-
+        projectAdapter = new CommonAdapter<ProjectResVo>(getContext(), R.layout.goverment_project_list_item, projectList) {
             @Override
-            protected void convert(ViewHolder holder, OfficialDocResVo msgMeResVo, int position) {
-                holder.setText(R.id.tv_title, msgMeResVo.getTitle());
+            protected void convert(ViewHolder holder, ProjectResVo msgMeResVo, int position) {
+                holder.setText(R.id.tv_title, msgMeResVo.getName());
                 holder.setText(R.id.tv_time, msgMeResVo.getCreateTime());
                 holder.setText(R.id.tv_ui_flag, getString(R.string.project_approval));
 
@@ -60,11 +59,11 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
         binding.rvProject.setAdapter(projectAdapter);
     }
 
-    private void getWaitPendingOfficalDoc() {
-        mViewModel.getWaitPendingOfficalDoc().observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<OfficialDocResVo>>() {
+    private void getWaitPendingProject() {
+        mViewModel.getWaitPendingProject().observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
-                public void onSuccess(ListBaseResVo<OfficialDocResVo> data) {
+                public void onSuccess(ListBaseResVo<ProjectResVo> data) {
                     projectList.clear();
                     projectList.addAll(data.getList());
                     projectAdapter.notifyDataSetChanged();
@@ -73,11 +72,11 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
         });
     }
 
-    private void getOfficalDoc() {
-        mViewModel.getOfficalDoc().observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<OfficialDocResVo>>() {
+    private void getPendingProject() {
+        mViewModel.getPendingProject().observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
-                public void onSuccess(ListBaseResVo<OfficialDocResVo> data) {
+                public void onSuccess(ListBaseResVo<ProjectResVo> data) {
                     projectList.clear();
                     projectList.addAll(data.getList());
                     projectAdapter.notifyDataSetChanged();
@@ -108,17 +107,16 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
                 binding.viewProjectDeclare.setVisibility(View.VISIBLE);
                 binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
                 binding.viewMyDeclare.setVisibility(View.GONE);
-                getWaitPendingOfficalDoc();
+                getWaitPendingProject();
                 break;
             case R.id.ll_my_declare:  //已审核
                 binding.viewProjectDeclare.setVisibility(View.GONE);
                 binding.viewMyDeclare.setVisibility(View.VISIBLE);
                 binding.viewMyDeclare.setBackgroundColor(R.color.tab_selected);
-                getOfficalDoc();
+                getPendingProject();
                 break;
             default:
                 break;
-
         }
     }
 }

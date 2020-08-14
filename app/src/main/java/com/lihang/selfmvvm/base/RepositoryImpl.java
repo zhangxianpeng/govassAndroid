@@ -22,6 +22,7 @@ import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
+import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -303,9 +304,22 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getWaitPendingOfficalDoc(), liveData);
     }
 
+    /**
+     * 我的公文
+     * @return
+     */
     public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getOfficalDoc(), liveData);
+    }
+
+    /**
+     * 公文详情
+     * @return
+     */
+    public MutableLiveData<Resource<OfficialDocResVo>> getOfficalDocDetail(int id) {
+        MutableLiveData<Resource<OfficialDocResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getOfficalDocDetail(id), liveData);
     }
 
     public MutableLiveData<Resource<MsgMeResVo>> getMsgDetail(int id) {
@@ -323,4 +337,55 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getPlainMsgDetail(id), liveData);
     }
 
+
+    /**
+     * 待审核项目 （政府）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject() {
+        MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getWaitPendingProject(), liveData);
+    }
+
+    /**
+     * 已审核项目 （政府）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject() {
+        MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPendingProject(), liveData);
+    }
+
+    /**
+     * 待审核项目 （企业）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMePending() {
+        MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getListMePending(), liveData);
+    }
+
+    /**
+     * 已审核项目 （企业）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMeHandled() {
+        MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().listMeHandled(), liveData);
+    }
+
+    /**
+     * 项目详情
+     *
+     * @param id
+     * @return
+     */
+    public MutableLiveData<Resource<ProjectResVo>> getProjectDetail(int id) {
+        MutableLiveData<Resource<ProjectResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getProjectDetail(id), liveData);
+    }
 }

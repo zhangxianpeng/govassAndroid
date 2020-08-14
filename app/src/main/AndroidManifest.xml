@@ -89,7 +89,9 @@
         <activity android:name=".ui.mailist.MemberManagerActivity" />
         <activity android:name=".ui.project.ProjectActivity" />
         <activity android:name=".ui.msgdetail.MsgDetailActivity" />
-        <activity android:name=".ui.communicate.PlainMsgDetailActivity"></activity>
+        <activity android:name=".ui.communicate.PlainMsgDetailActivity" />
+        <activity android:name=".ui.officialdoc.OfficialDocListActivity" />
+        <activity android:name=".ui.officialdoc.OfficialDocDetailActivity"></activity>
     </application>
 
 </manifest>

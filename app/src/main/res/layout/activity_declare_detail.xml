@@ -10,10 +10,10 @@
         tools:context=".ui.declaredetail.DeclareDetailActivity">
 
         <RelativeLayout
-            android:layout_alignParentTop="true"
             android:id="@+id/rl_title_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_48">
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentTop="true">
 
             <ImageView
                 android:id="@+id/ibtn_title_bar_back"
@@ -26,25 +26,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/declare_detail_title"
                 android:layout_centerInParent="true"
+                android:text="@string/declare_detail_title"
                 android:textColor="#ff222222"
                 android:textSize="18sp" />
         </RelativeLayout>
 
         <Button
             android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_48"
             android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/dp_15"
             android:layout_marginLeft="@dimen/dp_25"
             android:layout_marginRight="@dimen/dp_25"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:text="@string/submit_declare"
+            android:layout_marginBottom="@dimen/dp_15"
             android:background="@drawable/reg_btn_shape"
-            android:textColor="#FFFFFF" />
+            android:text="@string/submit_declare"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -74,9 +74,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/project_name"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/project_name"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -95,15 +95,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -115,9 +115,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/project_type"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/project_type"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -136,15 +136,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -156,9 +156,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/company_name"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/company_name"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -177,15 +177,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -197,9 +197,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/project_detail"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/project_detail"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -218,15 +218,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -238,9 +238,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/project_money"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/project_money"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -259,15 +259,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -279,9 +279,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/address"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/address"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -300,15 +300,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -320,9 +320,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/contract"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/contract"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -341,15 +341,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -361,9 +361,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/phone"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/phone"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -382,15 +382,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -402,35 +402,36 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/attachment"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/attachment"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
 
-                <TextView
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_attachment"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_15"
-                    android:text=""
+                    android:layout_height="@dimen/dp_40"
                     android:layout_marginLeft="@dimen/dp_25"
-                    android:textColor="#ff303030"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:layout_marginRight="@dimen/dp_20"
+                    android:scrollbars="none" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -442,9 +443,9 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/isDeclare"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/isDeclare"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
@@ -461,8 +462,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
 
@@ -491,15 +492,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_5"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_5"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -511,29 +512,29 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/declare_appointment"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_5"
+                        android:text="@string/declare_appointment"
                         android:textColor="#ff303030"
                         android:textSize="12sp" />
                 </LinearLayout>
 
                 <EditText
                     android:id="@+id/et_appoval"
+                    style="@style/AppovalEditTextStyle"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_128"
-                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginLeft="@dimen/dp_15"
+                    android:layout_marginTop="@dimen/dp_10"
                     android:layout_marginRight="@dimen/dp_15"
-                    android:hint="@string/group_msg"
-                    style="@style/AppovalEditTextStyle" />
+                    android:hint="@string/group_msg" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_1"
                     android:layout_marginLeft="@dimen/dp_30"
-                    android:layout_marginRight="@dimen/dp_30"
                     android:layout_marginTop="@dimen/dp_8"
+                    android:layout_marginRight="@dimen/dp_30"
                     android:background="#F3F3F3" />
             </LinearLayout>
         </ScrollView>

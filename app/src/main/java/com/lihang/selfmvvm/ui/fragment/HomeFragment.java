@@ -14,12 +14,14 @@ import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
+import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
+import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
@@ -83,13 +85,16 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     ActivityUtils.startActivity(getContext(), ProjectActivity.class);
                     break;
                 case 2:
+                    ToastUtils.showToast("企业账户管理界面");
                     break;
                 case 3:
+                    ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
                     break;
                 case 4:
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                     break;
                 case 5:
+                    ToastUtils.showToast("我的企业界面");
                     break;
                 case 6:
                     ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
