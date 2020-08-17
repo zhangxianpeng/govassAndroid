@@ -131,10 +131,4 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
         }
 
     }
-
-    /**
-     * 未填报列表
-     */
-    private void getNoCompleteQuestionList() {
-    }
 }
