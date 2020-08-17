@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <data></data>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
     <RelativeLayout
         android:id="@+id/rl_project_list_item"
@@ -30,10 +31,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/iv_msg"
             android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toRightOf="@+id/iv_msg"
             android:text="关于《政企消息》的审核结果"
             android:textColor="#ff131008"
             android:textSize="14sp" />
     </RelativeLayout>
-</layout>
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="match_parent"
+        android:background="#FFF55030"
+        android:gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/delete"
+        android:textColor="#FFFFFFFF"
+        android:textSize="14sp" />
+</LinearLayout>

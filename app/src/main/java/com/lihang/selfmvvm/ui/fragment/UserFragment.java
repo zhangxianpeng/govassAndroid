@@ -11,6 +11,7 @@ import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
+import com.lihang.selfmvvm.ui.mydeclare.MyDeclareActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
@@ -20,8 +21,14 @@ import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.TokenReqVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
@@ -92,7 +99,11 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 case R.id.ll_user_info:
                     break;
                 case R.id.ll_my_project:
-                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    if (CheckPermissionUtils.getInstance().isGovernment()) {
+                        ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    } else {
+                        ActivityUtils.startActivity(getContext(), MyDeclareActivity.class);
+                    }
                     break;
                 case R.id.ll_my_article:
                     ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
@@ -104,16 +115,18 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 case R.id.rl_share_down:
                     String filePath = "/storage/emulated/0/Tencent/TIMfile_recv/test.jpg";
                     File file = new File(filePath);
-                    mViewModel.testUploadFile("image/jpg", file);
+                    List<File> fileList = new ArrayList<>();
+                    fileList.add(file);
+                    doMultyUploadFile(fileList);
                     break;
                 case R.id.rl_contact_us:
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                     break;
                 case R.id.rl_change_account:
-                    ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+                    logout(1);
                     break;
                 case R.id.rl_exit:
-                    logout();
+                    logout(2);
                     break;
                 case R.id.fl_new_msg:
                     ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
@@ -124,8 +137,27 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
         }
     };
 
+    private void doMultyUploadFile(List<File> fileList) {
+        List<MultipartBody.Part> parts
+                = new ArrayList<>();
+        for (File file : fileList) {
+            RequestBody body = MultipartBody.create(MultipartBody.FORM, file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), body);
+            parts.add(part);
+        }
 
-    private void logout() {
+        mViewModel.uploadMultyFile(parts).observe(this, res -> {
+            res.handler(new OnCallback<List<UploadAttachmentResVo>>() {
+                @Override
+                public void onSuccess(List<UploadAttachmentResVo> data) {
+                    ToastUtils.showToast(data.get(0).getFileName());
+                }
+            });
+        });
+    }
+
+
+    private void logout(int flag) {
         TokenReqVo token = new TokenReqVo();
         token.setToken(MyApplication.getToken());
         mViewModel.govassLogout(token).observe(this, res -> {
@@ -134,8 +166,18 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 public void onSuccess(String data) {
                     ToastUtils.showToast(data);
                     PreferenceUtil.clear();
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                    System.exit(0);
+                    switch (flag) {
+                        case 1:   //切换账号
+                            ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
+                            getActivity().finish();
+                            break;
+                        case 2:  //退出
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                            System.exit(0);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             });
         });

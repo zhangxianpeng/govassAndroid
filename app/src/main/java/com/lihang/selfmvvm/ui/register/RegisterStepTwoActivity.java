@@ -106,7 +106,7 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
-                    ToastUtils.showToast(data);
+                    ToastUtils.showToast("注册成功");
                     ActivityUtils.startActivity(RegisterStepTwoActivity.this,GovassLoginActivity.class);
                     finish();
                 }

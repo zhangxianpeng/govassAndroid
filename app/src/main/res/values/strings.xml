@@ -174,4 +174,11 @@
     <string name="msgdetail">消息详情</string>
     <string name="createTime">创建时间：</string>
     <string name="officialdocdetail">公告详情</string>
+    <string name="submit">提交</string>
+
+    <string name="declare_name">申报项目名称</string>
+    <string name="declare_type">申报类别</string>
+    <string name="declare_info">项目描述</string>
+    <string name="declare_money">申报补贴金额</string>
+    <string name="add_attachment_all">点击添加附件(ppt.docx.xlsx.pdf.jpg.png)	</string>
 </resources>

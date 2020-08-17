@@ -15,13 +15,17 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
-import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import okhttp3.MultipartBody;
 
 /**
  * @ClassName: UserFragmentViewModel
@@ -47,4 +51,12 @@ public class UserFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().getMsgUnRead();
     }
 
+    /**
+     * 多文件上传
+     * @param parts
+     * @return
+     */
+    public LiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
+        return getRepository().uploadMultyFile(parts);
+    }
 }

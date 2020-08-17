@@ -11,21 +11,36 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.lihang.selfmvvm.customview.LeoTitleBar
-            android:id="@+id/leoTitleBar"
+        <RelativeLayout
+            android:id="@+id/rl_title_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:hl_background="@color/status_background"
-            app:hl_textTitle=""
-            app:hl_textTitleColor="#fff" />
+            android:layout_height="@dimen/dp_48"
+            android:layout_alignParentTop="true">
 
+            <ImageView
+                android:id="@+id/iv_title_bar_back"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:src="@mipmap/nav_ic_back" />
 
-        <com.lihang.selfmvvm.customview.x5webview.X5WebView
-            android:id="@+id/webViewX5"
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text=""
+                android:textColor="#222222"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <WebView
+            android:id="@+id/normal_webview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="none" />
-
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="none"/>
 
     </LinearLayout>
 </layout>

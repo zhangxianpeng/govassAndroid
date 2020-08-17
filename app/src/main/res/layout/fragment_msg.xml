@@ -110,7 +110,7 @@
             android:layout_marginRight="@dimen/dp_10"
             android:background="#F3F3F3" />
 
-        <ExpandableListView
+        <com.lihang.selfmvvm.customview.swipeview.SwipeExpandableListView
             android:id="@+id/ex_listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

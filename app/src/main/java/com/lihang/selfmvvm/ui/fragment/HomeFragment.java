@@ -16,6 +16,7 @@ import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
+import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
@@ -82,7 +83,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
                     break;
                 case 1:
-                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    if (CheckPermissionUtils.getInstance().isGovernment()) {
+                        ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    } else {
+                        ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
+                    }
                     break;
                 case 2:
                     ToastUtils.showToast("企业账户管理界面");

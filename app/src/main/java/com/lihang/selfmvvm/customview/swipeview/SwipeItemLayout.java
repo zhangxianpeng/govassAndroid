@@ -12,14 +12,10 @@ import android.widget.Scroller;
 
 import androidx.core.view.ViewCompat;
 
-/**
- * Author： liyi
- * Date：    2017/2/24.
- */
 
 public class SwipeItemLayout extends ViewGroup {
-    enum Mode{
-        RESET,DRAG,FLING,TAP
+    enum Mode {
+        RESET, DRAG, FLING, TAP
     }
 
     private Mode mTouchMode;
@@ -35,7 +31,7 @@ public class SwipeItemLayout extends ViewGroup {
     private boolean mIsLaidOut;
 
     public SwipeItemLayout(Context context) {
-        this(context,null);
+        this(context, null);
     }
 
     public SwipeItemLayout(Context context, AttributeSet attrs) {
@@ -47,16 +43,16 @@ public class SwipeItemLayout extends ViewGroup {
         mScrollRunnable = new ScrollRunnable(context);
     }
 
-    public boolean isOpen(){
-        return mScrollOffset !=0;
+    public boolean isOpen() {
+        return mScrollOffset != 0;
     }
 
-    Mode getTouchMode(){
+    Mode getTouchMode() {
         return mTouchMode;
     }
 
-    void setTouchMode(Mode mode){
-        switch (mTouchMode){
+    void setTouchMode(Mode mode) {
+        switch (mTouchMode) {
             case FLING:
                 mScrollRunnable.abort();
                 break;
@@ -67,75 +63,75 @@ public class SwipeItemLayout extends ViewGroup {
         mTouchMode = mode;
     }
 
-    public void open(){
-        if(mScrollOffset!=-mMaxScrollOffset){
+    public void open() {
+        if (mScrollOffset != -mMaxScrollOffset) {
             //正在open，不需要处理
-            if(mTouchMode== Mode.FLING && mScrollRunnable.isScrollToLeft())
+            if (mTouchMode == Mode.FLING && mScrollRunnable.isScrollToLeft())
                 return;
 
             //当前正在向右滑，abort
-            if(mTouchMode== Mode.FLING /*&& !mScrollRunnable.mScrollToLeft*/)
+            if (mTouchMode == Mode.FLING /*&& !mScrollRunnable.mScrollToLeft*/)
                 mScrollRunnable.abort();
 
-            mScrollRunnable.startScroll(mScrollOffset,-mMaxScrollOffset);
+            mScrollRunnable.startScroll(mScrollOffset, -mMaxScrollOffset);
         }
     }
 
-    public void close(){
-        if(mScrollOffset!=0){
+    public void close() {
+        if (mScrollOffset != 0) {
             //正在close，不需要处理
-            if(mTouchMode== Mode.FLING && !mScrollRunnable.isScrollToLeft())
+            if (mTouchMode == Mode.FLING && !mScrollRunnable.isScrollToLeft())
                 return;
 
             //当前正向左滑，abort
-            if(mTouchMode== Mode.FLING /*&& mScrollRunnable.mScrollToLeft*/)
+            if (mTouchMode == Mode.FLING /*&& mScrollRunnable.mScrollToLeft*/)
                 mScrollRunnable.abort();
 
-            mScrollRunnable.startScroll(mScrollOffset,0);
+            mScrollRunnable.startScroll(mScrollOffset, 0);
         }
     }
 
-    void fling(int xVel){
-        mScrollRunnable.startFling(mScrollOffset,xVel);
+    void fling(int xVel) {
+        mScrollRunnable.startFling(mScrollOffset, xVel);
     }
 
-    void revise(){
-        if(mScrollOffset<-mMaxScrollOffset/2)
+    void revise() {
+        if (mScrollOffset < -mMaxScrollOffset / 2)
             open();
         else
             close();
     }
 
-    boolean trackMotionScroll(int deltaX){
-        if(deltaX==0)
+    boolean trackMotionScroll(int deltaX) {
+        if (deltaX == 0)
             return false;
 
         boolean over = false;
-        int newLeft = mScrollOffset+deltaX;
-        if((deltaX>0 && newLeft>0) || (deltaX<0 && newLeft<-mMaxScrollOffset)){
+        int newLeft = mScrollOffset + deltaX;
+        if ((deltaX > 0 && newLeft > 0) || (deltaX < 0 && newLeft < -mMaxScrollOffset)) {
             over = true;
-            newLeft = Math.min(newLeft,0);
-            newLeft = Math.max(newLeft,-mMaxScrollOffset);
+            newLeft = Math.min(newLeft, 0);
+            newLeft = Math.max(newLeft, -mMaxScrollOffset);
         }
 
-        offsetChildrenLeftAndRight(newLeft-mScrollOffset);
+        offsetChildrenLeftAndRight(newLeft - mScrollOffset);
         mScrollOffset = newLeft;
         return over;
     }
 
-    private boolean ensureChildren(){
+    private boolean ensureChildren() {
         int childCount = getChildCount();
 
-        if(childCount!=2)
+        if (childCount != 2)
             return false;
 
         View childView = getChildAt(0);
-        if(!(childView instanceof ViewGroup))
+        if (!(childView instanceof ViewGroup))
             return false;
         mMainView = (ViewGroup) childView;
 
         childView = getChildAt(1);
-        if(!(childView instanceof ViewGroup))
+        if (!(childView instanceof ViewGroup))
             return false;
         mSideView = (ViewGroup) childView;
         return true;
@@ -143,7 +139,7 @@ public class SwipeItemLayout extends ViewGroup {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        if(!ensureChildren())
+        if (!ensureChildren())
             throw new RuntimeException("SwipeItemLayout的子视图不符合规定");
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
@@ -152,39 +148,39 @@ public class SwipeItemLayout extends ViewGroup {
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
         MarginLayoutParams lp = null;
-        int horizontalMargin,verticalMargin;
-        int horizontalPadding = getPaddingLeft()+getPaddingRight();
-        int verticalPadding = getPaddingTop()+getPaddingBottom();
+        int horizontalMargin, verticalMargin;
+        int horizontalPadding = getPaddingLeft() + getPaddingRight();
+        int verticalPadding = getPaddingTop() + getPaddingBottom();
 
         lp = (MarginLayoutParams) mMainView.getLayoutParams();
-        horizontalMargin = lp.leftMargin+lp.rightMargin;
-        verticalMargin = lp.topMargin+lp.bottomMargin;
+        horizontalMargin = lp.leftMargin + lp.rightMargin;
+        verticalMargin = lp.topMargin + lp.bottomMargin;
         measureChildWithMargins(mMainView,
-                widthMeasureSpec,horizontalMargin+horizontalPadding,
-                heightMeasureSpec,verticalMargin+verticalPadding);
+                widthMeasureSpec, horizontalMargin + horizontalPadding,
+                heightMeasureSpec, verticalMargin + verticalPadding);
 
-        if(widthMode==MeasureSpec.AT_MOST)
-            widthSize = Math.min(widthSize,mMainView.getMeasuredWidth()+horizontalMargin+horizontalPadding);
-        else if(widthMode==MeasureSpec.UNSPECIFIED)
-            widthSize = mMainView.getMeasuredWidth()+horizontalMargin+horizontalPadding;
+        if (widthMode == MeasureSpec.AT_MOST)
+            widthSize = Math.min(widthSize, mMainView.getMeasuredWidth() + horizontalMargin + horizontalPadding);
+        else if (widthMode == MeasureSpec.UNSPECIFIED)
+            widthSize = mMainView.getMeasuredWidth() + horizontalMargin + horizontalPadding;
 
-        if(heightMode==MeasureSpec.AT_MOST)
-            heightSize = Math.min(heightSize,mMainView.getMeasuredHeight()+verticalMargin+verticalPadding);
-        else if(heightMode==MeasureSpec.UNSPECIFIED)
-            heightSize = mMainView.getMeasuredHeight()+verticalMargin+verticalPadding;
+        if (heightMode == MeasureSpec.AT_MOST)
+            heightSize = Math.min(heightSize, mMainView.getMeasuredHeight() + verticalMargin + verticalPadding);
+        else if (heightMode == MeasureSpec.UNSPECIFIED)
+            heightSize = mMainView.getMeasuredHeight() + verticalMargin + verticalPadding;
 
-        setMeasuredDimension(widthSize,heightSize);
+        setMeasuredDimension(widthSize, heightSize);
 
         //side layout大小为自身实际大小
         lp = (MarginLayoutParams) mSideView.getLayoutParams();
-        verticalMargin = lp.topMargin+lp.bottomMargin;
-        mSideView.measure(MeasureSpec.makeMeasureSpec(0,MeasureSpec.UNSPECIFIED),
-                MeasureSpec.makeMeasureSpec(getMeasuredHeight()-verticalMargin-verticalPadding,MeasureSpec.EXACTLY));
+        verticalMargin = lp.topMargin + lp.bottomMargin;
+        mSideView.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+                MeasureSpec.makeMeasureSpec(getMeasuredHeight() - verticalMargin - verticalPadding, MeasureSpec.EXACTLY));
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        if(!ensureChildren())
+        if (!ensureChildren())
             throw new RuntimeException("SwipeItemLayout的子视图不符合规定");
 
         mInLayout = true;
@@ -197,19 +193,19 @@ public class SwipeItemLayout extends ViewGroup {
         MarginLayoutParams mainLp = (MarginLayoutParams) mMainView.getLayoutParams();
         MarginLayoutParams sideParams = (MarginLayoutParams) mSideView.getLayoutParams();
 
-        int childLeft = pl+mainLp.leftMargin;
-        int childTop = pt+mainLp.topMargin;
-        int childRight = getWidth()-(pr+mainLp.rightMargin);
-        int childBottom = getHeight()-(mainLp.bottomMargin+pb);
-        mMainView.layout(childLeft,childTop,childRight,childBottom);
+        int childLeft = pl + mainLp.leftMargin;
+        int childTop = pt + mainLp.topMargin;
+        int childRight = getWidth() - (pr + mainLp.rightMargin);
+        int childBottom = getHeight() - (mainLp.bottomMargin + pb);
+        mMainView.layout(childLeft, childTop, childRight, childBottom);
 
-        childLeft = childRight+sideParams.leftMargin;
-        childTop = pt+sideParams.topMargin;
-        childRight = childLeft+sideParams.leftMargin+sideParams.rightMargin+mSideView.getMeasuredWidth();
-        childBottom = getHeight()-(sideParams.bottomMargin+pb);
-        mSideView.layout(childLeft,childTop,childRight,childBottom);
+        childLeft = childRight + sideParams.leftMargin;
+        childTop = pt + sideParams.topMargin;
+        childRight = childLeft + sideParams.leftMargin + sideParams.rightMargin + mSideView.getMeasuredWidth();
+        childBottom = getHeight() - (sideParams.bottomMargin + pb);
+        mSideView.layout(childLeft, childTop, childRight, childBottom);
 
-        mMaxScrollOffset = mSideView.getWidth()+sideParams.leftMargin+sideParams.rightMargin;
+        mMaxScrollOffset = mSideView.getWidth() + sideParams.leftMargin + sideParams.rightMargin;
         mScrollOffset = 0;//mScrollOffset<-mMaxScrollOffset/2 ? -mMaxScrollOffset:0;
 
         //offsetChildrenLeftAndRight(mScrollOffset);
@@ -217,9 +213,9 @@ public class SwipeItemLayout extends ViewGroup {
         mIsLaidOut = true;
     }
 
-    void offsetChildrenLeftAndRight(int delta){
-        ViewCompat.offsetLeftAndRight(mMainView,delta);
-        ViewCompat.offsetLeftAndRight(mSideView,delta);
+    void offsetChildrenLeftAndRight(int delta) {
+        ViewCompat.offsetLeftAndRight(mMainView, delta);
+        ViewCompat.offsetLeftAndRight(mSideView, delta);
     }
 
     @Override
@@ -253,10 +249,10 @@ public class SwipeItemLayout extends ViewGroup {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
 
-        if(mScrollOffset!=0 && mIsLaidOut){
+        if (mScrollOffset != 0 && mIsLaidOut) {
             offsetChildrenLeftAndRight(-mScrollOffset);
             mScrollOffset = 0;
-        }else
+        } else
             mScrollOffset = 0;
     }
 
@@ -264,10 +260,10 @@ public class SwipeItemLayout extends ViewGroup {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
 
-        if(mScrollOffset!=0 && mIsLaidOut){
+        if (mScrollOffset != 0 && mIsLaidOut) {
             offsetChildrenLeftAndRight(-mScrollOffset);
             mScrollOffset = 0;
-        }else
+        } else
             mScrollOffset = 0;
         removeCallbacks(mScrollRunnable);
     }
@@ -280,8 +276,8 @@ public class SwipeItemLayout extends ViewGroup {
             case MotionEvent.ACTION_DOWN: {
                 final int x = (int) ev.getX();
                 final int y = (int) ev.getY();
-                View pointView = findTopChildUnder(this,x,y);
-                if(pointView!=null && pointView==mMainView && mScrollOffset !=0)
+                View pointView = findTopChildUnder(this, x, y);
+                if (pointView != null && pointView == mMainView && mScrollOffset != 0)
                     return true;
                 break;
             }
@@ -290,11 +286,11 @@ public class SwipeItemLayout extends ViewGroup {
             case MotionEvent.ACTION_CANCEL:
                 break;
 
-            case MotionEvent.ACTION_UP:{
+            case MotionEvent.ACTION_UP: {
                 final int x = (int) ev.getX();
                 final int y = (int) ev.getY();
-                View pointView = findTopChildUnder(this,x,y);
-                if(pointView!=null && pointView==mMainView && mTouchMode== Mode.TAP && mScrollOffset !=0)
+                View pointView = findTopChildUnder(this, x, y);
+                if (pointView != null && pointView == mMainView && mTouchMode == Mode.TAP && mScrollOffset != 0)
                     return true;
                 break;
             }
@@ -311,8 +307,8 @@ public class SwipeItemLayout extends ViewGroup {
             case MotionEvent.ACTION_DOWN: {
                 final int x = (int) ev.getX();
                 final int y = (int) ev.getY();
-                View pointView = findTopChildUnder(this,x,y);
-                if(pointView!=null && pointView==mMainView && mScrollOffset !=0)
+                View pointView = findTopChildUnder(this, x, y);
+                if (pointView != null && pointView == mMainView && mScrollOffset != 0)
                     return true;
                 break;
             }
@@ -321,11 +317,11 @@ public class SwipeItemLayout extends ViewGroup {
             case MotionEvent.ACTION_CANCEL:
                 break;
 
-            case MotionEvent.ACTION_UP:{
+            case MotionEvent.ACTION_UP: {
                 final int x = (int) ev.getX();
                 final int y = (int) ev.getY();
-                View pointView = findTopChildUnder(this,x,y);
-                if(pointView!=null && pointView==mMainView && mTouchMode== Mode.TAP && mScrollOffset !=0) {
+                View pointView = findTopChildUnder(this, x, y);
+                if (pointView != null && pointView == mMainView && mTouchMode == Mode.TAP && mScrollOffset != 0) {
                     close();
                     return true;
                 }
@@ -339,7 +335,7 @@ public class SwipeItemLayout extends ViewGroup {
     @Override
     protected void onVisibilityChanged(View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
-        if(getVisibility()!=View.VISIBLE){
+        if (getVisibility() != View.VISIBLE) {
             mScrollOffset = 0;
             invalidate();
         }
@@ -360,8 +356,8 @@ public class SwipeItemLayout extends ViewGroup {
         private int mMinVelocity;
         private boolean mScrollToLeft;
 
-        ScrollRunnable(Context context){
-            mScroller = new Scroller(context,sInterpolator);
+        ScrollRunnable(Context context) {
+            mScroller = new Scroller(context, sInterpolator);
             mAbort = false;
             mScrollToLeft = false;
 
@@ -369,37 +365,37 @@ public class SwipeItemLayout extends ViewGroup {
             mMinVelocity = configuration.getScaledMinimumFlingVelocity();
         }
 
-        void startScroll(int startX,int endX){
-            if(startX!=endX){
-                Log.e("scroll - startX - endX",""+startX+" "+endX);
+        void startScroll(int startX, int endX) {
+            if (startX != endX) {
+                Log.e("scroll - startX - endX", "" + startX + " " + endX);
                 setTouchMode(Mode.FLING);
                 mAbort = false;
-                mScrollToLeft = endX<startX;
-                mScroller.startScroll(startX,0,endX-startX,0, 400);
-                ViewCompat.postOnAnimation(SwipeItemLayout.this,this);
+                mScrollToLeft = endX < startX;
+                mScroller.startScroll(startX, 0, endX - startX, 0, 400);
+                ViewCompat.postOnAnimation(SwipeItemLayout.this, this);
             }
         }
 
-        void startFling(int startX,int xVel){
-            Log.e("fling - startX",""+startX);
+        void startFling(int startX, int xVel) {
+            Log.e("fling - startX", "" + startX);
 
-            if(xVel>mMinVelocity && startX!=0) {
+            if (xVel > mMinVelocity && startX != 0) {
                 startScroll(startX, 0);
                 return;
             }
 
-            if(xVel<-mMinVelocity && startX!=-mMaxScrollOffset) {
+            if (xVel < -mMinVelocity && startX != -mMaxScrollOffset) {
                 startScroll(startX, -mMaxScrollOffset);
                 return;
             }
 
-            startScroll(startX,startX>-mMaxScrollOffset/2 ? 0:-mMaxScrollOffset);
+            startScroll(startX, startX > -mMaxScrollOffset / 2 ? 0 : -mMaxScrollOffset);
         }
 
-        void abort(){
-            if(!mAbort){
+        void abort() {
+            if (!mAbort) {
                 mAbort = true;
-                if(!mScroller.isFinished()){
+                if (!mScroller.isFinished()) {
                     mScroller.abortAnimation();
                     removeCallbacks(this);
                 }
@@ -407,40 +403,40 @@ public class SwipeItemLayout extends ViewGroup {
         }
 
         //是否正在滑动需要另外判断
-        boolean isScrollToLeft(){
+        boolean isScrollToLeft() {
             return mScrollToLeft;
         }
 
         @Override
         public void run() {
-            Log.e("abort",Boolean.toString(mAbort));
-            if(!mAbort){
+            Log.e("abort", Boolean.toString(mAbort));
+            if (!mAbort) {
                 boolean more = mScroller.computeScrollOffset();
                 int curX = mScroller.getCurrX();
-                Log.e("curX",""+curX);
+                Log.e("curX", "" + curX);
 
-                boolean atEdge = trackMotionScroll(curX-mScrollOffset);
-                if(more && !atEdge) {
+                boolean atEdge = trackMotionScroll(curX - mScrollOffset);
+                if (more && !atEdge) {
                     ViewCompat.postOnAnimation(SwipeItemLayout.this, this);
                     return;
                 }
 
-                if(atEdge){
+                if (atEdge) {
                     removeCallbacks(this);
-                    if(!mScroller.isFinished())
+                    if (!mScroller.isFinished())
                         mScroller.abortAnimation();
                     setTouchMode(Mode.RESET);
                 }
 
-                if(!more){
+                if (!more) {
                     setTouchMode(Mode.RESET);
                     //绝对不会出现这种意外的！！！可以注释掉
-                    if(mScrollOffset!=0){
-                        if(Math.abs(mScrollOffset)>mMaxScrollOffset/2)
+                    if (mScrollOffset != 0) {
+                        if (Math.abs(mScrollOffset) > mMaxScrollOffset / 2)
                             mScrollOffset = -mMaxScrollOffset;
                         else
                             mScrollOffset = 0;
-                        ViewCompat.postOnAnimation(SwipeItemLayout.this,this);
+                        ViewCompat.postOnAnimation(SwipeItemLayout.this, this);
                     }
                 }
             }

@@ -28,7 +28,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="项目申报"
+                android:text="@string/project_application"
                 android:layout_centerInParent="true"
                 android:textColor="#ff222222"
                 android:textSize="18sp" />
@@ -44,7 +44,7 @@
             android:layout_marginRight="@dimen/dp_25"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:text="提交"
+            android:text="@string/submit_declare"
             android:background="@drawable/reg_btn_shape"
             android:textColor="#FFFFFF" />
 
@@ -75,7 +75,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="申报项目名称" />
+                    android:text="@string/declare_name" />
 
                 <EditText
                     android:id="@+id/et_project_name"
@@ -102,7 +102,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="申报类别" />
+                    android:text="@string/declare_type" />
 
                 <EditText
                     android:id="@+id/et_project_type"
@@ -120,7 +120,8 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginRight="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_8"
-                    android:background="#F3F3F3" />
+                    android:background="#F3F3F3"
+                    android:visibility="gone"/>
 
                 <com.lihang.selfmvvm.customview.RequiredTextView
                     android:layout_width="wrap_content"
@@ -129,7 +130,8 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="公司名称" />
+                    android:text="@string/company_name"
+                    android:visibility="gone"/>
 
                 <EditText
                     android:id="@+id/et_company_name"
@@ -139,7 +141,8 @@
                     android:layout_marginTop="@dimen/dp_9"
                     android:layout_marginRight="@dimen/dp_15"
                     android:background="@null"
-                    android:textColorHint="#D0D0D0" />
+                    android:textColorHint="#D0D0D0"
+                    android:visibility="gone"/>
 
                 <View
                     android:layout_width="match_parent"
@@ -156,7 +159,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="项目描述" />
+                    android:text="@string/declare_info" />
 
                 <EditText
                     android:id="@+id/et_project_info"
@@ -183,7 +186,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="申报补贴金额" />
+                    android:text="@string/declare_money" />
 
                 <EditText
                     android:id="@+id/et_project_money"
@@ -210,7 +213,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="地址" />
+                    android:text="@string/address" />
 
                 <EditText
                     android:id="@+id/et_address"
@@ -237,7 +240,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="联系人" />
+                    android:text="@string/contract" />
 
                 <EditText
                     android:id="@+id/et_contract_person"
@@ -264,7 +267,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="联系电话" />
+                    android:text="@string/phone" />
 
                 <EditText
                     android:id="@+id/et_contract_phone"
@@ -291,7 +294,7 @@
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginTop="@dimen/dp_12"
                     android:textColor="#303030"
-                    android:text="附件" />
+                    android:text="@string/attachment" />
 
                 <RelativeLayout
                     android:id="@+id/rl_attachment"
@@ -313,7 +316,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/imabtn_upload"
-                        android:text="点击添加附件(ppt.docx.xlsx.pdf.jpg.png)	"
+                        android:text="@string/add_attachment_all"
                         android:textColor="#ffd0d0d0"
                         android:textSize="14sp" />
                 </RelativeLayout>
@@ -324,7 +327,7 @@
                     android:layout_width="match_parent"
                     android:layout_marginLeft="@dimen/dp_15"
                     android:layout_marginRight="@dimen/dp_15"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="@dimen/dp_40" />
             </LinearLayout>
         </ScrollView>
     </RelativeLayout>

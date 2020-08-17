@@ -27,6 +27,7 @@ import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CommonUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -55,7 +56,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     /**
      * 附件列表
      */
-    private List<String> attachmentList = new ArrayList<>();
+    private List<AttachmentResVo> attachmentList = new ArrayList<>();
     private AttchmentListAdapter attchmentListAdapter;
 
     private String realName = "";
@@ -85,11 +86,31 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
                     bundle.putInt("id", msgMeResVo.getId());
                     ActivityUtils.startActivityWithBundle(getContext(), PlainMsgDetailActivity.class, bundle);
                 });
+
+                holder.setOnClickListener(R.id.tv_delete, view -> deletePlainMsg(msgMeResVo.getId()));
             }
         };
         binding.rvMsg.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rvMsg.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
         binding.rvMsg.setAdapter(projectAdapter);
+    }
+
+    /**
+     * 删除 普通消息
+     *
+     * @param id
+     */
+    private void deletePlainMsg(int id) {
+        List<Integer> list = new ArrayList<>();
+        list.add(id);
+        mViewModel.deletePlainMsgList(list).observe(this, res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    getPlainMsgList();
+                }
+            });
+        });
     }
 
     private void getPlainMsgList() {
@@ -157,7 +178,6 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
 //                }));
 //            }
 //        });
-
 
         closeIv.setOnClickListener((view1 -> onDismiss()));
         sendBtn.setOnClickListener(view1 -> ToastUtils.showToast("hahah"));
@@ -230,15 +250,36 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
                 for (int i = 0; i < count; i++) {
                     Uri imageUri = data.getClipData().getItemAt(i).getUri();
                     String imgpath = FileUtils.getPath(this, imageUri);
-                    attachmentList.add(imgpath);
+                    AttachmentResVo attachmentResVo = new AttachmentResVo();
+                    attachmentResVo.setName(getFileName(imgpath));
+                    attachmentResVo.setUrl(imgpath);
+                    attachmentList.add(attachmentResVo);
                 }
                 attchmentListAdapter.notifyDataSetChanged();
             } else if (data.getData() != null) { // 单选
                 String imagePath = FileUtils.getPath(this, data.getData());
                 Log.i("zhangxianpeng===", "Single image path ---- " + imagePath);
-                attachmentList.add(imagePath);
+                AttachmentResVo attachmentResVo = new AttachmentResVo();
+                attachmentResVo.setName(getFileName(imagePath));
+                attachmentResVo.setUrl(imagePath);
+                attachmentList.add(attachmentResVo);
                 attchmentListAdapter.notifyDataSetChanged();
             }
+        }
+    }
+
+    /**
+     * 从路径获取文件名
+     *
+     * @param imgpath
+     * @return
+     */
+    private String getFileName(String imgpath) {
+        int start = imgpath.lastIndexOf("/");
+        if (start != -1) {
+            return imgpath.substring(start + 1);
+        } else {
+            return "";
         }
     }
 }

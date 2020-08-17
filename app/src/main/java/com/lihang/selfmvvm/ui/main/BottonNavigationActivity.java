@@ -10,7 +10,6 @@ import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityBottonNavigationBinding;
-import com.lihang.selfmvvm.ui.fragment.GovermentProjectFragment;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
 import com.lihang.selfmvvm.ui.fragment.ProjectFragment;
@@ -78,8 +77,10 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
                 @Override
                 public void onSuccess(UserInfoVo data) {
                     if (data != null) {
-                        PreferenceUtil.put(USER_LOGIN_HEAD_URL, data.getHeadUrl());
-                        PreferenceUtil.put(USER_NICK_NAME, data.getRealname());
+                        if (!TextUtils.isEmpty(data.getHeadUrl()))
+                            PreferenceUtil.put(USER_LOGIN_HEAD_URL, data.getHeadUrl());
+                        if (!TextUtils.isEmpty(data.getRealname()))
+                            PreferenceUtil.put(USER_NICK_NAME, data.getRealname());
                         if (data.getUserType() == 0) { //政府
                             CheckPermissionUtils.getInstance().setGovernment(true);
                         } else if (data.getUserType() == 1) {  //企业

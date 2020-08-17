@@ -9,6 +9,8 @@ import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -20,5 +22,9 @@ public class CommunicateViewModel extends BaseViewModel<RepositoryImpl> {
 
     public LiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList() {
         return getRepository().getPlainMsgList();
+    }
+
+    public LiveData<Resource<String>> deletePlainMsgList(List<Integer> idList) {
+        return getRepository().deletePlainMsgList(idList);
     }
 }

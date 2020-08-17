@@ -1,6 +1,5 @@
 package com.lihang.selfmvvm.ui.login;
 
-import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,10 +11,10 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.databinding.ActivityGovassLoginactivityBinding;
+import com.lihang.selfmvvm.ui.main.BottonNavigationActivity;
 import com.lihang.selfmvvm.ui.register.RegisterStepOneActivity;
 import com.lihang.selfmvvm.utils.AESUtils;
 import com.lihang.selfmvvm.utils.ActivityUtils;
-import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
@@ -106,7 +105,8 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                             String token = data.getToken();
                             PreferenceUtil.put(USER_LOGIN_TOKEN, token);
                             ToastUtils.showToast("登录成功");
-                            backResult(token);
+                            ActivityUtils.startActivity(getContext(), BottonNavigationActivity.class);
+                            finish();
                         }
 
                         @Override
@@ -122,12 +122,6 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                 });
     }
 
-    private void backResult(String token) {
-        Intent intent = new Intent();
-        intent.putExtra("token", token);
-        setResult(RESPONSE_CODE, intent);
-        finish();
-    }
 
     @Override
     public void onClick(View view) {
@@ -174,4 +168,5 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         return super.onKeyDown(keyCode, event);
     }
+
 }

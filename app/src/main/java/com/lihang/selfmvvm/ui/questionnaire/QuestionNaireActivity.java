@@ -19,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, ActivityQuestionNaireBinding> {
 
@@ -42,8 +43,28 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
 
     @Override
     protected void processLogic() {
+        initLoadMoreListener();
         initAdapter();
         getCompleteQuestionList(page, status);
+    }
+
+    private void initLoadMoreListener() {
+        binding.swipeRefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                page += 1;
+                getCompleteQuestionList(page, status);
+                binding.swipeRefreshlayout.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /*
+                         * 加载完毕之后就关闭进度条
+                         */
+                        binding.swipeRefreshlayout.setRefreshing(false);
+                    }
+                }, 10000);
+            }
+        });
     }
 
     private void initAdapter() {

@@ -48,7 +48,7 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_project_list_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_project_list_item2, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(view);
         return viewHolder;
     }
@@ -88,7 +88,6 @@ public class ProjectListAdapter extends RecyclerView.Adapter<ProjectListAdapter.
     class MyViewHolder extends RecyclerView.ViewHolder {
         private RelativeLayout containerRl;
         private TextView title;
-
 
         public MyViewHolder(View itemView) {
             super(itemView);

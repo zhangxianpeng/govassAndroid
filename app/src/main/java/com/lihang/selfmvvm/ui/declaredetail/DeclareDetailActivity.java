@@ -59,6 +59,15 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
             res.handler(new OnCallback<ProjectResVo>() {
                 @Override
                 public void onSuccess(ProjectResVo data) {
+                    if (data.getStatus() == 1) {   //已通过
+                        binding.btnSubmit.setVisibility(View.GONE);
+                        binding.btnNotadopt.setClickable(false);
+                        binding.btnAdopt.setClickable(false);
+                    } else {
+                        binding.btnSubmit.setVisibility(View.VISIBLE);
+                        binding.btnNotadopt.setClickable(true);
+                        binding.btnAdopt.setClickable(true);
+                    }
                     binding.tvProjectName.setText(data.getName());
                     binding.tvDeclareStyle.setText(data.getType());
                     binding.tvCompanyName.setText(data.getEnterpriseName());

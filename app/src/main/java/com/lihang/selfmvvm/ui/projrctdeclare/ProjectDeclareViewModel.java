@@ -10,23 +10,26 @@
  */
 package com.lihang.selfmvvm.ui.projrctdeclare;
 
-import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.Intent;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.view.View;
 import android.widget.EditText;
 
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
+import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
+
+import java.util.List;
 
 import androidx.annotation.Dimension;
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import okhttp3.MultipartBody;
 
 /**
  * @ClassName: ProjectDeclareViewModel
@@ -57,17 +60,23 @@ public class ProjectDeclareViewModel extends BaseViewModel<RepositoryImpl> {
         }
     }
 
-
-    public void submitDeclare() {
-
+    /**
+     * 新增项目申报
+     *
+     * @param addProjectReqVo
+     * @return
+     */
+    public LiveData<Resource<String>> saveProject(AddProjectReqVo addProjectReqVo) {
+        return getRepository().saveProject(addProjectReqVo);
     }
 
     /**
-     * 从本地选择附件上传
+     * 多文件上传
      *
-     * @param view
+     * @param parts
+     * @return
      */
-    public void selectAttachmentFromLocal(Activity activity, View view) {
-
+    public LiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
+        return getRepository().uploadMultyFile(parts);
     }
 }

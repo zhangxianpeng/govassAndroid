@@ -16,6 +16,7 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
@@ -125,6 +126,16 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
         return getRepository().deleteGroup(groupIds);
+    }
+
+    /**
+     * 从当前分组移除用户
+     *
+     * @param removeUserReqVo
+     * @return
+     */
+    public LiveData<Resource<String>> removeUser(RemoveUserReqVo removeUserReqVo) {
+        return getRepository().removeUser(removeUserReqVo);
     }
 
 }

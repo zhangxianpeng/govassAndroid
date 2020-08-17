@@ -2,9 +2,9 @@
     android:shape="oval">
     <stroke
         android:width="@dimen/dp_1"
-        android:color="#F86F6A" />
+        android:color="@color/red" />
 
-    <solid android:color="#F86F6A" />
+    <solid android:color="@color/red" />
 
     <size
         android:width="@dimen/dp_8"

@@ -29,6 +29,7 @@ import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
@@ -96,9 +97,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         } else {
             binding.exListView.setGroupIndicator(null);
         }
-
-        //这里是通过改变默认的setGroupIndicator方式实现自定义指示器 但是效果不好 图标会被拉伸的很难看 不信你可以自己试试
-//        expandableListView.setGroupIndicator(this.getResources().getDrawable(R.drawable.shape_expendable_listview));
 
         //创建适配器
         expandableAdapter = new ExpandableAdapter(getContext(), groupArray, R.layout.exlistview_group_item, childArray, R.layout.exlistview_child_item);
@@ -198,7 +196,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
             return true;
         });
+
     }
+
 
     private void showMenuDialog(View view, String groupName, String groupId) {
         View contentView = LayoutInflater.from(getContext()).inflate(R.layout.mailistpop, null);
@@ -299,6 +299,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
 
     /**
      * 新增分组名
+     *
      * @param groupName
      * @param groupNameRemark
      */
@@ -405,7 +406,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         }
         switch (view.getId()) {
             case R.id.iv_add_group:
-                DialogUtil.alertIosDialog(getActivity(), "新增分组", true,"确定", "取消", new DialogUtil.DialogAlertListener() {
+                DialogUtil.alertIosDialog(getActivity(), "新增分组", true, "确定", "取消", new DialogUtil.DialogAlertListener() {
                     @Override
                     public void yes(String groupName, String groupNameRemark) {
                         if (!TextUtils.isEmpty(groupName)) {
@@ -457,7 +458,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REMOVE_REQUEST_CODE && resultCode == REMOVE_RESPONSE_CODE) {
+        if (requestCode == REMOVE_REQUEST_CODE && resultCode == REMOVE_RESPONSE_CODE) {
             initData(defaultType);
         }
     }
@@ -511,7 +512,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             } else {
                 v = convertView;
             }
-            bindChildView(v, mChildArray.get(groupPosition).get(childPosition));
+            bindChildView(v, groupPosition, mChildArray.get(groupPosition).get(childPosition));
             return v;
         }
 
@@ -587,15 +588,39 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
          * @param view
          * @param data
          */
-        private void bindChildView(View view, ChildModel data) {
+        private void bindChildView(View view, int groupPosition, ChildModel data) {
             // 绑定组视图的数据 当然这些都是模拟的
             TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
+            TextView deleteTv = (TextView) view.findViewById(R.id.tv_delete);
             ImageView iv_head = view.findViewById(R.id.iv_head);
-//            TextView tv_sig = ( TextView ) view.findViewById(R.id.tv_sig);
             tv_name.setText(data.getName());
             Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
                     .error(R.mipmap.default_tx_img).into(iv_head);
-//            tv_sig.setText(data.getSig());
+            deleteTv.setOnClickListener(view1 -> {
+                DialogUtil.alertIosDialog(getActivity(), "确定从该分组中删除此用户?", false, "确定", "取消", new DialogUtil.DialogAlertListener() {
+                    @Override
+                    public void yes(String groupName, String groupNameRemark) {
+                        RemoveUserReqVo removeUserReqVo = new RemoveUserReqVo();
+                        List<Integer> userIdList = new ArrayList<>();
+                        try {
+                            int id = Integer.parseInt(data.getUserId());
+                            userIdList.add(id);
+                        } catch (NumberFormatException e) {
+                            System.out.print("NumberFormatException" + e.getMessage());
+                        }
+                        removeUserReqVo.setGroupId(groupPosition);
+                        removeUserReqVo.setUserIdList(userIdList);
+                        mViewModel.removeUser(removeUserReqVo).observe(getActivity(), res -> {
+                            res.handler(new OnCallback<String>() {
+                                @Override
+                                public void onSuccess(String data) {
+                                    initData(defaultType);
+                                }
+                            });
+                        });
+                    }
+                });
+            });
         }
 
         /**

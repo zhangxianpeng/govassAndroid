@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseConstant;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 
 import java.util.List;
 
@@ -34,14 +35,14 @@ import androidx.recyclerview.widget.RecyclerView;
 public class AttchmentListAdapter extends RecyclerView.Adapter<AttchmentListAdapter.MyViewHolder> implements View.OnClickListener {
     private String TAG = "AttchmentListAdapter";
     private Context context;
-    private List<String> attachmentPathList;
+    private List<AttachmentResVo> attachmentPathList;
 
     private AttchmentListAdapter.OnItemClickListener mOnItemClickListener;
 
     // 界面
     private String flag;
 
-    public AttchmentListAdapter(Context context, String flag, List<String> attachmentPathList) {
+    public AttchmentListAdapter(Context context, String flag, List<AttachmentResVo> attachmentPathList) {
         this.context = context;
         this.flag = flag;
         this.attachmentPathList = attachmentPathList;
@@ -62,8 +63,8 @@ public class AttchmentListAdapter extends RecyclerView.Adapter<AttchmentListAdap
 
     @Override
     public void onBindViewHolder(AttchmentListAdapter.MyViewHolder holder, final int position) {
-        String filePathName = attachmentPathList.get(position);
-        holder.filePathName.setText(filePathName);
+        AttachmentResVo attachmentResVo = attachmentPathList.get(position);
+        holder.filePathName.setText(attachmentResVo.getName());
         if (holder.deleteTextView != null) {
             holder.deleteTextView.setTag(position);
             holder.deleteTextView.setOnClickListener(this);

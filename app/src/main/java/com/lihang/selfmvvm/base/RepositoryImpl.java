@@ -9,6 +9,7 @@ import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
@@ -24,17 +25,16 @@ import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import androidx.lifecycle.MutableLiveData;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 /**
  * 网络请求api
@@ -131,19 +131,9 @@ public class RepositoryImpl extends BaseModel {
 
 
     //上传多张图片(进度监听)  多张图片进度监听，图片一张一张上传 所以用到了PictureProgressUtil工具类。用之前init初始数据，setProgress即可
-    public MutableLiveData<Resource<String>> upLoadPicss(String type, HashMap<String, File> files) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-
-        Map<String, RequestBody> bodyMap = new HashMap<>();
-        for (int i = 0; i < files.size(); i++) {
-            File file = files.get(i);
-            UploadFileRequestBody uploadFileRequestBody = new UploadFileRequestBody(file, liveData);
-            bodyMap.put("files" + "\"; filename=\"" + file.getName(), uploadFileRequestBody);
-        }
-
-        //如果是传统的不带进度监听 只需要
-//        bodyMap=PARAMS.manyFileToPartBody(files);
-        return upLoadFile(getApiService().uploadPicss(PARAMS.changeToRquestBody(type), bodyMap), liveData);
+    public MutableLiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
+        MutableLiveData<Resource<List<UploadAttachmentResVo>>> liveData = new MutableLiveData<>();
+        return upLoadFile(getApiService().uploadMultyFile(parts), liveData);
     }
 
     //----------------------------------------------------政企通--------------------------------------------------------------
@@ -262,11 +252,23 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().saveGroup(addGroupReqVo), liveData);
     }
 
+    /**
+     * 删除分组
+     *
+     * @param groupIds
+     * @return
+     */
     public MutableLiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().deleteGroup(groupIds), liveData);
+        return observeGo(getApiService().deletePlainMsg(groupIds), liveData);
     }
 
+    /**
+     * 移除用户
+     *
+     * @param removeUserReqVo
+     * @return
+     */
     public MutableLiveData<Resource<String>> removeUser(RemoveUserReqVo removeUserReqVo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().removeUser(removeUserReqVo), liveData);
@@ -299,6 +301,11 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getPlainMsgList(), liveData);
     }
 
+    public MutableLiveData<Resource<String>> deletePlainMsgList(List<Integer> idList) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().deletePlainMsg(idList), liveData);
+    }
+
     public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getWaitPendingOfficalDoc() {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getWaitPendingOfficalDoc(), liveData);
@@ -306,6 +313,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 我的公文
+     *
      * @return
      */
     public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
@@ -315,6 +323,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 公文详情
+     *
      * @return
      */
     public MutableLiveData<Resource<OfficialDocResVo>> getOfficalDocDetail(int id) {
@@ -388,4 +397,16 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<ProjectResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getProjectDetail(id), liveData);
     }
+
+    /**
+     * 新增项目申报 （企业）
+     *
+     * @param addProjectReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<String>> saveProject(AddProjectReqVo addProjectReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().saveProject(addProjectReqVo), liveData);
+    }
+
 }

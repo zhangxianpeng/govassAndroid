@@ -6,9 +6,11 @@ import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
@@ -22,6 +24,7 @@ import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -101,13 +104,6 @@ public interface RetrofitApiService {
     @POST("add2gank")
     @FormUrlEncoded
     Observable<ResponseBody> postAddGank(@FieldMap HashMap<String, String> map);
-
-
-    //单张图片上传
-    @POST("upload/picss")
-    @Multipart
-    Observable<ResponModel<String>> uploadPicss(@Part("type") RequestBody type, @PartMap Map<String, RequestBody> maps);
-
 
     @GET
     @Streaming
@@ -199,7 +195,9 @@ public interface RetrofitApiService {
     /**
      * 多个文件上传
      */
-//    file/batchUpload
+    @POST("file/batchUpload")
+    @Multipart
+    Observable<ResponModel<List<UploadAttachmentResVo>>> uploadMultyFile(@Part()  List<MultipartBody.Part> parts);
 
     /**
      * 文件下载
@@ -459,7 +457,7 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/plainmsg/delete")
-    Observable<ResponModel<List<MemberDetailResVo>>> deletePlainMsg();
+    Observable<ResponModel<String>> deletePlainMsg(@Body List<Integer> idList);
 
     /**
      * 保存普通消息管理
@@ -511,7 +509,7 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/project/save")
-    Observable<ResponModel<List<MemberDetailResVo>>> saveProject();
+    Observable<ResponModel<String>> saveProject(@Body AddProjectReqVo addProjectReqVo);
 
     /**
      * 修改 项目填报
