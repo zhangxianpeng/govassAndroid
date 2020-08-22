@@ -164,7 +164,6 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
-                    ToastUtils.showToast(data);
                     PreferenceUtil.clear();
                     switch (flag) {
                         case 1:   //切换账号

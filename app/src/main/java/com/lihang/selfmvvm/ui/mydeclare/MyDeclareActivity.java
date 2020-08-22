@@ -1,28 +1,42 @@
 package com.lihang.selfmvvm.ui.mydeclare;
 
+import android.annotation.SuppressLint;
+import android.os.Bundle;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
-import com.lihang.selfmvvm.bean.ProjectBean;
 import com.lihang.selfmvvm.databinding.ActivityMyDeclareBinding;
-import com.lihang.selfmvvm.ui.fragment.adapter.ProjectAdapter;
-import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
-import com.lihang.selfmvvm.utils.LogUtils;
+import com.lihang.selfmvvm.ui.declaredetail.DeclareDetailActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.ProjectResVo;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * 我的申报
+ * 我的申报（企業端）
  */
 public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, ActivityMyDeclareBinding> {
 
-    private ArrayList<ProjectBean> myDecalreList = new ArrayList<>();
-    private ProjectAdapter myDeclareAdapter;
+    private List<ProjectResVo> projectList = new ArrayList<>();
+    private CommonAdapter projectAdapter;
 
     private static final String TAG = MyDeclareActivity.class.getSimpleName();
+
+    /**
+     * 默认从第一页开始
+     */
+    private int page = 1;
+
+    private boolean isHaveDeclare = true;
 
     @Override
     protected int getContentViewId() {
@@ -31,58 +45,114 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
 
     @Override
     protected void processLogic() {
-        getMyDeclareList();
+        initFreshLayout();
+        initAdapter();
+        getHaveDeclareProject(page);
     }
 
-    private void getMyDeclareList() {
-        ProjectBean testBean1 = new ProjectBean();
-        testBean1.setProjectTitle("关于做好2019年度自治区小企业贷款风控系统...");
-        testBean1.setProjectTime("2020年5月21日 15:03");
-        myDecalreList.add(testBean1);
+    private void getHaveDeclareProject(int page) {
+        mViewModel.getListMeHandled(page).observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<ProjectResVo> data) {
+                    projectList.clear();
+                    projectList.addAll(data.getList());
+                    projectAdapter.notifyDataSetChanged();
+                }
+            });
+        });
+    }
 
-        ProjectBean testBean2 = new ProjectBean();
-        testBean2.setProjectTitle("自治区科技厅关于征集2021年国家自xxxxxxx...");
-        testBean2.setProjectTime("2020年6月17日 15:03");
-        myDecalreList.add(testBean2);
+    private void getWaitDeclareProject(int page) {
+        mViewModel.getListMePending(page).observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<ProjectResVo> data) {
+                    projectList.clear();
+                    projectList.addAll(data.getList());
+                    projectAdapter.notifyDataSetChanged();
+                }
+            });
+        });
+    }
 
-        ProjectBean testBean3 = new ProjectBean();
-        testBean3.setProjectTitle("关于做好2019年度自治区小区也贷款xxxx");
-        testBean3.setProjectTime("2020年6月17日 15:03");
-        myDecalreList.add(testBean3);
+    private void initFreshLayout() {
+        binding.smartfreshlayout.setOnRefreshListener(this::refresh);
+        binding.smartfreshlayout.setOnLoadMoreListener(this::loadMore);
+    }
 
-        ProjectBean testBean4 = new ProjectBean();
-        testBean4.setProjectTitle("在变革中求发展 在发展中求突破项目");
-        testBean4.setProjectTime("2020年6月17日 15:03");
-        myDecalreList.add(testBean4);
+    private void initAdapter() {
+        projectAdapter = new CommonAdapter<ProjectResVo>(getContext(), R.layout.goverment_project_list_item, projectList) {
+            @Override
+            protected void convert(ViewHolder holder, ProjectResVo msgMeResVo, int position) {
+                holder.setText(R.id.tv_title, msgMeResVo.getName());
+                holder.setText(R.id.tv_time, msgMeResVo.getCreateTime());
+                holder.setText(R.id.tv_ui_flag, getString(R.string.project_application));
 
-        ProjectBean testBean5 = new ProjectBean();
-        testBean5.setProjectTitle("关于疫情下外贸营销的困难与机遇");
-        testBean5.setProjectTime("2020年6月17日 15:03");
-        myDecalreList.add(testBean5);
-
-        ProjectBean testBean6 = new ProjectBean();
-        testBean6.setProjectTitle("直播营销“带货南宁”项目");
-        testBean6.setProjectTime("2020年6月17日 15:03");
-        myDecalreList.add(testBean6);
-
-        myDeclareAdapter = new ProjectAdapter(getContext(), myDecalreList, TAG);
+                holder.setOnClickListener(R.id.rl_container, new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("id", msgMeResVo.getId());
+                        ActivityUtils.startActivityWithBundle(MyDeclareActivity.this, DeclareDetailActivity.class, bundle);
+                    }
+                });
+            }
+        };
         binding.lvMyDeclare.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.lvMyDeclare.setAdapter(myDeclareAdapter);
-        myDeclareAdapter.setOnItemClickListener((view, position) -> LogUtils.d(TAG, "menuClick===" + position));
+        binding.lvMyDeclare.setAdapter(projectAdapter);
     }
 
     @Override
     protected void setListener() {
         binding.ivTitleBarBack.setOnClickListener(this::onClick);
+        binding.llProjectDeclare.setOnClickListener(this::onClick);
+        binding.llMyDeclare.setOnClickListener(this::onClick);
     }
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View view) {
+        if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();
+                break;
+            case R.id.ll_project_declare:  //已审核
+                binding.viewProjectDeclare.setVisibility(View.VISIBLE);
+                binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
+                binding.viewMyDeclare.setVisibility(View.GONE);
+                isHaveDeclare = true;
+                getHaveDeclareProject(1);
+                break;
+            case R.id.ll_my_declare:  //待审核
+                binding.viewProjectDeclare.setVisibility(View.GONE);
+                binding.viewMyDeclare.setVisibility(View.VISIBLE);
+                binding.viewMyDeclare.setBackgroundColor(R.color.tab_selected);
+                isHaveDeclare = false;
+                getWaitDeclareProject(1);
+                break;
             default:
                 break;
         }
+    }
+
+    private void refresh(RefreshLayout refresh) {
+        if (isHaveDeclare) {
+            getHaveDeclareProject(page);
+        } else {
+            getWaitDeclareProject(page);
+        }
+        binding.smartfreshlayout.finishRefresh();
+    }
+
+    private void loadMore(RefreshLayout layout) {
+        page += 1;
+        if (isHaveDeclare) {
+            getHaveDeclareProject(page);
+        } else {
+            getWaitDeclareProject(page);
+        }
+        binding.smartfreshlayout.finishLoadMore();
     }
 }

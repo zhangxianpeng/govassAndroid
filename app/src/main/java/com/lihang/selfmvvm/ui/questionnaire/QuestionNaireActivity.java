@@ -11,6 +11,7 @@ import com.lihang.selfmvvm.ui.activity.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -19,7 +20,6 @@ import java.util.List;
 
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, ActivityQuestionNaireBinding> {
 
@@ -43,28 +43,14 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
 
     @Override
     protected void processLogic() {
-        initLoadMoreListener();
+        initFreshLayout();
         initAdapter();
         getCompleteQuestionList(page, status);
     }
 
-    private void initLoadMoreListener() {
-        binding.swipeRefreshlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                page += 1;
-                getCompleteQuestionList(page, status);
-                binding.swipeRefreshlayout.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        /*
-                         * 加载完毕之后就关闭进度条
-                         */
-                        binding.swipeRefreshlayout.setRefreshing(false);
-                    }
-                }, 10000);
-            }
-        });
+    private void initFreshLayout() {
+        binding.smartfreshlayout.setOnRefreshListener(this::refresh);
+        binding.smartfreshlayout.setOnLoadMoreListener(this::loadMore);
     }
 
     private void initAdapter() {
@@ -130,5 +116,16 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
                 break;
         }
 
+    }
+
+    private void refresh(RefreshLayout refresh) {
+        getCompleteQuestionList(page, status);
+        binding.smartfreshlayout.finishRefresh();
+    }
+
+    private void loadMore(RefreshLayout layout) {
+        page += 1;
+        getCompleteQuestionList(page, status);
+        binding.smartfreshlayout.finishLoadMore();
     }
 }

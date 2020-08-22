@@ -181,4 +181,7 @@
     <string name="declare_info">项目描述</string>
     <string name="declare_money">申报补贴金额</string>
     <string name="add_attachment_all">点击添加附件(ppt.docx.xlsx.pdf.jpg.png)	</string>
+
+    <string name="have_declare">已审核</string>
+    <string name="wait_declare">待审核</string>
 </resources>

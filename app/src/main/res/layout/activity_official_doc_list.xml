@@ -30,11 +30,17 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_officialdoc"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smartfreshlayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/rl_title_bar"
-            android:background="#F1F2F6" />
+            android:layout_below="@+id/rl_title_bar">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_officialdoc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F1F2F6" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </RelativeLayout>
 </layout>

@@ -352,9 +352,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject() {
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject(int page) {
         MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getWaitPendingProject(), liveData);
+        return observeGo(getApiService().getWaitPendingProject(page), liveData);
     }
 
     /**
@@ -362,9 +362,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject() {
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject(int page) {
         MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getPendingProject(), liveData);
+        return observeGo(getApiService().getPendingProject(page), liveData);
     }
 
     /**
@@ -372,9 +372,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMePending() {
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMePending(int page) {
         MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getListMePending(), liveData);
+        return observeGo(getApiService().getListMePending(page), liveData);
     }
 
     /**
@@ -382,9 +382,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMeHandled() {
+    public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMeHandled(int page) {
         MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().listMeHandled(), liveData);
+        return observeGo(getApiService().listMeHandled(page), liveData);
     }
 
     /**

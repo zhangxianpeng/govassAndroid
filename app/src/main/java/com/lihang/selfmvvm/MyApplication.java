@@ -2,7 +2,6 @@ package com.lihang.selfmvvm;
 
 import android.app.Application;
 import android.content.Context;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.lihang.selfmvvm.bean.User;
@@ -10,6 +9,15 @@ import com.lihang.selfmvvm.launchstater.TaskDispatcher;
 import com.lihang.selfmvvm.launchstater.mytasks.SmartRefreshLayoutTask;
 import com.lihang.selfmvvm.launchstater.mytasks.X5WebTask;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
+import com.lihang.selfmvvm.utils.crash.CrashHandler;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.header.ClassicsHeader;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
+import com.scwang.smart.refresh.layout.api.RefreshFooter;
+import com.scwang.smart.refresh.layout.api.RefreshHeader;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.DefaultRefreshFooterCreator;
+import com.scwang.smart.refresh.layout.listener.DefaultRefreshHeaderCreator;
 import com.tencent.smtt.sdk.QbSdk;
 
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
@@ -18,6 +26,25 @@ public class MyApplication extends Application {
 
     private static MyApplication context;
     private static User loginUser;
+
+    static {
+        //设置全局的Header构建器
+        SmartRefreshLayout.setDefaultRefreshHeaderCreator(new DefaultRefreshHeaderCreator() {
+            @Override
+            public RefreshHeader createRefreshHeader(Context context, RefreshLayout layout) {
+                layout.setPrimaryColorsId(R.color.blue_gray, android.R.color.white);//全局设置主题颜色
+                return new ClassicsHeader(context);//.setTimeFormat(new DynamicTimeFormat("更新于 %s"));//指定为经典Header，默认是 贝塞尔雷达Header
+            }
+        });
+        //设置全局的Footer构建器
+        SmartRefreshLayout.setDefaultRefreshFooterCreator(new DefaultRefreshFooterCreator() {
+            @Override
+            public RefreshFooter createRefreshFooter(Context context, RefreshLayout layout) {
+                //指定为经典Footer，默认是 BallPulseFooter
+                return new ClassicsFooter(context).setDrawableSize(20);
+            }
+        });
+    }
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -28,8 +55,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         //捕获崩溃日志，位置在外部存储的LianSou
-//        CrashHandler crashHandler = CrashHandler.getInstance();
-//        crashHandler.init(getApplicationContext());
+        CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(getApplicationContext());
         context = this;
         TaskDispatcher.init(this);
         TaskDispatcher dispatcher = TaskDispatcher.createInstance();

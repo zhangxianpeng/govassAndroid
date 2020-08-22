@@ -66,7 +66,7 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
         Integer imagePath = bean.getImageUrl();
         holder.title.setText(name);
         holder.image.setImageResource(imagePath);
-        if (CheckPermissionUtils.getInstance().isGovernment() && position == homeMenuBeanList.size() - 1 && !TextUtils.isEmpty(unReadMsgCount) && !unReadMsgCount.equals("0")) {
+        if (position == homeMenuBeanList.size() - 1 && !TextUtils.isEmpty(unReadMsgCount) && !unReadMsgCount.equals("0")) {
             holder.badgeView.setVisibility(View.VISIBLE);
             holder.badgeView.setText(String.valueOf(unReadMsgCount));
         }

@@ -10,6 +10,7 @@ import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -32,8 +33,14 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
 
     @Override
     protected void processLogic() {
+        initFreshLayout();
         initAdapter();
         initData();
+    }
+
+    private void initFreshLayout() {
+        binding.smartfreshlayout.setOnRefreshListener(this::refresh);
+        binding.smartfreshlayout.setOnLoadMoreListener(this::loadMore);
     }
 
     private void initAdapter() {
@@ -92,5 +99,15 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
             default:
                 break;
         }
+    }
+
+    private void refresh(RefreshLayout refresh) {
+        initData();
+        binding.smartfreshlayout.finishRefresh();
+    }
+
+    private void loadMore(RefreshLayout layout) {
+       initData();
+        binding.smartfreshlayout.finishLoadMore();
     }
 }

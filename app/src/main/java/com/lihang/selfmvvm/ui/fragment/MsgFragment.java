@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
@@ -592,7 +593,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             // 绑定组视图的数据 当然这些都是模拟的
             TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
             TextView deleteTv = (TextView) view.findViewById(R.id.tv_delete);
-            ImageView iv_head = view.findViewById(R.id.iv_head);
+            CircleImageView iv_head = view.findViewById(R.id.iv_head);
             tv_name.setText(data.getName());
             Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
                     .error(R.mipmap.default_tx_img).into(iv_head);

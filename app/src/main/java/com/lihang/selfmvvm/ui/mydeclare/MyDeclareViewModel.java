@@ -14,8 +14,13 @@ import android.app.Application;
 
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
+import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.ProjectResVo;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
 
 /**
  * @ClassName: MyDeclareViewModel
@@ -28,8 +33,25 @@ public class MyDeclareViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-    //getMyDeclareList
-    public void getMyDeclareList() {
-
+    /**
+     * 已审核项目
+     * 企业
+     *
+     * @return
+     */
+    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMeHandled(int page) {
+        return getRepository().getListMeHandled(page);
     }
+
+    /**
+     * 待审核项目
+     * 企业
+     *
+     * @return
+     */
+    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMePending(int page) {
+        return getRepository().getListMePending(page);
+    }
+
+
 }

@@ -25,7 +25,10 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
     private List<ProjectResVo> projectList = new ArrayList<>();
     private CommonAdapter projectAdapter;
 
-
+    /**
+     * 默认从第一页开始
+     */
+    private int page = 1;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_project;
@@ -60,7 +63,7 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
     }
 
     private void getWaitPendingProject() {
-        mViewModel.getWaitPendingProject().observe(this, res -> {
+        mViewModel.getWaitPendingProject(page).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<ProjectResVo> data) {
@@ -73,7 +76,7 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
     }
 
     private void getPendingProject() {
-        mViewModel.getPendingProject().observe(this, res -> {
+        mViewModel.getPendingProject(page).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<ProjectResVo> data) {

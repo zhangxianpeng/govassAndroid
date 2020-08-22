@@ -19,23 +19,21 @@ public class ProjectActivityViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 待审核项目
-     * 区别政府/企业
+     * 政府
      *
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject() {
-        return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getWaitPendingProject() : getRepository().getListMePending();
+    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject(int page) {
+        return getRepository().getWaitPendingProject(page);
     }
 
     /**
      * 已审核项目
-     * 区别政府/企业
+     * 政府
      *
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject() {
-        return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getPendingProject() : getRepository().getListMeHandled();
+    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject(int page) {
+        return getRepository().getPendingProject(page);
     }
-
-
 }

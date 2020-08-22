@@ -533,7 +533,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/project/list-pending")
-    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getWaitPendingProject();
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getWaitPendingProject(@Query("page") int page);
 
     /**
      * 已审核项目  （政府端）
@@ -541,7 +541,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/project/list-handled")
-    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getPendingProject();
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getPendingProject(@Query("page") int page);
 
     /**
      * 待审核项目  （企业端）
@@ -549,7 +549,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/project/listMePending")
-    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getListMePending();
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> getListMePending(@Query("page") int page);
 
     /**
      * 已审核项目  （企业端）
@@ -557,6 +557,6 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/project/listMeHandled")
-    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> listMeHandled();
+    Observable<ResponModel<ListBaseResVo<ProjectResVo>>> listMeHandled(@Query("page") int page);
 
 }

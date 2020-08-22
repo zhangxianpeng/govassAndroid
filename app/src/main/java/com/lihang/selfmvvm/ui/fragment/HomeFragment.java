@@ -26,12 +26,16 @@ import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -42,7 +46,7 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 /**
  * 主界面 fragment
  */
-public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> {
+public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener {
     private static final String TAG = "HomeFragment";
     private HomeMenuAdapter homeMenuAdapter;
     private ProjectListAdapter projectListAdapter;
@@ -60,6 +64,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        initFreshLayout();
         initBannerWidget();
         initMenuData();
         initMsgAdapter();
@@ -73,41 +78,78 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         }
     }
 
+    private void initFreshLayout() {
+        binding.smartfreshlayout.setOnRefreshListener(this::onRefresh);
+        binding.smartfreshlayout.setOnLoadMoreListener(this::onLoadMore);
+    }
+
     private void initMenuAdapter(String unReadMsgCount) {
         homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList, unReadMsgCount);
         binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
         binding.rvMenu.setAdapter(homeMenuAdapter);
-        homeMenuAdapter.setOnItemClickListener((view, position) -> {
-            switch (position) {
-                case 0:
-                    ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
-                    break;
-                case 1:
-                    if (CheckPermissionUtils.getInstance().isGovernment()) {
-                        ActivityUtils.startActivity(getContext(), ProjectActivity.class);
-                    } else {
-                        ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
-                    }
-                    break;
-                case 2:
-                    ToastUtils.showToast("企业账户管理界面");
-                    break;
-                case 3:
-                    ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
-                    break;
-                case 4:
-                    ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
-                    break;
-                case 5:
-                    ToastUtils.showToast("我的企业界面");
-                    break;
-                case 6:
-                    ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-                    break;
-                default:
-                    break;
-            }
-        });
+        if (CheckPermissionUtils.getInstance().isGovernment()) {   //政府
+            homeMenuAdapter.setOnItemClickListener((view, position) -> {
+                switch (position) {
+                    case 0:
+                        ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+                        break;
+                    case 1:
+                        if (CheckPermissionUtils.getInstance().isGovernment()) {
+                            ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                        } else {
+                            ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
+                        }
+                        break;
+                    case 2:
+                        ToastUtils.showToast("企业账户管理界面");
+                        break;
+                    case 3:
+                        ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
+                        break;
+                    case 4:
+                        ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
+                        break;
+                    case 5:
+                        ToastUtils.showToast("我的企业界面");
+                        break;
+                    case 6:
+                        ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        } else { //企業
+            homeMenuAdapter.setOnItemClickListener((view, position) -> {
+                switch (position) {
+                    case 0:
+                        ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+                        break;
+                    case 1:
+                        if (CheckPermissionUtils.getInstance().isGovernment()) {
+                            ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                        } else {
+                            ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
+                        }
+                        break;
+                    case 2:
+                        ToastUtils.showToast("企业账户管理界面");
+                        break;
+                    case 3:
+                        ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
+                        break;
+                    case 4:
+                        ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
+                        break;
+                    case 5:
+                        ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                        break;
+                    default:
+                        break;
+                }
+            });
+        }
+
     }
 
 
@@ -209,13 +251,13 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         HomeMenuBean mybusinessBean = new HomeMenuBean();
         mybusinessBean.setImageUrl(R.mipmap.home_ic_mybusiness);
         mybusinessBean.setTitle(getContext().getString(R.string.my_business));
-        homeMenuPathList.add(mybusinessBean);
+        if (CheckPermissionUtils.getInstance().isGovernment())
+            homeMenuPathList.add(mybusinessBean);
 
         HomeMenuBean msgBean = new HomeMenuBean();
         msgBean.setImageUrl(R.mipmap.home_ic_alerts);
         msgBean.setTitle(getContext().getString(R.string.message_notification));
-        if (CheckPermissionUtils.getInstance().isGovernment())
-            homeMenuPathList.add(msgBean);
+        homeMenuPathList.add(msgBean);
     }
 
     private void initMsgMeList() {
@@ -250,5 +292,18 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
+        initMsgMeList();
+        binding.smartfreshlayout.finishLoadMore();
+    }
+
+    @Override
+    public void onRefresh(@NonNull RefreshLayout refreshLayout) {
+        getUnReadMsgCount();
+        initMsgMeList();
+        binding.smartfreshlayout.finishRefresh();
     }
 }
