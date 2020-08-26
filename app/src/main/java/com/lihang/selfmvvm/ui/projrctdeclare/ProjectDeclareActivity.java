@@ -148,7 +148,7 @@ public class ProjectDeclareActivity extends BaseActivity<ProjectDeclareViewModel
         addProjectReqVo.setContact(getStringByUI(binding.etContractPhone));
         addProjectReqVo.setDescription(getStringByUI(binding.etProjectInfo));
         addProjectReqVo.setLinkman(getStringByUI(binding.etContractPerson));
-        addProjectReqVo.setName(getStringByUI(binding.etCompanyName));
+        addProjectReqVo.setName(getStringByUI(binding.etProjectName));
         addProjectReqVo.setType(getStringByUI(binding.etProjectType));
 
         if (addProjectReqVo.getAttachmentList().size() > 0) {

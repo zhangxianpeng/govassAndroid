@@ -274,9 +274,28 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().removeUser(removeUserReqVo), liveData);
     }
 
+    /**
+     * 调查问卷（政府）
+     *
+     * @param page
+     * @param status
+     * @return
+     */
     public MutableLiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, int status) {
         MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getQuestiontList(page, status), liveData);
+    }
+
+    /**
+     * 调查问卷（企业）
+     *
+     * @param page
+     * @param status
+     * @return
+     */
+    public MutableLiveData<Resource<QuestionNaireResVo>> getEnQuestiontList(int page, int status) {
+        MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnQuestiontList(page, status), liveData);
     }
 
     public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
@@ -312,7 +331,7 @@ public class RepositoryImpl extends BaseModel {
     }
 
     /**
-     * 我的公文
+     * 我的公文（政府端）
      *
      * @return
      */
@@ -320,6 +339,17 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getOfficalDoc(), liveData);
     }
+
+    /**
+     * 我的收文（企业端）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc() {
+        MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getReceiveOfficalDoc(), liveData);
+    }
+
 
     /**
      * 公文详情

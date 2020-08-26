@@ -28,7 +28,11 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
      */
     private List<QuestionNaireItemResVo> completeList = new ArrayList<>();
 
+    /**
+     * 默认页数
+     */
     private int page = 1;
+
     /**
      * 0 未填報 1 已填報
      */
@@ -45,7 +49,7 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     protected void processLogic() {
         initFreshLayout();
         initAdapter();
-        getCompleteQuestionList(page, status);
+        getCompleteQuestionList(page, status,true);
     }
 
     private void initFreshLayout() {
@@ -72,12 +76,14 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
         binding.rvProject.setAdapter(commonAdapter);
     }
 
-    private void getCompleteQuestionList(int page, int status) {
+    private void getCompleteQuestionList(int page, int status, boolean isClearDataSource) {
         mViewModel.getQuestiontList(page, status).observe(this, res -> {
             res.handler(new OnCallback<QuestionNaireResVo>() {
                 @Override
                 public void onSuccess(QuestionNaireResVo data) {
-                    completeList.clear();
+                    if (isClearDataSource) {
+                        completeList.clear();
+                    }
                     completeList.addAll(data.getList());
                     commonAdapter.notifyDataSetChanged();
                 }
@@ -104,13 +110,13 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
                 status = 0;
-                getCompleteQuestionList(page, status);
+                getCompleteQuestionList(page, status, true);
                 break;
             case R.id.rl_tab_no_complete:
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
                 status = 1;
-                getCompleteQuestionList(page, status);
+                getCompleteQuestionList(page, status, true);
                 break;
             default:
                 break;
@@ -119,13 +125,13 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     }
 
     private void refresh(RefreshLayout refresh) {
-        getCompleteQuestionList(page, status);
+        getCompleteQuestionList(page, status, true);
         binding.smartfreshlayout.finishRefresh();
     }
 
     private void loadMore(RefreshLayout layout) {
         page += 1;
-        getCompleteQuestionList(page, status);
+        getCompleteQuestionList(page, status, false);
         binding.smartfreshlayout.finishLoadMore();
     }
 }

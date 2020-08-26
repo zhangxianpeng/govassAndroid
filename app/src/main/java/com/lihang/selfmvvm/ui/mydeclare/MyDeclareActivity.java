@@ -47,15 +47,17 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
     protected void processLogic() {
         initFreshLayout();
         initAdapter();
-        getHaveDeclareProject(page);
+        getHaveDeclareProject(page,true);
     }
 
-    private void getHaveDeclareProject(int page) {
+    private void getHaveDeclareProject(int page, boolean isClearDataSource) {
         mViewModel.getListMeHandled(page).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<ProjectResVo> data) {
-                    projectList.clear();
+                    if(isClearDataSource) {
+                        projectList.clear();
+                    }
                     projectList.addAll(data.getList());
                     projectAdapter.notifyDataSetChanged();
                 }
@@ -63,12 +65,14 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
         });
     }
 
-    private void getWaitDeclareProject(int page) {
+    private void getWaitDeclareProject(int page, boolean isClearDataSource) {
         mViewModel.getListMePending(page).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<ProjectResVo> data) {
-                    projectList.clear();
+                    if(isClearDataSource) {
+                        projectList.clear();
+                    }
                     projectList.addAll(data.getList());
                     projectAdapter.notifyDataSetChanged();
                 }
@@ -123,14 +127,14 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
                 binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
                 binding.viewMyDeclare.setVisibility(View.GONE);
                 isHaveDeclare = true;
-                getHaveDeclareProject(1);
+                getHaveDeclareProject(1,false);
                 break;
             case R.id.ll_my_declare:  //待审核
                 binding.viewProjectDeclare.setVisibility(View.GONE);
                 binding.viewMyDeclare.setVisibility(View.VISIBLE);
                 binding.viewMyDeclare.setBackgroundColor(R.color.tab_selected);
                 isHaveDeclare = false;
-                getWaitDeclareProject(1);
+                getWaitDeclareProject(1,false);
                 break;
             default:
                 break;
@@ -139,9 +143,9 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
 
     private void refresh(RefreshLayout refresh) {
         if (isHaveDeclare) {
-            getHaveDeclareProject(page);
+            getHaveDeclareProject(page, true);
         } else {
-            getWaitDeclareProject(page);
+            getWaitDeclareProject(page, true);
         }
         binding.smartfreshlayout.finishRefresh();
     }
@@ -149,9 +153,9 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
     private void loadMore(RefreshLayout layout) {
         page += 1;
         if (isHaveDeclare) {
-            getHaveDeclareProject(page);
+            getHaveDeclareProject(page, false);
         } else {
-            getWaitDeclareProject(page);
+            getWaitDeclareProject(page, false);
         }
         binding.smartfreshlayout.finishLoadMore();
     }

@@ -47,7 +47,7 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
             protected void convert(ViewHolder holder, OfficialDocResVo msgMeResVo, int position) {
                 holder.setText(R.id.tv_title, msgMeResVo.getTitle());
                 holder.setText(R.id.tv_time, msgMeResVo.getCreateTime());
-                holder.setText(R.id.tv_ui_flag, getString(R.string.project_approval));
+                holder.setText(R.id.tv_ui_flag, getString(R.string.system_announcement));
 
                 holder.setOnClickListener(R.id.rl_container, new View.OnClickListener() {
                     @Override

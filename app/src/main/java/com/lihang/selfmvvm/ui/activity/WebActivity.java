@@ -95,7 +95,7 @@ public class WebActivity extends BaseActivity<NormalViewModel, ActivityWebBindin
     private String transfer(String content, int id) {
         String s1 = content.replace("#{server}", SystemConst.DEFAULT_SERVER.substring(0, SystemConst.DEFAULT_SERVER.length() - 1));
         String s2 = s1.replace("#{token}", MyApplication.getToken());
-        String s3 = s2.replace("#{questionnaireId}", String.valueOf(id));
+        String s3 = s2.replace("#{questionnaireRecordId}", String.valueOf(id));
         return s3;
     }
 

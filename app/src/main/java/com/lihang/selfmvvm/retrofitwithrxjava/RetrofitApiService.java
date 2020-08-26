@@ -10,7 +10,6 @@ import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
-import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
@@ -30,7 +29,6 @@ import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
@@ -46,7 +44,6 @@ import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Streaming;
@@ -167,7 +164,7 @@ public interface RetrofitApiService {
     Observable<ResponModel<List<ImageDataInfo>>> getBannerList(@Query("token") String token);
 
     /**
-     * 调查问卷
+     * 调查问卷(政府)
      *
      * @param page
      * @param status
@@ -175,6 +172,16 @@ public interface RetrofitApiService {
      */
     @GET("sys/questionnairerecord/list")
     Observable<ResponModel<QuestionNaireResVo>> getQuestiontList(@Query("page") int page, @Query("status") int status);
+
+    /**
+     * 调查问卷（企业）
+     *
+     * @param page
+     * @param status
+     * @return
+     */
+    @GET("sys/questionnairerecord/listMe")
+    Observable<ResponModel<QuestionNaireResVo>> getEnQuestiontList(@Query("page") int page, @Query("status") int status);
 
     /**
      * 获取客服
@@ -197,7 +204,7 @@ public interface RetrofitApiService {
      */
     @POST("file/batchUpload")
     @Multipart
-    Observable<ResponModel<List<UploadAttachmentResVo>>> uploadMultyFile(@Part()  List<MultipartBody.Part> parts);
+    Observable<ResponModel<List<UploadAttachmentResVo>>> uploadMultyFile(@Part() List<MultipartBody.Part> parts);
 
     /**
      * 文件下载
@@ -361,12 +368,21 @@ public interface RetrofitApiService {
     Observable<ResponModel<OfficialDocResVo>> getOfficalDocDetail(@Path("id") int id);
 
     /**
-     * 查询我的公文列表
+     * 我的公文（政府端）
      *
      * @return
      */
     @GET("sys/officialdocument/list")
     Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc();
+
+
+    /**
+     * 我的收文（企业端）
+     *
+     * @return
+     */
+    @GET("sys/officialdocument/list-receive")
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc();
 
     /**
      * 待审核公文列表

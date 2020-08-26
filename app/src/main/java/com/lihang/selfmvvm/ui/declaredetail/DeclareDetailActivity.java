@@ -7,6 +7,7 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityDeclareDetailBinding;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -64,9 +65,15 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
                         binding.btnNotadopt.setClickable(false);
                         binding.btnAdopt.setClickable(false);
                     } else {
-                        binding.btnSubmit.setVisibility(View.VISIBLE);
-                        binding.btnNotadopt.setClickable(true);
-                        binding.btnAdopt.setClickable(true);
+                        if (CheckPermissionUtils.getInstance().isGovernment()) {
+                            binding.btnSubmit.setVisibility(View.VISIBLE);
+                            binding.btnNotadopt.setClickable(true);
+                            binding.btnAdopt.setClickable(true);
+                        } else {
+                            binding.btnSubmit.setVisibility(View.GONE);
+                            binding.btnNotadopt.setClickable(false);
+                            binding.btnAdopt.setClickable(false);
+                        }
                     }
                     binding.tvProjectName.setText(data.getName());
                     binding.tvDeclareStyle.setText(data.getType());
