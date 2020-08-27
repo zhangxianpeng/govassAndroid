@@ -184,4 +184,5 @@
 
     <string name="have_declare">已审核</string>
     <string name="wait_declare">待审核</string>
+    <string name="forget_pwd">忘记密码</string>
 </resources>

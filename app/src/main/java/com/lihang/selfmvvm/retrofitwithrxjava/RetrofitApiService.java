@@ -19,6 +19,7 @@ import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
@@ -464,6 +465,11 @@ public interface RetrofitApiService {
      */
     @POST("sys/msg/readMsg/{id}")
     Observable<ResponModel<String>> transferReadFlag(@Path("id") int id);
+
+    //----------------------------------------------------政企通 公告 api------------------------------------------------------------
+    @GET("sys/notice/list-published")
+    Observable<ResponModel<ListBaseResVo<NoticeResVo>>> getPublishedNotice();
+
 
     //----------------------------------------------------政企通 普通消息 api------------------------------------------------------------
 

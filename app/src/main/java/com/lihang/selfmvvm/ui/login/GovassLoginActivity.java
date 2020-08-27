@@ -1,5 +1,8 @@
 package com.lihang.selfmvvm.ui.login;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -7,6 +10,7 @@ import android.view.KeyEvent;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.common.SystemConst;
@@ -19,9 +23,12 @@ import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 
 import java.util.UUID;
+
+import cn.yhq.dialog.core.DialogBuilder;
 
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 
@@ -62,6 +69,7 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         binding.etPhone.addTextChangedListener(this);
         binding.etUserPassword.addTextChangedListener(this);
         binding.etVerifycode.addTextChangedListener(this);
+        binding.tvForgetPwd.setOnClickListener(mNoDoubleClickListener);
     }
 
 
@@ -84,12 +92,38 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                     passwprd = "";
                     binding.etUserPassword.setText("");
                     break;
+                case R.id.tv_forget_pwd:
+                    mViewModel.getCustomerService(MyApplication.getToken()).observe(GovassLoginActivity.this, res -> {
+                        res.handler(new OnCallback<CsDataInfoVo>() {
+                            @Override
+                            public void onSuccess(CsDataInfoVo data) {
+                                showDialogContactCs(data.getPhone());
+                            }
+                        });
+                    });
+                    break;
                 default:
                     break;
             }
         }
     };
 
+
+    /**
+     * 联系客服
+     *
+     * @param phone
+     */
+    private void showDialogContactCs(String phone) {
+        DialogBuilder.alertDialog(this).setMessage("如需找回密码，请及时联系： " + phone)
+                .setOnPositiveButtonClickListener(new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                        startActivity(dialIntent);
+                    }
+                }).create().show();
+    }
 
     private void doLogin() {
         LoginReqVo loginReqVo = new LoginReqVo();

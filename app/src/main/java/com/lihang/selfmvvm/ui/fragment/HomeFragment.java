@@ -1,5 +1,6 @@
 package com.lihang.selfmvvm.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
+import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
@@ -31,6 +33,7 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,9 +53,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private static final String TAG = "HomeFragment";
     private HomeMenuAdapter homeMenuAdapter;
     private ProjectListAdapter projectListAdapter;
-    private ArrayList<String> bannerImagePathList = new ArrayList<>();
-    private ArrayList<String> bannerTitleList = new ArrayList<>();
-    private ArrayList<HomeMenuBean> homeMenuPathList = new ArrayList<>();
+    private List<String> bannerImagePathList = new ArrayList<>();
+    private List<ImageDataInfo> bannerDataSourceList = new ArrayList<>();
+    private List<String> bannerTitleList = new ArrayList<>();
+    private List<HomeMenuBean> homeMenuPathList = new ArrayList<>();
 
     private List<MsgMeResVo> projectList = new ArrayList<>();
 
@@ -65,7 +69,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initFreshLayout();
-        initBannerWidget();
         initMenuData();
         initMsgAdapter();
         if (TextUtils.isEmpty(MyApplication.getToken())) {
@@ -103,7 +106,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     case 2:
                         ToastUtils.showToast("企业账户管理界面");
                         break;
-                    case 3:
+                    case 3:   //系统公告
                         ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
                         break;
                     case 4:
@@ -177,8 +180,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 @Override
                 public void onSuccess(List<ImageDataInfo> data) {
                     for (int i = 0; i < data.size(); i++) {
+                        bannerDataSourceList.addAll(data);
                         bannerImagePathList.add(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.get(i).getImageUrl());
+                        bannerTitleList.add("");
                     }
+                    initBannerWidget();
                 }
 
                 @Override
@@ -192,15 +198,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 }
             });
         });
-
-
-        //轮播
-//        bannerImagePathList.add(R.mipmap.home_default_img);
-//        bannerImagePathList.add(R.mipmap.default_img);
-//        bannerImagePathList.add(R.mipmap.default_img);
-        bannerTitleList.add("");
-        bannerTitleList.add("");
-        bannerTitleList.add("");
     }
 
     private void initBannerWidget() {
@@ -220,6 +217,21 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.banner.setImages(bannerImagePathList)
                 .setBannerTitles(bannerTitleList)
                 .start();
+        binding.banner.setOnBannerListener(new OnBannerListener() {
+            @SuppressLint("NewApi")
+            @Override
+            public void OnBannerClick(int position) {
+                for (int i = 0; i < bannerDataSourceList.size(); i++) {
+                    if (i == position) {
+                        ImageDataInfo imageDataInfo = bannerDataSourceList.get(i);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("flag", "homebanner");
+                        bundle.putSerializable("imageDataInfo", imageDataInfo);
+                        ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
+                    }
+                }
+            }
+        });
     }
 
     private void initMenuData() {

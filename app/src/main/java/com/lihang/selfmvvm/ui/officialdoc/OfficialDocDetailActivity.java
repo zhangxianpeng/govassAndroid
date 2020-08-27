@@ -1,12 +1,25 @@
 package com.lihang.selfmvvm.ui.officialdoc;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.net.http.SslError;
+import android.os.Build;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityOfficialDocDetailBinding;
-import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.vo.res.ImageDataInfo;
+import com.lihang.selfmvvm.vo.res.NoticeResVo;
 
+/**
+ * 公告详情
+ */
 public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailViewModel, ActivityOfficialDocDetailBinding> {
 
     @Override
@@ -16,18 +29,99 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
 
     @Override
     protected void processLogic() {
-        int id = getIntent().getIntExtra("id", 0);
-        mViewModel.getOfficalDocDetail(id).observe(this, res -> {
-            res.handler(new OnCallback<OfficialDocResVo>() {
-                @Override
-                public void onSuccess(OfficialDocResVo data) {
-                    binding.tvTitle.setText(data.getTitle());
-                    binding.tvCreatTime.setText(getString(R.string.createTime) + data.getCreateTime());
-                    binding.tvContent.setText(data.getContent());
-                }
-            });
-        });
+        String flag = getIntent().getStringExtra("flag");
+        NoticeResVo noticeResVo = (NoticeResVo) getIntent().getSerializableExtra("noticeResVo");
+        ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");
+        if (flag.equals("homebanner")) {  //首页banner
+            if (imageDataInfo.getContentType() == 0) {
+                initNormalWebView(imageDataInfo.getContent());
+            } else {
+                loadHtml(imageDataInfo.getContent());
+            }
+        } else {
+            if (noticeResVo.getContentType() == 0) {
+                initNormalWebView(noticeResVo.getContent());
+            } else {
+                loadHtml(noticeResVo.getContent());
+            }
+        }
+    }
 
+    private void loadHtml(String content) {
+        WebSettings settings = binding.normalWebview.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
+        binding.normalWebview.loadUrl(content);
+    }
+
+    private void initNormalWebView(String content) {
+        WebSettings settings = binding.normalWebview.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+        } else {
+            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        }
+        binding.normalWebview.loadData(content, "text/html;charset=utf-8", "utf-8");
+    }
+
+    static class MyWebViewClient extends WebViewClient {
+        private Activity activity;
+
+        public MyWebViewClient(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        binding.normalWebview.onResume();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        binding.normalWebview.onPause();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        binding.normalWebview.destroy();
     }
 
     @Override
@@ -36,13 +130,23 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
+    public void onClick(View v) {
+        if (ButtonClickUtils.isFastClick()) {
+            return;
+        }
+        switch (v.getId()) {
             case R.id.iv_title_bar_back:
-                finish();
+                onBackPressed();
                 break;
-            default:
-                break;
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (binding.normalWebview.canGoBack()) {
+            binding.normalWebview.goBack();
+        } else {
+            super.onBackPressed();
         }
     }
 }

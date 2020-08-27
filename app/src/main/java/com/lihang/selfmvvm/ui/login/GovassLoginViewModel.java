@@ -6,6 +6,7 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 
 import androidx.annotation.NonNull;
@@ -19,5 +20,9 @@ public class GovassLoginViewModel extends BaseViewModel<RepositoryImpl> {
 
     public LiveData<Resource<LoginDataVo>> govassLogin(LoginReqVo loginReqVo) {
         return getRepository().govassLogin(loginReqVo);
+    }
+
+    public LiveData<Resource<CsDataInfoVo>> getCustomerService(String token) {
+        return getRepository().getCustomerService(token);
     }
 }

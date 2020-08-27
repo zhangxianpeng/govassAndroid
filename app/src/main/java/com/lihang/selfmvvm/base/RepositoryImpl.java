@@ -21,6 +21,7 @@ import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.LoginDataVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
@@ -348,6 +349,15 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc() {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getReceiveOfficalDoc(), liveData);
+    }
+
+    /**
+     * 已发布公告
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice() {
+        MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPublishedNotice(), liveData);
     }
 
 

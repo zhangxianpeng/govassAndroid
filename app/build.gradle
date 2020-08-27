@@ -8,7 +8,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -99,5 +99,11 @@ dependencies {
 
     //圓形頭像
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+
+    //自动更新
+    implementation 'com.teprinciple:updateapputilsX:2.0.0'
+
+    //Dialog
+    implementation 'cn.yhq:android-dialog:1.6.0'
 
 }

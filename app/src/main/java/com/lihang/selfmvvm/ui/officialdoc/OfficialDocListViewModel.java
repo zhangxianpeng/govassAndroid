@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,15 @@ public class OfficialDocListViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
         return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getOfficalDoc() : getRepository().getReceiveOfficalDoc();
+    }
+
+    /**
+     * 获取已发布公告
+     *
+     * @return
+     */
+    public LiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice() {
+        return getRepository().getPublishedNotice();
     }
 
 }

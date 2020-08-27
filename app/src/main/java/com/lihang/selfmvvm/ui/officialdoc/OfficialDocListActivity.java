@@ -8,6 +8,7 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityOfficialDocListBinding;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -18,10 +19,13 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+/**
+ * 系统公告界面
+ */
 public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewModel, ActivityOfficialDocListBinding> {
 
     private CommonAdapter officialdocAdapter;
-    private List<OfficialDocResVo> officialDocList = new ArrayList<>();
+    private List<NoticeResVo> officialDocList = new ArrayList<>();
 
     @Override
     protected int getContentViewId() {
@@ -41,19 +45,20 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
     }
 
     private void initAdapter() {
-        officialdocAdapter = new CommonAdapter<OfficialDocResVo>(getContext(), R.layout.goverment_project_list_item, officialDocList) {
+        officialdocAdapter = new CommonAdapter<NoticeResVo>(getContext(), R.layout.goverment_project_list_item, officialDocList) {
 
             @Override
-            protected void convert(ViewHolder holder, OfficialDocResVo msgMeResVo, int position) {
-                holder.setText(R.id.tv_title, msgMeResVo.getTitle());
-                holder.setText(R.id.tv_time, msgMeResVo.getCreateTime());
+            protected void convert(ViewHolder holder, NoticeResVo noticeResVo, int position) {
+                holder.setText(R.id.tv_title, noticeResVo.getTitle());
+                holder.setText(R.id.tv_time, noticeResVo.getCreateTime());
                 holder.setText(R.id.tv_ui_flag, getString(R.string.system_announcement));
 
                 holder.setOnClickListener(R.id.rl_container, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Bundle bundle = new Bundle();
-                        bundle.putInt("id", msgMeResVo.getId());
+                        bundle.putString("flag", "noticelist");
+                        bundle.putSerializable("noticeResVo", noticeResVo);
                         ActivityUtils.startActivityWithBundle(OfficialDocListActivity.this, OfficialDocDetailActivity.class, bundle);
                     }
                 });
@@ -64,10 +69,10 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
     }
 
     private void initData() {
-        mViewModel.getOfficalDoc().observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<OfficialDocResVo>>() {
+        mViewModel.getPublishedNotice().observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<NoticeResVo>>() {
                 @Override
-                public void onSuccess(ListBaseResVo<OfficialDocResVo> data) {
+                public void onSuccess(ListBaseResVo<NoticeResVo> data) {
                     officialDocList.clear();
                     officialDocList.addAll(data.getList());
                     officialdocAdapter.notifyDataSetChanged();
