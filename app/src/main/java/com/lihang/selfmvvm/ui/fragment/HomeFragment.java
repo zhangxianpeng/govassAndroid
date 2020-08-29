@@ -1,9 +1,17 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
@@ -24,10 +32,13 @@ import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.LogUtils;
+import com.lihang.selfmvvm.utils.PackageUtils;
+import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.VersionVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -42,7 +53,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 
@@ -78,7 +91,80 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             initBannerData();
             initMsgMeList();
             getUnReadMsgCount();
+            getNewAppVersion(0);
         }
+    }
+
+    /**
+     * 获取版本更新
+     * Android device 0
+     *
+     * @param device
+     */
+    private void getNewAppVersion(int device) {
+        mViewModel.getNewVersion(device).observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<VersionVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<VersionVo> data) {
+                    VersionVo newVersion = data.getList().get(0);
+                    String version = newVersion.getAppVersion();
+                    String newAppVersion = version.replace(".", "");
+                    int newVersionCode = 0;
+                    try {
+                        newVersionCode = Integer.parseInt(newAppVersion);
+                    } catch (NumberFormatException e) {
+                        System.out.println(e);
+                    }
+                    String apkUrl = newVersion.getUrl();
+                    if (!TextUtils.isEmpty(apkUrl)) {
+                        PreferenceUtil.put(APK_URL, apkUrl);
+                    }
+                    String updateContent = newVersion.getChangeLog();
+                    String updateTitle = "发现新版本V" + newAppVersion;
+                    int forceFlag = newVersion.getForceFlag();
+                    if (newVersionCode - PackageUtils.getVersionCode(getContext()) > 0)
+                        showUpdateDialog(apkUrl, updateContent, updateTitle, forceFlag);
+                }
+            });
+        });
+    }
+
+    /**
+     * 显示更新弹框
+     *
+     * @param apkUrl        跳转外链地址
+     * @param updateContent 更新内容
+     * @param updateTitle   标题
+     * @param forceFlag     是否强制更新
+     */
+    private void showUpdateDialog(String apkUrl, String updateContent, String updateTitle, int forceFlag) {
+        Dialog picChooseDialog = new Dialog(getContext(), R.style.CustomDialog);
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.update_view, null);
+        final Button uptate_tv_version = view.findViewById(R.id.btn_upgrade);
+        final TextView title = view.findViewById(R.id.tv_title);
+        title.setText(updateTitle);
+        final TextView content = view.findViewById(R.id.tv_description);
+        content.setText(updateContent);
+        title.setText(updateTitle);
+        uptate_tv_version.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(apkUrl));
+                startActivity(intent);
+            }
+        });
+
+        Window window = picChooseDialog.getWindow();
+        window.setContentView(view);
+        window.setGravity(Gravity.CENTER);
+        int width = (int) getContext().getResources().getDimension(R.dimen.dp_250);
+        int height = (int) getContext().getResources().getDimension(R.dimen.dp_250);
+        window.setLayout(width, height);
+        window.setWindowAnimations(R.style.ActionSheetDialogAnimation);
+        picChooseDialog.setCanceledOnTouchOutside(true);
+        picChooseDialog.show();
     }
 
     private void initFreshLayout() {
@@ -317,5 +403,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         getUnReadMsgCount();
         initMsgMeList();
         binding.smartfreshlayout.finishRefresh();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getUnReadMsgCount();
     }
 }

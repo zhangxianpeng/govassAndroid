@@ -18,6 +18,7 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.VersionVo;
 
 import java.util.List;
 
@@ -38,6 +39,7 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     /**
      * 获取公告轮播
+     *
      * @param token
      * @return
      */
@@ -51,5 +53,9 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
 
     public LiveData<Resource<String>> getMsgUnRead() {
         return getRepository().getMsgUnRead();
+    }
+
+    public LiveData<Resource<ListBaseResVo<VersionVo>>> getNewVersion(int device) {
+        return getRepository().getNewVersion(device);
     }
 }

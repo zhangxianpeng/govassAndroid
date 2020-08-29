@@ -29,6 +29,7 @@ import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
+import com.lihang.selfmvvm.vo.res.VersionVo;
 
 import java.io.File;
 import java.util.HashMap;
@@ -353,11 +354,22 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 已发布公告
+     *
      * @return
      */
     public MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice() {
         MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getPublishedNotice(), liveData);
+    }
+
+    /**
+     * 获取版本更新
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<VersionVo>>> getNewVersion(int device) {
+        MutableLiveData<Resource<ListBaseResVo<VersionVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getNewVersion(device), liveData);
     }
 
 

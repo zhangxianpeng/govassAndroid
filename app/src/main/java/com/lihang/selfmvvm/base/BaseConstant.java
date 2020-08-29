@@ -11,4 +11,5 @@ public class BaseConstant {
     public static final String DEFAULT_FILE_SERVER = "file-server/";
     public static final String USER_LOGIN_HEAD_URL = "userLoginHeadUrl";
     public static final String USER_NICK_NAME = "userRealName";
+    public static final String APK_URL = "apkUrl";
 }

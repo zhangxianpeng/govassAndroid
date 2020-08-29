@@ -1,5 +1,7 @@
 package com.lihang.selfmvvm.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -30,6 +32,7 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_NICK_NAME;
@@ -110,14 +113,14 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                     break;
                 case R.id.ll_my_collect:
                     break;
-                case R.id.rl_verify:
+                case R.id.rl_verify:  //认证中心
                     break;
-                case R.id.rl_share_down:
-                    String filePath = "/storage/emulated/0/Tencent/TIMfile_recv/test.jpg";
-                    File file = new File(filePath);
-                    List<File> fileList = new ArrayList<>();
-                    fileList.add(file);
-                    doMultyUploadFile(fileList);
+                case R.id.rl_share_down:  //推广下载
+                    String apkUrl = (String) PreferenceUtil.get(APK_URL, "");
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(apkUrl));
+                    startActivity(intent);
                     break;
                 case R.id.rl_contact_us:
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);

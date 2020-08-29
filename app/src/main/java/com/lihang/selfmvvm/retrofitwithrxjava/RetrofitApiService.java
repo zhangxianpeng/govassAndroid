@@ -27,6 +27,7 @@ import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
+import com.lihang.selfmvvm.vo.res.VersionVo;
 
 import java.util.HashMap;
 import java.util.List;
@@ -470,6 +471,10 @@ public interface RetrofitApiService {
     @GET("sys/notice/list-published")
     Observable<ResponModel<ListBaseResVo<NoticeResVo>>> getPublishedNotice();
 
+
+    //----------------------------------------------------政企通 版本更新 api------------------------------------------------------------
+    @GET("sys/app-version/list")
+    Observable<ResponModel<ListBaseResVo<VersionVo>>> getNewVersion(@Query("device") int device);
 
     //----------------------------------------------------政企通 普通消息 api------------------------------------------------------------
 
