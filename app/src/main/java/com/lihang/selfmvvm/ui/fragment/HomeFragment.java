@@ -22,6 +22,7 @@ import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
+import com.lihang.selfmvvm.ui.myenterprises.MyEnterprisesListActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
@@ -55,7 +56,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
-import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 
@@ -122,7 +122,15 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     String updateContent = newVersion.getChangeLog();
                     String updateTitle = "发现新版本V" + newAppVersion;
                     int forceFlag = newVersion.getForceFlag();
-                    if (newVersionCode - PackageUtils.getVersionCode(getContext()) > 0)
+                    String currentVersion = PackageUtils.getVersionName(getContext());
+                    String currentVersion2 = currentVersion.replace(".", "");
+                    int currentVersionCode = 0;
+                    try {
+                        currentVersionCode = Integer.parseInt(currentVersion2);
+                    } catch (NumberFormatException e) {
+                        System.out.println(e);
+                    }
+                    if (newVersionCode > currentVersionCode)
                         showUpdateDialog(apkUrl, updateContent, updateTitle, forceFlag);
                 }
             });
@@ -199,7 +207,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                         ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                         break;
                     case 5:
-                        ToastUtils.showToast("我的企业界面");
+                        ActivityUtils.startActivity(getContext(), MyEnterprisesListActivity.class);
                         break;
                     case 6:
                         ActivityUtils.startActivity(getContext(), NewMsgActivity.class);

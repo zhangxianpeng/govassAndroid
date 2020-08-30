@@ -37,12 +37,10 @@ public class FileUtils {
      * @author paulburke
      */
     public static String getPath(final Context context, final Uri uri) {
-
+        LogUtils.e("xptestfilePath", uri.getPath());
         final boolean isKitKat = true;
-
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
@@ -51,20 +49,12 @@ public class FileUtils {
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
-
+            } else if (isDownloadsDocument(uri)) {
                 final String id = DocumentsContract.getDocumentId(uri);
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
                 return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
+            } else if (isMediaDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
                 final String[] split = docId.split(":");
                 final String type = split[0];
@@ -85,18 +75,11 @@ public class FileUtils {
 
                 return getDataColumn(context, contentUri, selection, selectionArgs);
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
-
-            // Return the remote address
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
             if (isGooglePhotosUri(uri))
                 return uri.getLastPathSegment();
-
             return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
             return uri.getPath();
         }
 
@@ -112,7 +95,6 @@ public class FileUtils {
      */
     public static String getFilePathByUri(Context context, Uri uri) {
         if ("content".equalsIgnoreCase(uri.getScheme())) {
-
             int sdkVersion = Build.VERSION.SDK_INT;
             if (sdkVersion >= 19) { // api >= 19
                 return getRealPathFromUriAboveApi19(context, uri);

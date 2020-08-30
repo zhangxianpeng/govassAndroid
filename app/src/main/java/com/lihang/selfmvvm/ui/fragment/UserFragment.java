@@ -1,7 +1,5 @@
 package com.lihang.selfmvvm.ui.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -17,9 +15,11 @@ import com.lihang.selfmvvm.ui.mydeclare.MyDeclareActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
+import com.lihang.selfmvvm.ui.share.ShareActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
+import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.TokenReqVo;
@@ -32,7 +32,6 @@ import java.util.List;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_NICK_NAME;
@@ -49,6 +48,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
 
     @Override
     protected void processLogic(Bundle savedInstanceState) {
+        binding.tvVersion.setText("V" + PackageUtils.getVersionName(getContext()));
         headUrl = (String) PreferenceUtil.get(USER_LOGIN_HEAD_URL, "");
         realName = (String) PreferenceUtil.get(USER_NICK_NAME, "");
         if (!TextUtils.isEmpty(headUrl))
@@ -116,11 +116,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                 case R.id.rl_verify:  //认证中心
                     break;
                 case R.id.rl_share_down:  //推广下载
-                    String apkUrl = (String) PreferenceUtil.get(APK_URL, "");
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.setData(Uri.parse(apkUrl));
-                    startActivity(intent);
+                    ActivityUtils.startActivity(getContext(), ShareActivity.class);
                     break;
                 case R.id.rl_contact_us:
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);

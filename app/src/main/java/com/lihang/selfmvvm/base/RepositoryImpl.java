@@ -14,6 +14,7 @@ import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
@@ -303,6 +304,16 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
         MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getMsgMeList(), liveData);
+    }
+
+    /**
+     * 获取我的企业列表
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<EnterpriseVo>>> getEnterpriseList(int page) {
+        MutableLiveData<Resource<ListBaseResVo<EnterpriseVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnterpriseList(page), liveData);
     }
 
 

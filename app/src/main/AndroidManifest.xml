@@ -64,9 +64,9 @@
         <meta-data
             android:name="android.notch_support"
             android:value="true" />
-        <!--问卷调查-->
+        <!-- 问卷调查 -->
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
-        <!--消息-->
+        <!-- 消息 -->
         <activity android:name=".ui.newmsg.NewMsgActivity" />
         <!-- 注册 -->
         <activity android:name=".ui.register.RegisterStepOneActivity" />
@@ -80,9 +80,9 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"
-                tools:replace="android:resource"/>
+                tools:replace="android:resource" />
         </provider>
-        <!-- 客服-->
+        <!-- 客服 -->
         <activity android:name=".ui.customserver.CustomServerActivity" />
         <!-- 主页面 -->
         <activity android:name=".ui.main.BottonNavigationActivity" />
@@ -97,7 +97,11 @@
         <!-- 公告列表 -->
         <activity android:name=".ui.officialdoc.OfficialDocListActivity" />
         <!-- 公告详情 -->
-        <activity android:name=".ui.officialdoc.OfficialDocDetailActivity"></activity>
+        <activity android:name=".ui.officialdoc.OfficialDocDetailActivity" />
+        <activity android:name=".ui.myenterprises.MyEnterprisesListActivity" />
+        <activity android:name=".ui.myenterprises.EnterprisesDetailActivity" />
+        <activity android:name=".ui.bigpicture.BigPictureActivity" />
+        <activity android:name=".ui.share.ShareActivity"></activity>
     </application>
 
 </manifest>

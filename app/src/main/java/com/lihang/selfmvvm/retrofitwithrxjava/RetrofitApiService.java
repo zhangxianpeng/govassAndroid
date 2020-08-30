@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
@@ -430,6 +431,14 @@ public interface RetrofitApiService {
      */
     @GET("sys/msg/list-me")
     Observable<ResponModel<ListBaseResVo<MsgMeResVo>>> getMsgMeList();
+
+    /**
+     * 查询我的企业列表
+     *
+     * @return
+     */
+    @GET("sys/enterprise/list")
+    Observable<ResponModel<ListBaseResVo<EnterpriseVo>>> getEnterpriseList(@Query("page") int page);
 
 
     /**
