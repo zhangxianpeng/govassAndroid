@@ -48,32 +48,6 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:id="@+id/rl_tab_complete"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_weight="1">
-
-                <TextView
-                    android:id="@+id/tv_completed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/dp_5"
-                    android:layout_marginRight="@dimen/dp_10"
-                    android:text="@string/not_filled_in"
-                    android:textColor="#ff222222"
-                    android:textSize="14sp" />
-
-                <View
-                    android:id="@+id/view_completed"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_1"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/tab_selected" />
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/rl_tab_no_complete"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -98,6 +72,32 @@
                     android:layout_height="@dimen/dp_1"
                     android:layout_alignParentBottom="true"
                     android:background="@color/tab_normal" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_tab_complete"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_completed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:text="@string/not_filled_in"
+                    android:textColor="#ff222222"
+                    android:textSize="14sp" />
+
+                <View
+                    android:id="@+id/view_completed"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_1"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/tab_selected" />
             </RelativeLayout>
         </LinearLayout>
 

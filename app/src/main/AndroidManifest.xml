@@ -101,7 +101,9 @@
         <activity android:name=".ui.myenterprises.MyEnterprisesListActivity" />
         <activity android:name=".ui.myenterprises.EnterprisesDetailActivity" />
         <activity android:name=".ui.bigpicture.BigPictureActivity" />
-        <activity android:name=".ui.share.ShareActivity"></activity>
+        <activity android:name=".ui.share.ShareActivity" />
+        <activity android:name=".ui.myarticle.MyArticalListActivity" />
+        <activity android:name=".ui.myarticle.ArticalDetailActivity"></activity>
     </application>
 
 </manifest>

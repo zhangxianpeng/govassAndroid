@@ -125,7 +125,7 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     }
 
     private void refresh(RefreshLayout refresh) {
-        getCompleteQuestionList(page, status, true);
+        getCompleteQuestionList(1, status, true);
         binding.smartfreshlayout.finishRefresh();
     }
 

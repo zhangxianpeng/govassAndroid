@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
+import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
@@ -151,11 +152,10 @@ public interface RetrofitApiService {
     /**
      * 获取用户信息
      *
-     * @param token
      * @return
      */
     @GET("sys/user/info")
-    Observable<ResponModel<UserInfoVo>> getUserInfo(@Query("token") String token);
+    Observable<ResponModel<UserInfoVo>> getUserInfo();
 
     /**
      * 获取轮播图
@@ -376,7 +376,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/officialdocument/list")
-    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc();
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc(@Query("page") int page);
 
 
     /**
@@ -385,7 +385,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/officialdocument/list-receive")
-    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc();
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc(@Query("page") int page);
 
     /**
      * 待审核公文列表
@@ -430,7 +430,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/msg/list-me")
-    Observable<ResponModel<ListBaseResVo<MsgMeResVo>>> getMsgMeList();
+    Observable<ResponModel<ListBaseResVo<MsgMeResVo>>> getMsgMeList(@Query("page") int page);
 
     /**
      * 查询我的企业列表
@@ -478,7 +478,7 @@ public interface RetrofitApiService {
 
     //----------------------------------------------------政企通 公告 api------------------------------------------------------------
     @GET("sys/notice/list-published")
-    Observable<ResponModel<ListBaseResVo<NoticeResVo>>> getPublishedNotice();
+    Observable<ResponModel<ListBaseResVo<NoticeResVo>>> getPublishedNotice(@Query("page") int page);
 
 
     //----------------------------------------------------政企通 版本更新 api------------------------------------------------------------
@@ -562,6 +562,24 @@ public interface RetrofitApiService {
      */
     @GET("sys/project/info/{id}")
     Observable<ResponModel<ProjectResVo>> getProjectDetail(@Path("id") int id);
+
+    /**
+     * 通过审核
+     *
+     * @param auditReqVo
+     * @return
+     */
+    @POST("sys/project/pass")
+    Observable<ResponModel<String>> pass(@Body AuditReqVo auditReqVo);
+
+    /**
+     * 不通过审核
+     *
+     * @param auditReqVo
+     * @return
+     */
+    @POST("sys/project/noPass")
+    Observable<ResponModel<String>> noPass(@Body AuditReqVo auditReqVo);
 
     /**
      * 待审核项目  （政府端）

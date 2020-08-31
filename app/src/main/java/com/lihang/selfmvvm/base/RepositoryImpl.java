@@ -10,6 +10,7 @@ import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
+import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
@@ -178,12 +179,11 @@ public class RepositoryImpl extends BaseModel {
     /**
      * 获取用户信息
      *
-     * @param token
      * @return
      */
-    public MutableLiveData<Resource<UserInfoVo>> getUserInfo(String token) {
+    public MutableLiveData<Resource<UserInfoVo>> getUserInfo() {
         MutableLiveData<Resource<UserInfoVo>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getUserInfo(token), liveData);
+        return observeGo(getApiService().getUserInfo(), liveData);
     }
 
     /**
@@ -301,9 +301,15 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getEnQuestiontList(page, status), liveData);
     }
 
-    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
+    /**
+     * 查询我的公文列表
+     *
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList(int page) {
         MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getMsgMeList(), liveData);
+        return observeGo(getApiService().getMsgMeList(page), liveData);
     }
 
     /**
@@ -323,10 +329,10 @@ public class RepositoryImpl extends BaseModel {
     }
 
 
-    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getProjectList() {
-        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getMsgMeList(), liveData);
-    }
+//    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getProjectList() {
+//        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
+//        return observeGo(getApiService().getProjectList(), liveData);
+//    }
 
     public MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList() {
         MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> liveData = new MutableLiveData<>();
@@ -348,9 +354,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc(int page) {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getOfficalDoc(), liveData);
+        return observeGo(getApiService().getOfficalDoc(page), liveData);
     }
 
     /**
@@ -358,9 +364,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc() {
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getReceiveOfficalDoc(int page) {
         MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getReceiveOfficalDoc(), liveData);
+        return observeGo(getApiService().getReceiveOfficalDoc(page), liveData);
     }
 
     /**
@@ -368,9 +374,9 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice() {
+    public MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice(int page) {
         MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getPublishedNotice(), liveData);
+        return observeGo(getApiService().getPublishedNotice(page), liveData);
     }
 
     /**
@@ -459,6 +465,26 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ProjectResVo>> getProjectDetail(int id) {
         MutableLiveData<Resource<ProjectResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getProjectDetail(id), liveData);
+    }
+
+    /**
+     * 审核通过
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<String>> pass(AuditReqVo auditReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().pass(auditReqVo), liveData);
+    }
+
+    /**
+     * 审核不通过
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<String>> noPass(AuditReqVo auditReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().noPass(auditReqVo), liveData);
     }
 
     /**

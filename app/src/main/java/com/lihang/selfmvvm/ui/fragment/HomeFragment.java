@@ -367,7 +367,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     }
 
     private void initMsgMeList() {
-        mViewModel.getMsgMeList().observe(getActivity(), res -> {
+        mViewModel.getMsgMeList(1).observe(getActivity(), res -> {
             res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<MsgMeResVo> data) {

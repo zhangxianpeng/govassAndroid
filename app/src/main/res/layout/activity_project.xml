@@ -31,6 +31,13 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_113"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginRight="@dimen/dp_15"
+            android:src="@mipmap/project_banner2_img" />
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_40"
@@ -54,7 +61,7 @@
                         android:layout_height="match_parent">
 
                         <LinearLayout
-                            android:id="@+id/ll_project_declare"
+                            android:id="@+id/ll_my_declare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true">
@@ -62,15 +69,16 @@
                             <ImageView
                                 android:layout_width="@dimen/dp_16"
                                 android:layout_height="@dimen/dp_16"
-                                android:src="@mipmap/project_ic_declare" />
+                                android:src="@mipmap/project_ic_mydeclare"
+                                android:visibility="gone" />
 
                             <TextView
-                                android:id="@+id/tv_project_declare"
+                                android:id="@+id/tv_my_declare"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dp_5"
                                 android:layout_marginRight="@dimen/dp_10"
-                                android:text="@string/projects_to_be_approved"
+                                android:text="@string/approved_projects"
                                 android:textColor="#ff222222"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -95,7 +103,7 @@
                         android:layout_height="match_parent">
 
                         <LinearLayout
-                            android:id="@+id/ll_my_declare"
+                            android:id="@+id/ll_project_declare"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true">
@@ -103,15 +111,16 @@
                             <ImageView
                                 android:layout_width="@dimen/dp_16"
                                 android:layout_height="@dimen/dp_16"
-                                android:src="@mipmap/project_ic_mydeclare" />
+                                android:src="@mipmap/project_ic_declare"
+                                android:visibility="gone" />
 
                             <TextView
-                                android:id="@+id/tv_my_declare"
+                                android:id="@+id/tv_project_declare"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/dp_5"
                                 android:layout_marginRight="@dimen/dp_10"
-                                android:text="@string/approved_projects"
+                                android:text="@string/projects_to_be_approved"
                                 android:textColor="#ff222222"
                                 android:textSize="14sp" />
                         </LinearLayout>
@@ -127,22 +136,20 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_project"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smartfreshlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_8"
-            android:layout_marginRight="@dimen/dp_15"
-            android:overScrollMode="never"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="match_parent">
 
-        <com.lihang.selfmvvm.customview.SearchEditText
-            android:id="@+id/search_editText"
-            style="@style/StyleEditText"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_33"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_5"
-            android:layout_marginRight="@dimen/dp_15" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_project"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginRight="@dimen/dp_15"
+                android:overScrollMode="never"></androidx.recyclerview.widget.RecyclerView>
+
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </layout>

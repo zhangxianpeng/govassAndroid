@@ -47,8 +47,8 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().getGovassBannerList(token);
     }
 
-    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
-        return getRepository().getMsgMeList();
+    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList(int page) {
+        return getRepository().getMsgMeList(page);
     }
 
     public LiveData<Resource<String>> getMsgUnRead() {

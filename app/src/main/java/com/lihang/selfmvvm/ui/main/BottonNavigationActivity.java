@@ -72,7 +72,7 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
     }
 
     private void getUserInfo() {
-        mViewModel.getUserInfo(MyApplication.getToken()).observe(this, res -> {
+        mViewModel.getUserInfo().observe(this, res -> {
             res.handler(new OnCallback<UserInfoVo>() {
                 @Override
                 public void onSuccess(UserInfoVo data) {

@@ -5,8 +5,7 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
-import com.lihang.selfmvvm.vo.res.ListBaseResVo;
-import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -16,8 +15,13 @@ public class EnterprisesDetailViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-
-    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
-        return getRepository().getMsgMeList();
+    /**
+     * 获取登录信息
+     *
+     * @param token
+     * @return
+     */
+    public LiveData<Resource<UserInfoVo>> getUserInfo() {
+        return getRepository().getUserInfo();
     }
 }

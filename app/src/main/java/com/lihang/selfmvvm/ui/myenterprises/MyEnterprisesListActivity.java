@@ -111,21 +111,13 @@ public class MyEnterprisesListActivity extends BaseActivity<MyEnterprisesListVie
     }
 
     private void refresh(RefreshLayout refresh) {
-        if (isClearData) {
-            getEnterpriseList(page, true);
-        } else {
-            getEnterpriseList(page, true);
-        }
+        getEnterpriseList(1, true);
         binding.smartfreshlayout.finishRefresh();
     }
 
     private void loadMore(RefreshLayout layout) {
         page += 1;
-        if (isClearData) {
-            getEnterpriseList(page, false);
-        } else {
-            getEnterpriseList(page, false);
-        }
+        getEnterpriseList(page, false);
         binding.smartfreshlayout.finishLoadMore();
     }
 }

@@ -24,8 +24,8 @@ public class OfficialDocListViewModel extends BaseViewModel<RepositoryImpl> {
      *
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc() {
-        return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getOfficalDoc() : getRepository().getReceiveOfficalDoc();
+    public LiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getOfficalDoc(int page) {
+        return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getOfficalDoc(page) : getRepository().getReceiveOfficalDoc(page);
     }
 
     /**
@@ -33,8 +33,8 @@ public class OfficialDocListViewModel extends BaseViewModel<RepositoryImpl> {
      *
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice() {
-        return getRepository().getPublishedNotice();
+    public LiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice(int page) {
+        return getRepository().getPublishedNotice(page);
     }
 
 }

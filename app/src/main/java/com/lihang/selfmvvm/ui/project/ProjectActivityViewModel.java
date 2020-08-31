@@ -5,7 +5,6 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
-import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 
@@ -18,22 +17,12 @@ public class ProjectActivityViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
     /**
-     * 待审核项目
+     * 已审核项目/待审核
      * 政府
      *
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getWaitPendingProject(int page) {
-        return getRepository().getWaitPendingProject(page);
-    }
-
-    /**
-     * 已审核项目
-     * 政府
-     *
-     * @return
-     */
-    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject(int page) {
-        return getRepository().getPendingProject(page);
+    public LiveData<Resource<ListBaseResVo<ProjectResVo>>> getPendingProject(int page, boolean isPending) {
+        return isPending ? getRepository().getPendingProject(page) : getRepository().getWaitPendingProject(page);
     }
 }

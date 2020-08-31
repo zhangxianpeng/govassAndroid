@@ -17,7 +17,7 @@ public class NewMsgViewModel extends BaseViewModel<RepositoryImpl> {
     }
 
 
-    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList() {
-        return getRepository().getMsgMeList();
+    public LiveData<Resource<ListBaseResVo<MsgMeResVo>>> getMsgMeList(int page) {
+        return getRepository().getMsgMeList(page);
     }
 }

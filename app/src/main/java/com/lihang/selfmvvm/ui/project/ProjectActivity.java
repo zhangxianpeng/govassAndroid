@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
@@ -29,6 +30,17 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
      * 默认从第一页开始
      */
     private int page = 1;
+
+    /**
+     * 默认是已审核
+     */
+    private boolean isPending = true;
+
+    /**
+     * 是否删除数据
+     */
+    private boolean isClearData = true;
+
     @Override
     protected int getContentViewId() {
         return R.layout.activity_project;
@@ -36,8 +48,14 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
 
     @Override
     protected void processLogic() {
+        initFreshLayout();
         initAdapter();
-        getWaitPendingProject();
+        getPendingProject(page, isPending, true);
+    }
+
+    private void initFreshLayout() {
+        binding.smartfreshlayout.setOnRefreshListener(this::refresh);
+        binding.smartfreshlayout.setOnLoadMoreListener(this::loadMore);
     }
 
     private void initAdapter() {
@@ -62,25 +80,20 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
         binding.rvProject.setAdapter(projectAdapter);
     }
 
-    private void getWaitPendingProject() {
-        mViewModel.getWaitPendingProject(page).observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
-                @Override
-                public void onSuccess(ListBaseResVo<ProjectResVo> data) {
-                    projectList.clear();
-                    projectList.addAll(data.getList());
-                    projectAdapter.notifyDataSetChanged();
-                }
-            });
-        });
-    }
 
-    private void getPendingProject() {
-        mViewModel.getPendingProject(page).observe(this, res -> {
+    /**
+     * 获取项目列表（默认为已审核）
+     *
+     * @param isPending
+     */
+    private void getPendingProject(int page, boolean isPending, boolean isClearData) {
+        mViewModel.getPendingProject(page, isPending).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<ProjectResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<ProjectResVo> data) {
-                    projectList.clear();
+                    if (isClearData) {
+                        projectList.clear();
+                    }
                     projectList.addAll(data.getList());
                     projectAdapter.notifyDataSetChanged();
                 }
@@ -107,19 +120,44 @@ public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, Acti
                 finish();
                 break;
             case R.id.ll_project_declare:  //待审核
-                binding.viewProjectDeclare.setVisibility(View.VISIBLE);
-                binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
-                binding.viewMyDeclare.setVisibility(View.GONE);
-                getWaitPendingProject();
-                break;
-            case R.id.ll_my_declare:  //已审核
                 binding.viewProjectDeclare.setVisibility(View.GONE);
                 binding.viewMyDeclare.setVisibility(View.VISIBLE);
                 binding.viewMyDeclare.setBackgroundColor(R.color.tab_selected);
-                getPendingProject();
+                isPending = false;
+                getPendingProject(1, isPending, true);
+                break;
+            case R.id.ll_my_declare:  //已审核
+                binding.viewProjectDeclare.setVisibility(View.VISIBLE);
+                binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
+                binding.viewMyDeclare.setVisibility(View.GONE);
+                isPending = true;
+                getPendingProject(1, isPending, true);
                 break;
             default:
                 break;
         }
+    }
+
+    private void refresh(RefreshLayout refresh) {
+        getPendingProject(1, isPending, true);
+        binding.smartfreshlayout.finishRefresh();
+    }
+
+    private void loadMore(RefreshLayout layout) {
+        page += 1;
+        getPendingProject(page, isPending, false);
+        binding.smartfreshlayout.finishLoadMore();
+    }
+
+    @SuppressLint("ResourceAsColor")
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if(!isPending) {
+//            binding.viewProjectDeclare.setVisibility(View.VISIBLE);
+//            binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
+//            binding.viewMyDeclare.setVisibility(View.GONE);
+//        }
+//        getPendingProject(1, isPending, true);
     }
 }

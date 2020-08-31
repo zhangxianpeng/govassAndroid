@@ -16,6 +16,7 @@ import com.lihang.selfmvvm.databinding.ActivityOfficialDocDetailBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 
 /**
  * 公告详情
@@ -30,20 +31,23 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
     @Override
     protected void processLogic() {
         String flag = getIntent().getStringExtra("flag");
-        NoticeResVo noticeResVo = (NoticeResVo) getIntent().getSerializableExtra("noticeResVo");
-        ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");
+        NoticeResVo noticeResVo = (NoticeResVo) getIntent().getSerializableExtra("noticeResVo");  //公告
+        ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");   //轮播图
+        OfficialDocResVo officialDocResVo = (OfficialDocResVo) getIntent().getSerializableExtra("officialDocResVo");  //发文、收文
         if (flag.equals("homebanner")) {  //首页banner
             if (imageDataInfo.getContentType() == 0) {
                 initNormalWebView(imageDataInfo.getContent());
             } else {
                 loadHtml(imageDataInfo.getContent());
             }
-        } else {
+        } else if (flag.equals("noticelist")) {
             if (noticeResVo.getContentType() == 0) {
                 initNormalWebView(noticeResVo.getContent());
             } else {
                 loadHtml(noticeResVo.getContent());
             }
+        } else if (flag.equals("articallist")) {
+            initNormalWebView(officialDocResVo.getContent());
         }
     }
 

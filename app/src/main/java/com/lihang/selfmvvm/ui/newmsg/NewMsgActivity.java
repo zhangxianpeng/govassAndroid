@@ -25,6 +25,14 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
     private List<MsgMeResVo> msgList = new ArrayList<>();
     private CommonAdapter msgAdapter;
 
+    /**
+     * 默认请求页码
+     */
+    private int page = 1;
+    /**
+     * 默认删除元数据
+     */
+    private boolean isClearData = true;
 
     @Override
     protected int getContentViewId() {
@@ -35,7 +43,7 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
     protected void processLogic() {
         initFreshLayout();
         initAdapter();
-        initData();
+        initData(page, true);
     }
 
     private void initFreshLayout() {
@@ -63,7 +71,7 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
                 holder.setOnClickListener(R.id.ll_container, (view -> {
                     Bundle bundle = new Bundle();
                     bundle.putInt("id", msgMeResVo.getId());
-                    bundle.putInt("readFlag",msgMeResVo.getReadFlag());
+                    bundle.putInt("readFlag", msgMeResVo.getReadFlag());
                     ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
                 }));
             }
@@ -72,12 +80,14 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
         binding.rvNewMsg.setAdapter(msgAdapter);
     }
 
-    private void initData() {
-        mViewModel.getMsgMeList().observe(this, res -> {
+    private void initData(int page, boolean isClearData) {
+        mViewModel.getMsgMeList(page).observe(this, res -> {
             res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<MsgMeResVo> data) {
-                    msgList.clear();
+                    if (isClearData) {
+                        msgList.clear();
+                    }
                     msgList.addAll(data.getList());
                     msgAdapter.notifyDataSetChanged();
                 }
@@ -102,12 +112,13 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
     }
 
     private void refresh(RefreshLayout refresh) {
-        initData();
+        initData(1, true);
         binding.smartfreshlayout.finishRefresh();
     }
 
     private void loadMore(RefreshLayout layout) {
-       initData();
+        page += 1;
+        initData(page, false);
         binding.smartfreshlayout.finishLoadMore();
     }
 }

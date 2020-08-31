@@ -22,7 +22,7 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * 我的申报（企業端）
+ * 项目申报（企業端）
  */
 public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, ActivityMyDeclareBinding> {
 
@@ -142,21 +142,13 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
     }
 
     private void refresh(RefreshLayout refresh) {
-        if (isHaveDeclare) {
-            getHaveDeclareProject(page, true);
-        } else {
-            getWaitDeclareProject(page, true);
-        }
+        getHaveDeclareProject(1, true);
         binding.smartfreshlayout.finishRefresh();
     }
 
     private void loadMore(RefreshLayout layout) {
         page += 1;
-        if (isHaveDeclare) {
-            getHaveDeclareProject(page, false);
-        } else {
-            getWaitDeclareProject(page, false);
-        }
+        getHaveDeclareProject(page, false);
         binding.smartfreshlayout.finishLoadMore();
     }
 }

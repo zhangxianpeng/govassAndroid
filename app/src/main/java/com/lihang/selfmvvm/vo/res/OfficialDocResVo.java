@@ -1,6 +1,8 @@
 package com.lihang.selfmvvm.vo.res;
 
-public class OfficialDocResVo {
+import java.io.Serializable;
+
+public class OfficialDocResVo implements Serializable {
 //     "id": 14,
 //             "title": "GGGGGGGGGG",
 //             "content": "<p>3434343</p>",

@@ -34,10 +34,9 @@ public class BottomNavigationViewModel extends BaseViewModel<RepositoryImpl> {
     /**
      * 获取用户信息
      *
-     * @param token
      * @return
      */
-    public LiveData<Resource<UserInfoVo>> getUserInfo(String token) {
-        return getRepository().getUserInfo(token);
+    public LiveData<Resource<UserInfoVo>> getUserInfo() {
+        return getRepository().getUserInfo();
     }
 }

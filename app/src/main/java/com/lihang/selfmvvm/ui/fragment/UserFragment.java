@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.mydeclare.MyDeclareActivity;
+import com.lihang.selfmvvm.ui.myenterprises.EnterprisesDetailActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
@@ -100,6 +101,8 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
         protected void onNoDoubleClick(View view) {
             switch (view.getId()) {
                 case R.id.ll_user_info:
+                case R.id.rl_user_info:
+                    ActivityUtils.startActivity(getContext(), EnterprisesDetailActivity.class);
                     break;
                 case R.id.ll_my_project:
                     if (CheckPermissionUtils.getInstance().isGovernment()) {
@@ -109,7 +112,9 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                     }
                     break;
                 case R.id.ll_my_article:
-                    ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("uiFlag", "myArticles");
+                    ActivityUtils.startActivityWithBundle(getContext(), OfficialDocListActivity.class, bundle);
                     break;
                 case R.id.ll_my_collect:
                     break;
