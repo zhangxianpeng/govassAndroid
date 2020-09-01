@@ -96,6 +96,16 @@ public class UserInfoVo {
      */
     private int authStatus;
 
+    private EnterpriseVo enterpriseEntity;
+
+    public EnterpriseVo getEnterpriseEntity() {
+        return enterpriseEntity;
+    }
+
+    public void setEnterpriseEntity(EnterpriseVo enterpriseEntity) {
+        this.enterpriseEntity = enterpriseEntity;
+    }
+
     public int getUserId() {
         return userId;
     }

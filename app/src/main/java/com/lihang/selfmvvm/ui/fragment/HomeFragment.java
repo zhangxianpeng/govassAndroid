@@ -1,22 +1,17 @@
 package com.lihang.selfmvvm.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.widget.Button;
-import android.widget.TextView;
 
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
+import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
@@ -73,6 +68,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     private List<MsgMeResVo> projectList = new ArrayList<>();
 
+    private NewIOSAlertDialog myDialog;
 
     @Override
     protected int getContentViewId() {
@@ -146,15 +142,8 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
      * @param forceFlag     是否强制更新
      */
     private void showUpdateDialog(String apkUrl, String updateContent, String updateTitle, int forceFlag) {
-        Dialog picChooseDialog = new Dialog(getContext(), R.style.CustomDialog);
-        View view = LayoutInflater.from(getContext()).inflate(R.layout.update_view, null);
-        final Button uptate_tv_version = view.findViewById(R.id.btn_upgrade);
-        final TextView title = view.findViewById(R.id.tv_title);
-        title.setText(updateTitle);
-        final TextView content = view.findViewById(R.id.tv_description);
-        content.setText(updateContent);
-        title.setText(updateTitle);
-        uptate_tv_version.setOnClickListener(new View.OnClickListener() {
+        myDialog = new NewIOSAlertDialog(getContext()).builder();
+        myDialog.setGone().setTitle(updateTitle).setMsg(updateContent).setNegativeButton("取消", null).setPositiveButton("确定", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
@@ -162,17 +151,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 intent.setData(Uri.parse(apkUrl));
                 startActivity(intent);
             }
-        });
-
-        Window window = picChooseDialog.getWindow();
-        window.setContentView(view);
-        window.setGravity(Gravity.CENTER);
-        int width = (int) getContext().getResources().getDimension(R.dimen.dp_250);
-        int height = (int) getContext().getResources().getDimension(R.dimen.dp_250);
-        window.setLayout(width, height);
-        window.setWindowAnimations(R.style.ActionSheetDialogAnimation);
-        picChooseDialog.setCanceledOnTouchOutside(true);
-        picChooseDialog.show();
+        }).show();
     }
 
     private void initFreshLayout() {

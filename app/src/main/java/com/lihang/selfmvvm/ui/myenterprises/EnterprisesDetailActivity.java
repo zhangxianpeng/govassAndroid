@@ -29,8 +29,6 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
     protected void processLogic() {
         enterpriseVo = (EnterpriseVo) getIntent().getSerializableExtra("enterpriseVo");
         if (enterpriseVo == null) {  //个人资料/个人信息
-            binding.slEnterprises.setVisibility(View.GONE);
-            binding.slUserInfo.setVisibility(View.VISIBLE);
             binding.tvMsg.setText(getContext().getString(R.string.personal_data));
             mViewModel.getUserInfo().observe(this, res -> {
                 res.handler(new OnCallback<UserInfoVo>() {
@@ -42,14 +40,30 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                         binding.tvUserPhone.setText(data.getMobile());
                         binding.tvUserName.setText(data.getUsername());
                         binding.tvUserRealName.setText(data.getRealname());
+
+                        EnterpriseVo enterpriseVo = data.getEnterpriseEntity();
+                        if (enterpriseVo != null) {
+                            Glide.with(EnterprisesDetailActivity.this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg()).placeholder(R.mipmap.default_img)
+                                    .error(R.mipmap.default_img).into(binding.ivBusinessLicenseImg);
+                            binding.tvEnterAddress.setText(enterpriseVo.getAddress());
+                            binding.tvBusinessTerm.setText(enterpriseVo.getBusinessTerm());
+                            binding.tvType.setText(enterpriseVo.getBusinessType());
+                            binding.tvEnterpriseCode.setText(enterpriseVo.getEnterpriseCode());
+                            binding.tvEnterpriseName.setText(enterpriseVo.getEnterpriseName());
+                            binding.tvLegalRepresentative.setText(enterpriseVo.getLegalRepresentative());
+                            binding.tvRegisteredCapital.setText(enterpriseVo.getRegisteredCapital());
+                            binding.tvSetupDate.setText(enterpriseVo.getSetUpDate());
+                            binding.tvBusinessScope.setText(enterpriseVo.getBusinessScope());
+                        } else {
+                           binding.llEnter.setVisibility(View.GONE);
+                        }
+
                     }
                 });
             });
 
         } else {  //我的企业
             binding.tvMsg.setText(getContext().getString(R.string.my_business));
-            binding.slEnterprises.setVisibility(View.VISIBLE);
-            binding.slUserInfo.setVisibility(View.GONE);
             binding.tvEnterAddress.setText(enterpriseVo.getAddress());
             Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg()).placeholder(R.mipmap.default_img)
                     .error(R.mipmap.default_img).into(binding.ivBusinessLicenseImg);

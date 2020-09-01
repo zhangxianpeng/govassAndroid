@@ -85,6 +85,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
     @Override
     protected void setListener() {
         binding.llUserInfo.setOnClickListener(mNoDoubleClickListener);
+        binding.rlUserInfo.setOnClickListener(mNoDoubleClickListener);
         binding.llMyProject.setOnClickListener(mNoDoubleClickListener);
         binding.llMyArticle.setOnClickListener(mNoDoubleClickListener);
         binding.llMyCollect.setOnClickListener(mNoDoubleClickListener);

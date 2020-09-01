@@ -35,18 +35,21 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");   //轮播图
         OfficialDocResVo officialDocResVo = (OfficialDocResVo) getIntent().getSerializableExtra("officialDocResVo");  //发文、收文
         if (flag.equals("homebanner")) {  //首页banner
+            binding.tvTitle.setText(imageDataInfo.getTitle());
             if (imageDataInfo.getContentType() == 0) {
                 initNormalWebView(imageDataInfo.getContent());
             } else {
                 loadHtml(imageDataInfo.getContent());
             }
-        } else if (flag.equals("noticelist")) {
+        } else if (flag.equals("noticelist")) {  //公告
+            binding.tvTitle.setText(noticeResVo.getTitle());
             if (noticeResVo.getContentType() == 0) {
                 initNormalWebView(noticeResVo.getContent());
             } else {
                 loadHtml(noticeResVo.getContent());
             }
         } else if (flag.equals("articallist")) {
+            binding.tvTitle.setText(officialDocResVo.getTitle());
             initNormalWebView(officialDocResVo.getContent());
         }
     }

@@ -8,6 +8,8 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityOfficialDocListBinding;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
@@ -44,7 +46,7 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
      */
     private int page = 1;
     /**
-     * 默认删除元数据
+     * 是否删除源数据
      */
     private boolean isClearData = true;
 
@@ -58,9 +60,11 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
         initFreshLayout();
         uiFlag = getIntent().getStringExtra("uiFlag");
         if (!TextUtils.isEmpty(uiFlag) && uiFlag.equals("myArticles")) {  // 我的收文/发文
+            binding.tvMsg.setText(CheckPermissionUtils.getInstance().isGovernment() ? getString(R.string.my_post):getString(R.string.my_receive_msg));
             initAdapter(isGetOfficeDoc);
             initData(isGetOfficeDoc, page, isClearData);
-        } else {  //公告相关
+        } else {  //公告
+            binding.tvMsg.setText(getString(R.string.system_announcement));
             isGetOfficeDoc = true;
             initAdapter(isGetOfficeDoc);
             initData(isGetOfficeDoc, page, isClearData);
@@ -80,7 +84,6 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
     private void initAdapter(boolean isGetOfficeDoc) {
         if (isGetOfficeDoc) {
             officialdocAdapter = new CommonAdapter<NoticeResVo>(getContext(), R.layout.goverment_project_list_item, officialDocList) {
-
                 @Override
                 protected void convert(ViewHolder holder, NoticeResVo noticeResVo, int position) {
                     holder.setText(R.id.tv_title, noticeResVo.getTitle());
@@ -100,12 +103,11 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
             };
         } else {
             officialdocAdapter = new CommonAdapter<OfficialDocResVo>(getContext(), R.layout.goverment_project_list_item, articalsList) {
-
                 @Override
                 protected void convert(ViewHolder holder, OfficialDocResVo officialDocResVo, int position) {
                     holder.setText(R.id.tv_title, officialDocResVo.getTitle());
                     holder.setText(R.id.tv_ui_flag, officialDocResVo.getCreateTime());
-
+                    holder.setVisible(R.id.tv_time, false);
                     holder.setOnClickListener(R.id.rl_container, new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -159,6 +161,7 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
 
     @Override
     public void onClick(View view) {
+        if(ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();

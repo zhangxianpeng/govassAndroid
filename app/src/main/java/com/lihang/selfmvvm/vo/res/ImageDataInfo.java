@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class ImageDataInfo implements Serializable {
     private int id;
     private String imageUrl;
+    private String title;
     private int contentType;
     private String content;
 
@@ -23,6 +24,10 @@ public class ImageDataInfo implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public String getTitle() { return title; }
+
+    public void setTitle(String title) { this.title = title; }
 
     public int getContentType() {
         return contentType;
