@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:text="@string/manage"
+                android:text="@string/send_msg"
                 android:textColor="#ff5379a0"
                 android:textSize="14sp" />
 

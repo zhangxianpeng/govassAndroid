@@ -8,6 +8,7 @@ import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
+import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentUserBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
@@ -22,25 +23,20 @@ import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
-import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.TokenReqVo;
-import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
+import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_NICK_NAME;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUserBinding> {
     private String headUrl = "";
     private String realName = "";
+
+    private NewIOSAlertDialog changeAccountDialog;
+    private NewIOSAlertDialog exitDialog;
 
     @Override
     protected int getContentViewId() {
@@ -128,7 +124,7 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                     break;
                 case R.id.rl_change_account:
-                    logout(1);
+                    changeAccout();
                     break;
                 case R.id.rl_exit:
                     logout(2);
@@ -142,46 +138,36 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
         }
     };
 
-    private void doMultyUploadFile(List<File> fileList) {
-        List<MultipartBody.Part> parts
-                = new ArrayList<>();
-        for (File file : fileList) {
-            RequestBody body = MultipartBody.create(MultipartBody.FORM, file);
-            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), body);
-            parts.add(part);
-        }
-
-        mViewModel.uploadMultyFile(parts).observe(this, res -> {
-            res.handler(new OnCallback<List<UploadAttachmentResVo>>() {
-                @Override
-                public void onSuccess(List<UploadAttachmentResVo> data) {
-                    ToastUtils.showToast(data.get(0).getFileName());
-                }
-            });
-        });
+    private void changeAccout() {
+        changeAccountDialog = new NewIOSAlertDialog(getContext()).builder();
+        changeAccountDialog.setGone().setTitle("提示").setMsg("是否确定切换账号").setNegativeButton("取消", null).setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityUtils.startActivity(getActivity(), GovassLoginActivity.class);
+                getActivity().finish();
+            }
+        }).show();
     }
 
-
     private void logout(int flag) {
+        changeAccountDialog = new NewIOSAlertDialog(getContext()).builder();
+        changeAccountDialog.setGone().setTitle("提示").setMsg("是否确定退出系统").setNegativeButton("取消", null).setPositiveButton("确定", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logoutAndClearToken();
+            }
+        }).show();
+    }
+
+    private void logoutAndClearToken() {
         TokenReqVo token = new TokenReqVo();
         token.setToken(MyApplication.getToken());
         mViewModel.govassLogout(token).observe(this, res -> {
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
-                    PreferenceUtil.clear();
-                    switch (flag) {
-                        case 1:   //切换账号
-                            ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
-                            getActivity().finish();
-                            break;
-                        case 2:  //退出
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                            System.exit(0);
-                            break;
-                        default:
-                            break;
-                    }
+                    PreferenceUtil.remove(USER_LOGIN_TOKEN);
+                    getActivity().finish();
                 }
             });
         });
@@ -189,8 +175,6 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-
-        }
+        //TODO
     }
 }

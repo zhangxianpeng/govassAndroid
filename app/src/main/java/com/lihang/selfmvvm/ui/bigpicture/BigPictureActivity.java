@@ -11,7 +11,11 @@ import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
+/**
+ * 查看大图
+ */
 public class BigPictureActivity extends BaseActivity<BigPictureViewModel, ActivityBigPictureBinding> {
+
 
     @Override
     protected int getContentViewId() {

@@ -1,7 +1,6 @@
 package com.lihang.selfmvvm.ui.main;
 
 import android.Manifest;
-import android.content.Intent;
 import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.View;
@@ -12,9 +11,9 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityBottonNavigationBinding;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
-import com.lihang.selfmvvm.ui.fragment.ProjectFragment;
 import com.lihang.selfmvvm.ui.fragment.UserFragment;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -25,7 +24,6 @@ import com.tbruyelle.rxpermissions2.RxPermissions;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import io.reactivex.functions.Consumer;
 
@@ -64,7 +62,8 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
     @Override
     protected void processLogic() {
         if (TextUtils.isEmpty(MyApplication.getToken())) {
-            startGovassLogin();
+            ActivityUtils.startActivity(this, GovassLoginActivity.class);
+            finish();
         } else {
             getUserInfo();
         }
@@ -90,24 +89,8 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
                         updateUi(CheckPermissionUtils.getInstance().isGovernment());
                     }
                 }
-
-                @Override
-                public void onFailure(String msg) {
-                    super.onFailure(msg);
-                    startGovassLogin();
-                }
-
-                @Override
-                public void onCompleted() {
-                    super.onCompleted();
-                }
             });
         });
-    }
-
-    private void startGovassLogin() {
-        Intent intent = new Intent(BottonNavigationActivity.this, GovassLoginActivity.class);
-        startActivityForResult(intent, REQUEST_CODE);
     }
 
     private void updateUi(boolean isGovernment) {
@@ -167,15 +150,6 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     @Override
     public void onClick(View view) {
-
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE && resultCode == RESPONSE_CODE) {
-            getUserInfo();
-        }
-
+        //TODO  使不报错
     }
 }

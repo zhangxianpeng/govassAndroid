@@ -23,9 +23,10 @@ public class QuestionNaireViewModel extends BaseViewModel<RepositoryImpl> {
      * @param status
      * @return
      */
-    public LiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, int status) {
+    public LiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, String status) {
         return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getQuestiontList(page, status) : getRepository().getEnQuestiontList(page, status);
     }
+
 
 
 }

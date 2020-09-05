@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
@@ -25,6 +26,7 @@ import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
@@ -175,6 +177,16 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().register(registerReqVo), liveData);
     }
 
+    /**
+     * 发布普通消息
+     *
+     * @param plainMsgReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<String>> savePlainMsg(PlainMsgReqVo plainMsgReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().savePlainMsg(plainMsgReqVo), liveData);
+    }
 
     /**
      * 获取用户信息
@@ -284,9 +296,22 @@ public class RepositoryImpl extends BaseModel {
      * @param status
      * @return
      */
-    public MutableLiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, int status) {
+    public MutableLiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, String status) {
         MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getQuestiontList(page, status), liveData);
+    }
+
+    /**
+     * 根據問卷id獲取企業列表
+     *
+     * @param page
+     * @param status
+     * @param questionnaireRecordId
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<EnterpriseVo>>> getEnpriceList(int page, String status, int questionnaireRecordId) {
+        MutableLiveData<Resource<ListBaseResVo<EnterpriseVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnpriceList(page, status, questionnaireRecordId), liveData);
     }
 
     /**
@@ -296,7 +321,7 @@ public class RepositoryImpl extends BaseModel {
      * @param status
      * @return
      */
-    public MutableLiveData<Resource<QuestionNaireResVo>> getEnQuestiontList(int page, int status) {
+    public MutableLiveData<Resource<QuestionNaireResVo>> getEnQuestiontList(int page, String status) {
         MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getEnQuestiontList(page, status), liveData);
     }
@@ -405,14 +430,31 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getMsgDetail(id), liveData);
     }
 
-    public MutableLiveData<Resource<String>> transferReadFlag(int id) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<MsgMeResVo>> transferReadFlag(int id) {
+        MutableLiveData<Resource<MsgMeResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().transferReadFlag(id), liveData);
     }
 
+    /**
+     * 获取消息详情
+     *
+     * @param id
+     * @return
+     */
     public MutableLiveData<Resource<PlainMsgResVo>> getPlainMsgDetail(int id) {
         MutableLiveData<Resource<PlainMsgResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getPlainMsgDetail(id), liveData);
+    }
+
+    /**
+     * 获取消息附件列表
+     *
+     * @param id
+     * @return
+     */
+    public MutableLiveData<Resource<List<PlainMsgAttachmentListResVo>>> getPlainMsgAttachmentList(int id) {
+        MutableLiveData<Resource<List<PlainMsgAttachmentListResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPlainMsgAttachmentList(id), liveData);
     }
 
 

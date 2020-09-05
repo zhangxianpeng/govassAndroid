@@ -70,8 +70,7 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
 
                 holder.setOnClickListener(R.id.ll_container, (view -> {
                     Bundle bundle = new Bundle();
-                    bundle.putInt("id", msgMeResVo.getId());
-                    bundle.putInt("readFlag", msgMeResVo.getReadFlag());
+                    bundle.putSerializable("msgMeResVo", msgMeResVo);
                     ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
                 }));
             }
@@ -109,6 +108,12 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
             default:
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initData(1, true);
     }
 
     private void refresh(RefreshLayout refresh) {

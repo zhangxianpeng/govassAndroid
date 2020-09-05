@@ -2,6 +2,10 @@ package com.lihang.selfmvvm.utils;
 
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -65,6 +69,49 @@ public final class PreferenceUtil {
         }
 
         return null;
+    }
+
+    /**
+     * 保存 list
+     *
+     * @param tag
+     * @param datalist
+     */
+    public static void setDataList(String tag, List<UserInfoVo> datalist) {
+        SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
+                Utils.getApp().MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+
+        if (null == datalist || datalist.size() <= 0)
+            return;
+
+        Gson gson = new Gson();
+        //转换成json数据，再保存
+        String strJson = gson.toJson(datalist);
+        editor.clear();
+        editor.putString(tag, strJson);
+        editor.commit();
+    }
+
+    /**
+     * 获取List
+     *
+     * @param tag
+     * @return
+     */
+    public static List<UserInfoVo> getDataList(String tag) {
+        SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
+                Utils.getApp().MODE_PRIVATE);
+
+        List<UserInfoVo> datalist = new ArrayList<>();
+        String strJson = sp.getString(tag, null);
+        if (null == strJson) {
+            return datalist;
+        }
+        Gson gson = new Gson();
+        datalist = gson.fromJson(strJson, new TypeToken<List<UserInfoVo>>() {
+        }.getType());
+        return datalist;
     }
 
 

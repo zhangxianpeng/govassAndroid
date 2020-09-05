@@ -9,6 +9,8 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityQuestionNaireBinding;
 import com.lihang.selfmvvm.ui.activity.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -34,9 +36,10 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     private int page = 1;
 
     /**
-     * 0 未填報 1 已填報
+     * 0 未填報 1 已填報  "" 全部
      */
-    private int status = 0;
+    private String status = null;
+
 
     private CommonAdapter commonAdapter;
 
@@ -49,7 +52,17 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     protected void processLogic() {
         initFreshLayout();
         initAdapter();
-        getCompleteQuestionList(page, status,true);
+        initView();
+    }
+
+    private void initView() {
+        if (CheckPermissionUtils.getInstance().isGovernment()) {
+            binding.llTab.setVisibility(View.GONE);
+            getCompleteQuestionList(page, "", true);
+        } else {
+            binding.llTab.setVisibility(View.VISIBLE);
+            getCompleteQuestionList(page, "0", true);
+        }
     }
 
     private void initFreshLayout() {
@@ -66,17 +79,33 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
                 holder.setText(R.id.tv_title, completeList.get(position).getName());
                 holder.setText(R.id.tv_ui_flag, getString(R.string.questionnaire));
                 holder.setText(R.id.tv_time, completeList.get(position).getCreateTime());
-                holder.setOnClickListener(R.id.rl_container, (view -> {
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("questionNaireItemResVo", projectBean);
-                    ActivityUtils.startActivityWithBundle(getContext(), WebActivity.class, bundle);
-                }));
+                if (CheckPermissionUtils.getInstance().isGovernment()) {
+                    holder.setOnClickListener(R.id.rl_container, (view -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("questionNaireItemResVo", projectBean);
+                        ActivityUtils.startActivityWithBundle(getContext(), QuestionNaireOfGovermentActivity.class, bundle);
+                    }));
+                } else {
+                    holder.setOnClickListener(R.id.rl_container, (view -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("questionNaireItemResVo", projectBean);
+                        ActivityUtils.startActivityWithBundle(getContext(), WebActivity.class, bundle);
+                    }));
+                }
+
             }
         };
         binding.rvProject.setAdapter(commonAdapter);
     }
 
-    private void getCompleteQuestionList(int page, int status, boolean isClearDataSource) {
+    /**
+     * 默认获取全部问卷列表（政府）
+     * 默认获取未填报问卷列表 （企业）
+     *
+     * @param page
+     * @param isClearDataSource
+     */
+    private void getCompleteQuestionList(int page, String status, boolean isClearDataSource) {
         mViewModel.getQuestiontList(page, status).observe(this, res -> {
             res.handler(new OnCallback<QuestionNaireResVo>() {
                 @Override
@@ -102,6 +131,7 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onClick(View view) {
+        if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();
@@ -109,13 +139,13 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
             case R.id.rl_tab_complete:
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
-                status = 0;
+                status = "0";
                 getCompleteQuestionList(page, status, true);
                 break;
             case R.id.rl_tab_no_complete:
                 binding.viewCompleted.setBackgroundColor(getContext().getColor(R.color.tab_normal));
                 binding.viewNoCompleted.setBackgroundColor(getContext().getColor(R.color.tab_selected));
-                status = 1;
+                status = "1";
                 getCompleteQuestionList(page, status, true);
                 break;
             default:

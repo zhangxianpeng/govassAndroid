@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_preview"
+        android:layout_width="@dimen/dp_44"
+        android:layout_height="@dimen/dp_44"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:src="@mipmap/list_ic_details_fujian" />
+
+    <TextView
+        android:id="@+id/tv_project_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_toRightOf="@+id/iv_preview"
+        android:ellipsize="end"
+        android:maxEms="30"
+        android:maxLines="1"
+        android:text="2020年南宁服务机构能力提升研修班项目（第八期）"
+        android:textColor="#303030"
+        android:textSize="14sp" />
+
+</RelativeLayout>

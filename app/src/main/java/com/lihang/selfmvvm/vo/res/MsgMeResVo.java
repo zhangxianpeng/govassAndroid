@@ -1,6 +1,8 @@
 package com.lihang.selfmvvm.vo.res;
 
-public class MsgMeResVo {
+import java.io.Serializable;
+
+public class MsgMeResVo implements Serializable {
 //    "id": 20,
 //            "userId": 1,
 //            "username": "admin",

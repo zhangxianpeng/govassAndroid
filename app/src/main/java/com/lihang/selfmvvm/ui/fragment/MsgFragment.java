@@ -1,19 +1,28 @@
 package com.lihang.selfmvvm.ui.fragment;
 
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -27,18 +36,31 @@ import com.lihang.selfmvvm.ui.communicate.CommunicateActivity;
 import com.lihang.selfmvvm.ui.mailist.MemberManagerActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import sakura.bottommenulibrary.bottompopfragmentmenu.BottomMenuFragment;
+import sakura.bottommenulibrary.bottompopfragmentmenu.MenuItem;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
@@ -68,6 +90,29 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      * 政府用户
      */
     private int defaultType = 0;
+
+    /**
+     * 发送消息弹框
+     */
+    private PopupWindow sendMsgPop;
+
+    /**
+     * 发送类型
+     */
+    private int sendType = 0;
+
+    /**
+     * 附件列表适配器
+     */
+    private CommonAdapter attachmentAdapter;
+    private List<AttachmentResVo> attachmentList = new ArrayList<>();
+
+    /**
+     * 发送消息请求VO
+     */
+    private String plainMsgContent = "";
+    private String plainMsgTitle = "";
+    private PlainMsgReqVo plainMsgReqVo = new PlainMsgReqVo();
 
     private static final int REMOVE_REQUEST_CODE = 101;
     private static final int ADD_REQUEST_CODE = 102;
@@ -111,7 +156,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                     binding.exListView.collapseGroup(groupPosition);
                 } else {
                     if (groupPosition == 0) {  //获取全部
-
                         if (defaultType == 0) {
                             mViewModel.getAllGovernment().observe(getActivity(), res -> {
                                 res.handler(new OnCallback<List<MemberDetailResVo>>() {
@@ -201,34 +245,107 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     }
 
 
-    private void showMenuDialog(View view, String groupName, String groupId) {
-        View contentView = LayoutInflater.from(getContext()).inflate(R.layout.mailistpop, null);
-        initPopView(contentView, groupName, groupId);
-        int height = (int) getResources().getDimension(R.dimen.dp_263);
-        mailistPop = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, height, true);
-        mailistPop.setAnimationStyle(R.style.ActionSheetDialogAnimation);
-        mailistPop.setOutsideTouchable(true);
-        backgroundAlpha(0.3f);
-        mailistPop.setOnDismissListener(this);
-        mailistPop.setBackgroundDrawable(new BitmapDrawable());
-        mailistPop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
+    /**
+     * 初始化发消息界面
+     *
+     * @param view
+     */
+    private void initsendMsgPopView(View view) {
+        ImageView closeIv = view.findViewById(R.id.iv_close);
+        EditText titleEt = view.findViewById(R.id.et_title);
+        EditText textEt = view.findViewById(R.id.et_text);
+        RecyclerView attachmentRv = view.findViewById(R.id.rv_attachment);
+        RelativeLayout addAttachmentRl = view.findViewById(R.id.rl_add_attachment);
+        Button sendBtn = view.findViewById(R.id.btn_send);
+        initAttachmentAdapter(attachmentRv);
+
+        closeIv.setOnClickListener((view1 -> {
+            if (sendMsgPop != null) sendMsgPop.dismiss();
+        }));
+
+        addAttachmentRl.setOnClickListener(view1 -> selectFile());
+
+        textEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                plainMsgContent = charSequence.toString().trim();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+            }
+        });
+
+        titleEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                plainMsgTitle = charSequence.toString().trim();
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        sendBtn.setOnClickListener(view1 -> {
+            plainMsgReqVo.setUserType(defaultType);
+            plainMsgReqVo.setReceiverType(0);
+            if (!TextUtils.isEmpty(plainMsgTitle)) {
+                plainMsgReqVo.setTitle(plainMsgTitle);
+            } else {
+                ToastUtils.showToast("请输入消息标题");
+            }
+            if (!TextUtils.isEmpty(plainMsgContent)) {
+                plainMsgReqVo.setContent(plainMsgContent);
+            } else {
+                ToastUtils.showToast("请输入消息内容");
+            }
+            //发送全员消息
+            mViewModel.savePlainMsg(plainMsgReqVo).observe(getActivity(), res -> {
+                res.handler(new OnCallback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+                        ToastUtils.showToast("消息发布成功");
+                        if (sendMsgPop != null) sendMsgPop.dismiss();
+                    }
+                });
+            });
+        });
     }
 
-    private void initPopView(View view, String groupName, String groupId) {
-        TextView titleTv = view.findViewById(R.id.tv_title);
-        TextView memManagerTv = view.findViewById(R.id.tv_member_delete);
-        TextView addMemberTv = view.findViewById(R.id.tv_add_member);
-        TextView renameGroupTv = view.findViewById(R.id.tv_rename);
-        TextView delGroupTv = view.findViewById(R.id.tv_delete_group);
-        TextView cancelTv = view.findViewById(R.id.tv_cancel);
-        titleTv.setText(groupName);
-        memManagerTv.setOnClickListener(view1 -> removeMember(groupName, groupId));
-        renameGroupTv.setOnClickListener(view1 -> renameGroup(groupName, groupId));
-        addMemberTv.setOnClickListener(view1 -> addMember(groupName, groupId));
-        delGroupTv.setOnClickListener(view1 -> deleteGroup(groupName, groupId));
-        cancelTv.setOnClickListener(this::onClick);
+    /**
+     * 从本地选择文件
+     */
+    private void selectFile() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        startActivityForResult(intent, 1);
     }
 
+    private void initAttachmentAdapter(RecyclerView attachmentRv) {
+        attachmentAdapter = new CommonAdapter<AttachmentResVo>(getContext(), R.layout.addmsg_attachment_list_item, attachmentList) {
+            @Override
+            protected void convert(ViewHolder holder, AttachmentResVo attachmentResVo, int position) {
+                holder.setText(R.id.tv_file_path, attachmentResVo.getName());
+                holder.setOnClickListener(R.id.iv_delete, (view -> attachmentList.remove(position)));
+            }
+        };
+        attachmentRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        attachmentRv.setAdapter(attachmentAdapter);
+    }
 
     /**
      * 重命名分组
@@ -398,6 +515,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         binding.tvCompanyUser.setOnClickListener(this::onClick);
         binding.tvGovermentUser.setOnClickListener(this::onClick);
         binding.ivAddGroup.setOnClickListener(this::onClick);
+        binding.tvManage.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -406,6 +524,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             return;
         }
         switch (view.getId()) {
+            case R.id.tv_manage:
+                initAddMsgGroupDialog(view);
+                break;
             case R.id.iv_add_group:
                 DialogUtil.alertIosDialog(getActivity(), "新增分组", true, "确定", "取消", new DialogUtil.DialogAlertListener() {
                     @Override
@@ -443,6 +564,59 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         }
     }
 
+    /**
+     * 底部弹框
+     */
+    private void initAddMsgGroupDialog(View rootView) {
+        new BottomMenuFragment(getActivity())
+                .addMenuItems(new MenuItem("全员消息"))
+                .addMenuItems(new MenuItem("分组消息"))
+                .addMenuItems(new MenuItem("成员消息"))
+                .setOnItemClickListener(new BottomMenuFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(TextView menu_item, int position) {
+                        switch (position) {
+                            case 0:   //全员
+                                sendType = 0;
+                                initSendMsgPop(rootView);
+                                break;
+                            case 1:  //分组
+                                Bundle bundle = new Bundle();
+                                bundle.putString("flag", "sendGroupPlainMsg");
+                                ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle);
+                                break;
+                            case 2: //成员
+                                Bundle bundle1 = new Bundle();
+                                bundle1.putString("flag", "sendMemberPlainMsg");
+                                ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle1);
+                                break;
+                            case 3: //取消
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }).show();
+    }
+
+    /**
+     * 添加消息
+     *
+     * @param rootView
+     */
+    private void initSendMsgPop(View rootView) {
+        View contentView = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_layout, null);
+        initsendMsgPopView(contentView);
+        int height = (int) getResources().getDimension(R.dimen.dp_350);
+        sendMsgPop = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, height, true);
+        sendMsgPop.setAnimationStyle(R.style.ActionSheetDialogAnimation);
+        sendMsgPop.setOutsideTouchable(true);
+        backgroundAlpha(0.3f);
+        sendMsgPop.setOnDismissListener(this);
+        sendMsgPop.setBackgroundDrawable(new BitmapDrawable());
+        sendMsgPop.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
+    }
+
 
     /**
      * 切换tab默认全部关闭，点击group 后重新去拉数据
@@ -461,6 +635,94 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REMOVE_REQUEST_CODE && resultCode == REMOVE_RESPONSE_CODE) {
             initData(defaultType);
+        }
+        if (resultCode == Activity.RESULT_OK) {
+            if (data.getData() != null) { //单次点击未使用多选
+                try {
+                    Uri uri = data.getData();
+                    String filePath = FileUtils.getPath(getContext(), uri);
+                    Log.i("zhangxianpeng===", "Single image path ---- " + filePath);
+                    AttachmentResVo attachmentResVo = new AttachmentResVo();
+                    attachmentResVo.setName(getFileName(filePath));
+                    attachmentResVo.setUrl(filePath);
+                    attachmentList.add(attachmentResVo);
+                    if (attachmentAdapter != null) attachmentAdapter.notifyDataSetChanged();
+                    uploadFile(attachmentList);
+                } catch (Exception e) {
+                    System.out.print(e.getMessage());
+                }
+            } else {   //长按使用多选
+                ClipData clipData = data.getClipData();
+                if (clipData != null) {
+                    List<String> pathList = new ArrayList<>();
+                    for (int i = 0; i < clipData.getItemCount(); i++) {
+                        ClipData.Item item = clipData.getItemAt(i);
+                        Uri uri = item.getUri();
+                        String filePath = FileUtils.getPath(getContext(), uri);
+                        AttachmentResVo attachmentResVo = new AttachmentResVo();
+                        attachmentResVo.setName(getFileName(filePath));
+                        attachmentResVo.setUrl(filePath);
+                        attachmentList.add(attachmentResVo);
+                    }
+                    if (attachmentAdapter != null) attachmentAdapter.notifyDataSetChanged();
+                    uploadFile(attachmentList);
+                }
+            }
+        }
+    }
+
+    /**
+     * 上传文件到后台服务器
+     *
+     * @param attachmentList
+     */
+    private void uploadFile(List<AttachmentResVo> attachmentList) {
+        List<MultipartBody.Part> parts
+                = new ArrayList<>();
+        for (File file : trasfer2FileList(attachmentList)) {
+            RequestBody body = MultipartBody.create(MultipartBody.FORM, file);
+            MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), body);
+            parts.add(part);
+        }
+
+        mViewModel.uploadMultyFile(parts).observe(this, res -> {
+            res.handler(new OnCallback<List<UploadAttachmentResVo>>() {
+                @Override
+                public void onSuccess(List<UploadAttachmentResVo> data) {
+                    List<AttachmentResVo> newList = new ArrayList<>();
+                    for (UploadAttachmentResVo uploadAttachmentResVo : data) {
+                        AttachmentResVo attachmentResVo = new AttachmentResVo();
+                        attachmentResVo.setName(uploadAttachmentResVo.getFileName());
+                        attachmentResVo.setUrl(uploadAttachmentResVo.getFilePath());
+                        newList.add(attachmentResVo);
+                    }
+                    plainMsgReqVo.setAttachmentList(newList);
+                }
+            });
+        });
+    }
+
+    private List<File> trasfer2FileList(List<AttachmentResVo> attachmentPathList) {
+        List<File> newList = new ArrayList<>();
+        for (AttachmentResVo attachmentResVo : attachmentPathList) {
+            File file = new File(attachmentResVo.getUrl());
+            newList.add(file);
+        }
+        return newList;
+    }
+
+    /**
+     * 从路径获取文件名
+     *
+     * @param imgpath
+     * @return
+     */
+    private String getFileName(String imgpath) {
+        int start = imgpath.lastIndexOf("/");
+        if (start != -1) {
+            return imgpath.substring(start + 1);
+        } else {
+            return "";
         }
     }
 
@@ -579,7 +841,33 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             }
 
             tv_online.setOnClickListener(view1 -> {
-                showMenuDialog(view1, data.getTitle(), data.getOnline());
+                new BottomMenuFragment(getActivity())
+                        .setTitle(data.getTitle())
+                        .addMenuItems(new MenuItem("移除成员"))
+                        .addMenuItems(new MenuItem("新增成员"))
+                        .addMenuItems(new MenuItem("重新命名"))
+                        .addMenuItems(new MenuItem("删除分组"))
+                        .setOnItemClickListener(new BottomMenuFragment.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(TextView menu_item, int position) {
+                                switch (position) {
+                                    case 0:   //移除成员
+                                        removeMember(data.getTitle(), data.getOnline());
+                                        break;
+                                    case 1:  //新增成员
+                                        addMember(data.getTitle(), data.getOnline());
+                                        break;
+                                    case 2: //重新命名
+                                        renameGroup(data.getTitle(), data.getOnline());
+                                        break;
+                                    case 3: //删除分组
+                                        deleteGroup(data.getTitle(), data.getOnline());
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }).show();
             });
         }
 

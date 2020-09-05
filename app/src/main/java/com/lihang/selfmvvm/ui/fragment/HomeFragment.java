@@ -17,6 +17,7 @@ import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
+import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
 import com.lihang.selfmvvm.ui.myenterprises.MyEnterprisesListActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
@@ -225,7 +226,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 }
             });
         }
-
     }
 
 
@@ -244,7 +244,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         projectListAdapter = new ProjectListAdapter(getContext(), projectList);
         binding.rvProjectMsg.setLayoutManager(new LinearLayoutManager(getActivity()));
         binding.rvProjectMsg.setAdapter(projectListAdapter);
-        projectListAdapter.setOnItemClickListener((view, position) -> ActivityUtils.startActivity(getActivity(), NewMsgActivity.class));
+        projectListAdapter.setOnItemClickListener((view, position) -> {
+            MsgMeResVo msgMeResVo = projectList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("msgMeResVo", msgMeResVo);
+            ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
+        });
     }
 
     private void initBannerData() {

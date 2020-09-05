@@ -16,14 +16,17 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import okhttp3.MultipartBody;
 
 /**
  * @ClassName: MsgFragmentViewModel
@@ -138,4 +141,24 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().removeUser(removeUserReqVo);
     }
 
+    /**
+     * 多文件上传
+     *
+     * @param parts
+     * @return
+     */
+    public LiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
+        return getRepository().uploadMultyFile(parts);
+    }
+
+
+    /**
+     * 发布消息
+     *
+     * @param plainMsgReqVo
+     * @return
+     */
+    public LiveData<Resource<String>> savePlainMsg(PlainMsgReqVo plainMsgReqVo) {
+        return getRepository().savePlainMsg(plainMsgReqVo);
+    }
 }

@@ -8,7 +8,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 29
         versionCode 1
-        versionName "1.0.7"
+        versionName "1.0.9"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         ndk {
@@ -97,10 +97,12 @@ dependencies {
     implementation 'com.scwang.smart:refresh-footer-ball:2.0.1'        //球脉冲加载
     implementation 'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
 
-    //圓形頭像
+    //圆形头像
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
-    //Dialog
-    implementation 'cn.yhq:android-dialog:1.6.0'
+    //仿ios底部弹框
+    implementation 'com.github.zhaolei9527:BottomMenu:v1.0.1'
 
+    // ImageView 插件 支持手势缩放
+    implementation 'com.github.chrisbanes:PhotoView:1.2.6'
 }

@@ -61,9 +61,9 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                     }
                 });
             });
-
         } else {  //我的企业
             binding.tvMsg.setText(getContext().getString(R.string.my_business));
+            binding.llUserInfo.setVisibility(View.GONE);
             binding.tvEnterAddress.setText(enterpriseVo.getAddress());
             Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg()).placeholder(R.mipmap.default_img)
                     .error(R.mipmap.default_img).into(binding.ivBusinessLicenseImg);
@@ -87,16 +87,16 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
 
     @Override
     public void onClick(View view) {
-        if (ButtonClickUtils.isFastClick()) {
-            return;
-        }
+        if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();
                 break;
             case R.id.iv_businessLicense_img:
                 Bundle bundle = new Bundle();
-                bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
+                if(enterpriseVo != null) {
+                    bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
+                }
                 ActivityUtils.startActivityWithBundle(this, BigPictureActivity.class, bundle);
                 break;
             default:

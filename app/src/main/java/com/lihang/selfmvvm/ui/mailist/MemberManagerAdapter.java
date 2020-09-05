@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 
 import java.util.List;
@@ -52,6 +53,7 @@ public class MemberManagerAdapter extends RecyclerView.Adapter<MemberManagerAdap
         Glide.with(context).load(memberDetailResVo.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
                 .error(R.mipmap.default_tx_img).into(holder.headIv);
         holder.nameTv.setText(memberDetailResVo.getRealname());
+
         holder.selectCb.setTag(position);
         holder.selectCb.setOnCheckedChangeListener(this);
     }

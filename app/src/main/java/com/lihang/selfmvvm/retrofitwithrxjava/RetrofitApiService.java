@@ -9,6 +9,7 @@ import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
+import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
@@ -23,6 +24,7 @@ import com.lihang.selfmvvm.vo.res.MemberDetailResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
@@ -174,7 +176,17 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/questionnairerecord/list")
-    Observable<ResponModel<QuestionNaireResVo>> getQuestiontList(@Query("page") int page, @Query("status") int status);
+    Observable<ResponModel<QuestionNaireResVo>> getQuestiontList(@Query("page") int page, @Query("status") String status);
+
+    /**
+     * 根据问卷id获取企业列表
+     *
+     * @param page
+     * @param status
+     * @return
+     */
+    @GET("sys/questionnairerecorddata/list")
+    Observable<ResponModel<ListBaseResVo<EnterpriseVo>>> getEnpriceList(@Query("page") int page, @Query("status") String status, @Query("questionnaireRecordId") int questionnaireRecordId);
 
     /**
      * 调查问卷（企业）
@@ -184,7 +196,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/questionnairerecord/listMe")
-    Observable<ResponModel<QuestionNaireResVo>> getEnQuestiontList(@Query("page") int page, @Query("status") int status);
+    Observable<ResponModel<QuestionNaireResVo>> getEnQuestiontList(@Query("page") int page, @Query("status") String status);
 
     /**
      * 获取客服
@@ -474,7 +486,7 @@ public interface RetrofitApiService {
      * @return
      */
     @POST("sys/msg/readMsg/{id}")
-    Observable<ResponModel<String>> transferReadFlag(@Path("id") int id);
+    Observable<ResponModel<MsgMeResVo>> transferReadFlag(@Path("id") int id);
 
     //----------------------------------------------------政企通 公告 api------------------------------------------------------------
     @GET("sys/notice/list-published")
@@ -496,12 +508,12 @@ public interface RetrofitApiService {
     Observable<ResponModel<String>> deletePlainMsg(@Body List<Integer> idList);
 
     /**
-     * 保存普通消息管理
+     * 发送消息
      *
      * @return
      */
     @POST("sys/plainmsg/save")
-    Observable<ResponModel<List<MemberDetailResVo>>> savePlainMsg();
+    Observable<ResponModel<String>> savePlainMsg(@Body PlainMsgReqVo plainMsgReqVo);
 
     /**
      * 修改普通消息管理
@@ -526,8 +538,15 @@ public interface RetrofitApiService {
      *
      * @return
      */
-    @GET("sys/plainmsg/list ")
+    @GET("sys/plainmsg/list")
     Observable<ResponModel<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList();
+
+    /**
+     * 查询普通消息管理附件列表
+     * @return
+     */
+    @GET("sys/plainmsg/list-attachment/{id}")
+    Observable<ResponModel<List<PlainMsgAttachmentListResVo>>> getPlainMsgAttachmentList(@Path("id") int id);
 
     //----------------------------------------------------政企通 项目申报 api------------------------------------------------------------
 
