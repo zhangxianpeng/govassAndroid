@@ -28,7 +28,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class QuestionNaireOfGovermentActivity extends BaseActivity<QuestionNaireOfGovermentViewModel, ActivityQuestionNaireOfGovermentBinding> {
 
-
     /**
      * 企業列表
      */
@@ -87,7 +86,9 @@ public class QuestionNaireOfGovermentActivity extends BaseActivity<QuestionNaire
                     holder.setText(R.id.tv_ui_flag, getString(R.string.completed));
                     holder.setOnClickListener(R.id.rl_container, (view -> {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("questionNaireItemResVo", projectBean);
+                        bundle.putInt("questionnaireRecordId", projectBean.getId());
+                        bundle.putString("questionnaireRecordName", questionNaireResVo.getName());
+                        bundle.putString("status", status);
                         ActivityUtils.startActivityWithBundle(getContext(), WebActivity.class, bundle);
                     }));
                 }

@@ -14,6 +14,8 @@ import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
+import com.lihang.selfmvvm.ui.enpriceofficedoc.EnpriceODActivity;
+import com.lihang.selfmvvm.ui.enpriceofficedoc.GovermentEnpriceODActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
@@ -71,6 +73,16 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     private NewIOSAlertDialog myDialog;
 
+    /**
+     * 默认加载页码
+     */
+    private int page = 1;
+
+    /**
+     * 是否删除数据源
+     */
+    private boolean isClearData = false;
+
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_home;
@@ -86,7 +98,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             getActivity().finish();
         } else {
             initBannerData();
-            initMsgMeList();
+            initMsgMeList(page, true);
             getUnReadMsgCount();
             getNewAppVersion(0);
         }
@@ -100,10 +112,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
      */
     private void getNewAppVersion(int device) {
         mViewModel.getNewVersion(device).observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<VersionVo>>() {
+            res.handler(new OnCallback<VersionVo>() {
                 @Override
-                public void onSuccess(ListBaseResVo<VersionVo> data) {
-                    VersionVo newVersion = data.getList().get(0);
+                public void onSuccess(VersionVo newVersion) {
                     String version = newVersion.getAppVersion();
                     String newAppVersion = version.replace(".", "");
                     int newVersionCode = 0;
@@ -164,70 +175,36 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList, unReadMsgCount);
         binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
         binding.rvMenu.setAdapter(homeMenuAdapter);
-        if (CheckPermissionUtils.getInstance().isGovernment()) {   //政府
-            homeMenuAdapter.setOnItemClickListener((view, position) -> {
-                switch (position) {
-                    case 0:
-                        ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
-                        break;
-                    case 1:
-                        if (CheckPermissionUtils.getInstance().isGovernment()) {
-                            ActivityUtils.startActivity(getContext(), ProjectActivity.class);
-                        } else {
-                            ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
-                        }
-                        break;
-                    case 2:
-                        ToastUtils.showToast("企业账户管理界面");
-                        break;
-                    case 3:   //系统公告
-                        ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
-                        break;
-                    case 4:
-                        ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
-                        break;
-                    case 5:
-                        ActivityUtils.startActivity(getContext(), MyEnterprisesListActivity.class);
-                        break;
-                    case 6:
-                        ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-                        break;
-                    default:
-                        break;
+        homeMenuAdapter.setOnItemClickListener((view, position) -> {
+            HomeMenuBean bean = homeMenuPathList.get(position);
+            if (bean.getTitle().equals(getString(R.string.questionnaire))) {
+                ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+            } else if (bean.getTitle().equals(getString(R.string.project_application))) {
+                if (CheckPermissionUtils.getInstance().isGovernment()) {
+                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                } else {
+                    ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
                 }
-            });
-        } else { //企業
-            homeMenuAdapter.setOnItemClickListener((view, position) -> {
-                switch (position) {
-                    case 0:
-                        ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
-                        break;
-                    case 1:
-                        if (CheckPermissionUtils.getInstance().isGovernment()) {
-                            ActivityUtils.startActivity(getContext(), ProjectActivity.class);
-                        } else {
-                            ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
-                        }
-                        break;
-                    case 2:
-                        ToastUtils.showToast("企业账户管理界面");
-                        break;
-                    case 3:
-                        ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
-                        break;
-                    case 4:
-                        ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
-                        break;
-                    case 5:
-                        ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-                        break;
-                    default:
-                        break;
-                }
-            });
-        }
-    }
+            } else if (bean.getTitle().equals(getString(R.string.enterprise_account_management))) {
+                ToastUtils.showToast("企业账户管理界面");
+            } else if (bean.getTitle().equals(getString(R.string.system_announcement))) {
+                ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
 
+            } else if (bean.getTitle().equals(getString(R.string.contact_customer_service))) {
+                ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
+            } else if (bean.getTitle().equals(getString(R.string.my_business))) {
+                ActivityUtils.startActivity(getContext(), MyEnterprisesListActivity.class);
+            } else if (bean.getTitle().equals(getString(R.string.message_notification))) {
+                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+            } else if (bean.getTitle().equals(getString(R.string.enprice_od))) {
+                if (CheckPermissionUtils.getInstance().isGovernment()) {
+                    ActivityUtils.startActivity(getContext(), GovermentEnpriceODActivity.class);
+                } else {
+                    ActivityUtils.startActivity(getContext(), EnpriceODActivity.class);
+                }
+            }
+        });
+    }
 
     private void getUnReadMsgCount() {
         mViewModel.getMsgUnRead().observe(getActivity(), res -> {
@@ -257,22 +234,14 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             res.handler(new OnCallback<List<ImageDataInfo>>() {
                 @Override
                 public void onSuccess(List<ImageDataInfo> data) {
+                    bannerImagePathList.clear();
+                    bannerTitleList.clear();
                     for (int i = 0; i < data.size(); i++) {
                         bannerDataSourceList.addAll(data);
                         bannerImagePathList.add(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.get(i).getImageUrl());
                         bannerTitleList.add("");
                     }
                     initBannerWidget();
-                }
-
-                @Override
-                public void onFailure(String msg) {
-                    super.onFailure(msg);
-                }
-
-                @Override
-                public void onCompleted() {
-                    super.onCompleted();
                 }
             });
         });
@@ -341,21 +310,29 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         HomeMenuBean mybusinessBean = new HomeMenuBean();
         mybusinessBean.setImageUrl(R.mipmap.home_ic_mybusiness);
         mybusinessBean.setTitle(getContext().getString(R.string.my_business));
-        if (CheckPermissionUtils.getInstance().isGovernment())
+        if (CheckPermissionUtils.getInstance().isGovernment()){
             homeMenuPathList.add(mybusinessBean);
+        }
 
         HomeMenuBean msgBean = new HomeMenuBean();
         msgBean.setImageUrl(R.mipmap.home_ic_alerts);
         msgBean.setTitle(getContext().getString(R.string.message_notification));
         homeMenuPathList.add(msgBean);
+
+        HomeMenuBean odBean = new HomeMenuBean();
+        odBean.setImageUrl(R.mipmap.home_ic_send);
+        odBean.setTitle(getContext().getString(R.string.enprice_od));
+        homeMenuPathList.add(odBean);
     }
 
-    private void initMsgMeList() {
-        mViewModel.getMsgMeList(1).observe(getActivity(), res -> {
+    private void initMsgMeList(int page, boolean isClearData) {
+        mViewModel.getMsgMeList(page).observe(getActivity(), res -> {
             res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
                 @Override
                 public void onSuccess(ListBaseResVo<MsgMeResVo> data) {
-                    projectList.clear();
+                    if (isClearData) {
+                        projectList.clear();
+                    }
                     projectList.addAll(data.getList());
                     projectListAdapter.notifyDataSetChanged();
                 }
@@ -386,14 +363,16 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     @Override
     public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-        initMsgMeList();
+        page += 1;
+        initMsgMeList(page, false);
         binding.smartfreshlayout.finishLoadMore();
     }
 
     @Override
     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
         getUnReadMsgCount();
-        initMsgMeList();
+        initMsgMeList(1, true);
+        initBannerData();
         binding.smartfreshlayout.finishRefresh();
     }
 

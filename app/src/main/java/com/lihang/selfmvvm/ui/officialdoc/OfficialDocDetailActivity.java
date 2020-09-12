@@ -6,6 +6,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -73,6 +74,18 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         settings.setLoadWithOverviewMode(true);
         binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
+        binding.normalWebview.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    binding.pbWebview.setVisibility(View.GONE);//加载完网页进度条消失
+                } else {
+                    binding.pbWebview.setVisibility(View.VISIBLE);//开始加载网页时显示进度条
+                    binding.pbWebview.setProgress(newProgress);//设置进度值
+                }
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
         } else {

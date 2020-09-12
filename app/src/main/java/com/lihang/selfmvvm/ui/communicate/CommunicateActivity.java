@@ -119,6 +119,4 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
                 break;
         }
     }
-
-
 }

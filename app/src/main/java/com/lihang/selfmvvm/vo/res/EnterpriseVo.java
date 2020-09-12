@@ -23,6 +23,7 @@ public class EnterpriseVo implements Serializable {
 //             "labelIdList": null
 
     private int id;
+    private int questionnaireRecordId;
     private String enterpriseName;
     private String enterpriseCode;
     private String legalRepresentative;
@@ -40,6 +41,14 @@ public class EnterpriseVo implements Serializable {
     private int createUserId;
     private String createTime;
     private String labelIdList;
+
+    public int getQuestionnaireRecordId() {
+        return questionnaireRecordId;
+    }
+
+    public void setQuestionnaireRecordId(int questionnaireRecordId) {
+        this.questionnaireRecordId = questionnaireRecordId;
+    }
 
     public int getId() {
         return id;

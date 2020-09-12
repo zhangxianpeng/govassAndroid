@@ -31,6 +31,14 @@
                 android:textSize="18sp" />
         </RelativeLayout>
 
+        <ProgressBar
+            android:id="@+id/pb_webview"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dip"
+            android:progressDrawable="@drawable/progress_background"
+            android:visibility="gone" />
+
         <WebView
             android:id="@+id/normal_webview"
             android:layout_width="match_parent"

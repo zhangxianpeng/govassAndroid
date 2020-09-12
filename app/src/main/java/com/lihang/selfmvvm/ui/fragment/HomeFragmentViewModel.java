@@ -73,7 +73,7 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
      * @param device
      * @return
      */
-    public LiveData<Resource<ListBaseResVo<VersionVo>>> getNewVersion(int device) {
+    public LiveData<Resource<VersionVo>> getNewVersion(int device) {
         return getRepository().getNewVersion(device);
     }
 

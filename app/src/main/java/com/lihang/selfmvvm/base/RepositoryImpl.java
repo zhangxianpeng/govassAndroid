@@ -1,14 +1,12 @@
 package com.lihang.selfmvvm.base;
 
-import com.lihang.selfmvvm.bean.BannerBean;
 import com.lihang.selfmvvm.bean.User;
-import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ParamsBuilder;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.common.PARAMS;
-import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
@@ -16,6 +14,7 @@ import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.EnpriceOdVo;
 import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
@@ -29,7 +28,7 @@ import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
-import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -47,77 +46,40 @@ import okhttp3.MultipartBody;
  */
 public class RepositoryImpl extends BaseModel {
 
-    //获取 banner列表
-    public MutableLiveData<Resource<List<BannerBean>>> getBannerList() {
-        MutableLiveData<Resource<List<BannerBean>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getBanner(), liveData);
-    }
-
-    //获取首页文章
-    public MutableLiveData<Resource<HomeFatherBean>> getHomeArticles(int curPage, ParamsBuilder paramsBuilder) {
-
-        MutableLiveData<Resource<HomeFatherBean>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getHomeArticles(curPage), liveData, paramsBuilder);
-    }
-
-    //获取收藏列表
-    public MutableLiveData<Resource<HomeFatherBean>> getCollectArticles(int curPage, ParamsBuilder paramsBuilder) {
-        MutableLiveData<Resource<HomeFatherBean>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getCollectArticles(curPage), liveData, paramsBuilder);
-    }
-
-    //站内收藏文章
-    public MutableLiveData<Resource<String>> collectArticle(int id) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().collectArticle(id), liveData, ParamsBuilder.build().isShowDialog(false));//不显示加载logo
-    }
-
-    //站外收藏文章
-    public MutableLiveData<Resource<String>> collectOutArticle(String title, String author, String link) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().collectOutArticle(title, author, link), liveData, ParamsBuilder.build().isShowDialog(false));
-    }
-
-    //取消收藏 -- 首页列表
-    public MutableLiveData<Resource<String>> unCollectByHome(int id) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().unCollectByHome(id), liveData, ParamsBuilder.build().isShowDialog(false));
-    }
-
-
-    public MutableLiveData<Resource<String>> unCollectByMe(int id, int originId) {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().unCollectByMe(id, originId), liveData, null);
-    }
-
-
-    //退出登录
-    public MutableLiveData<Resource<String>> LoginOut() {
-        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().loginOut(), liveData);
-    }
-
-
+    //----------------------------------------------------政企通-------------------------------------------------------------
     //登录
     public MutableLiveData<Resource<User>> login(HashMap<String, Object> map, ParamsBuilder paramsBuilder) {
         MutableLiveData<Resource<User>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().login(map), liveData, paramsBuilder);
     }
 
-
-    //正常下载，
-    public MutableLiveData<Resource<File>> downFile(String destDir, String fileName) {
+    /**
+     * 下載文件
+     *
+     * @param destDir
+     * @param fileName
+     * @param url
+     * @return
+     */
+    public MutableLiveData<Resource<File>> downFile(String destDir, String fileName, String url) {
         MutableLiveData<Resource<File>> liveData = new MutableLiveData<>();
-        return downLoadFile(getApiService().downloadFile(SystemConst.QQ_APK), liveData, destDir, fileName);
+        return downLoadFile(getApiService().downloadFile(url), liveData, destDir, fileName);
     }
 
-    //断点下载
-    public MutableLiveData<Resource<File>> downFile(String destDir, String fileName, long currentLength) {
+    /**
+     * 断点下载
+     *
+     * @param destDir
+     * @param fileName
+     * @param url
+     * @param currentLength
+     * @return
+     */
+    public MutableLiveData<Resource<File>> downFile(String destDir, String fileName, String url, long currentLength) {
         String range = "bytes=" + currentLength + "-";
         MutableLiveData<Resource<File>> liveData = new MutableLiveData<>();
-        return downLoadFile(getApiService().downloadFile(SystemConst.QQ_APK, range), liveData, destDir, fileName, currentLength);
+        return downLoadFile(getApiService().downloadFile(url, range), liveData, destDir, fileName, currentLength);
     }
-
 
     /**
      * 上传文件(进度监听)
@@ -135,14 +97,11 @@ public class RepositoryImpl extends BaseModel {
         return upLoadFile(getApiService().uploadSigleFile(PARAMS.changeToRquestBody(type), body), liveData);
     }
 
-
     //上传多张图片(进度监听)  多张图片进度监听，图片一张一张上传 所以用到了PictureProgressUtil工具类。用之前init初始数据，setProgress即可
     public MutableLiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
         MutableLiveData<Resource<List<UploadAttachmentResVo>>> liveData = new MutableLiveData<>();
         return upLoadFile(getApiService().uploadMultyFile(parts), liveData);
     }
-
-    //----------------------------------------------------政企通--------------------------------------------------------------
 
     /**
      * 登录-政企通
@@ -186,6 +145,17 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<String>> savePlainMsg(PlainMsgReqVo plainMsgReqVo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().savePlainMsg(plainMsgReqVo), liveData);
+    }
+
+    /**
+     * 发布公告
+     *
+     * @param addOdReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<String>> saveOd(AddOdReqVo addOdReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().saveOd(addOdReqVo), liveData);
     }
 
     /**
@@ -296,8 +266,8 @@ public class RepositoryImpl extends BaseModel {
      * @param status
      * @return
      */
-    public MutableLiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, String status) {
-        MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<ListBaseResVo<QuestionNaireItemResVo>>> getQuestiontList(int page, String status) {
+        MutableLiveData<Resource<ListBaseResVo<QuestionNaireItemResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getQuestiontList(page, status), liveData);
     }
 
@@ -321,8 +291,8 @@ public class RepositoryImpl extends BaseModel {
      * @param status
      * @return
      */
-    public MutableLiveData<Resource<QuestionNaireResVo>> getEnQuestiontList(int page, String status) {
-        MutableLiveData<Resource<QuestionNaireResVo>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<ListBaseResVo<QuestionNaireItemResVo>>> getEnQuestiontList(int page, String status) {
+        MutableLiveData<Resource<ListBaseResVo<QuestionNaireItemResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getEnQuestiontList(page, status), liveData);
     }
 
@@ -363,6 +333,12 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getPlainMsgList(), liveData);
     }
+
+    public MutableLiveData<Resource<QuestionNaireItemResVo>> getQuestionnairerecordData(int id) {
+        MutableLiveData<Resource<QuestionNaireItemResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getQuestionnairerecordData(id), liveData);
+    }
+
 
     public MutableLiveData<Resource<String>> deletePlainMsgList(List<Integer> idList) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
@@ -409,8 +385,8 @@ public class RepositoryImpl extends BaseModel {
      *
      * @return
      */
-    public MutableLiveData<Resource<ListBaseResVo<VersionVo>>> getNewVersion(int device) {
-        MutableLiveData<Resource<ListBaseResVo<VersionVo>>> liveData = new MutableLiveData<>();
+    public MutableLiveData<Resource<VersionVo>> getNewVersion(int device) {
+        MutableLiveData<Resource<VersionVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getNewVersion(device), liveData);
     }
 
@@ -496,6 +472,32 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> getListMeHandled(int page) {
         MutableLiveData<Resource<ListBaseResVo<ProjectResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().listMeHandled(page), liveData);
+    }
+
+    /**
+     * 已发布企业公告  （企业端）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeList(int page, int status) {
+        MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnterpriseNoticeList(page, status), liveData);
+    }
+
+    /**
+     * 待审核企业公告  （企业端）
+     *
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeAuditList(int page, int status) {
+        MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnterpriseNoticeAuditList(page, status), liveData);
+    }
+
+
+    public MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeListComment(int page, int status) {
+        MutableLiveData<Resource<ListBaseResVo<EnpriceOdVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getEnterpriseNoticeListComment(page, status), liveData);
     }
 
     /**

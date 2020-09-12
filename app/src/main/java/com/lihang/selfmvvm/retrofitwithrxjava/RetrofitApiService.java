@@ -6,6 +6,7 @@ import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
+import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
@@ -14,6 +15,7 @@ import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.EnpriceOdVo;
 import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
 import com.lihang.selfmvvm.vo.res.GroupResVo;
@@ -27,12 +29,13 @@ import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
-import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 import com.lihang.selfmvvm.vo.res.VersionVo;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -169,6 +172,15 @@ public interface RetrofitApiService {
     Observable<ResponModel<List<ImageDataInfo>>> getBannerList(@Query("token") String token);
 
     /**
+     * 获取调查问卷详情（已填报）
+     *
+     * @param id
+     * @return
+     */
+    @GET("sys/questionnairerecorddata/info/{id}")
+    Observable<ResponModel<QuestionNaireItemResVo>> getQuestionnairerecordData(@Path("id") int id);
+
+    /**
      * 调查问卷(政府)
      *
      * @param page
@@ -176,7 +188,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/questionnairerecord/list")
-    Observable<ResponModel<QuestionNaireResVo>> getQuestiontList(@Query("page") int page, @Query("status") String status);
+    Observable<ResponModel<ListBaseResVo<QuestionNaireItemResVo>>> getQuestiontList(@Query("page") int page, @Query("status") String status);
 
     /**
      * 根据问卷id获取企业列表
@@ -196,7 +208,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/questionnairerecord/listMe")
-    Observable<ResponModel<QuestionNaireResVo>> getEnQuestiontList(@Query("page") int page, @Query("status") String status);
+    Observable<ResponModel<ListBaseResVo<QuestionNaireItemResVo>>> getEnQuestiontList(@Query("page") int page, @Query("status") String status);
 
     /**
      * 获取客服
@@ -224,15 +236,10 @@ public interface RetrofitApiService {
     /**
      * 文件下载
      */
-//    file/download
-    //Retrofit下载文件
     @GET
     @Streaming
     //10以上用@streaming。不会造成oom，反正你用就是了
-    Observable<ResponseBody> downloadFile(@Url String url);
-
-//    sys/group/addUser
-
+    Observable<File> downloadFile(@Url String url);
 
     //----------------------------------------------------政企通 通讯录 api------------------------------------------------------------
 
@@ -494,8 +501,8 @@ public interface RetrofitApiService {
 
 
     //----------------------------------------------------政企通 版本更新 api------------------------------------------------------------
-    @GET("sys/app-version/list")
-    Observable<ResponModel<ListBaseResVo<VersionVo>>> getNewVersion(@Query("device") int device);
+    @GET("sys/app-version/lastest")
+    Observable<ResponModel<VersionVo>> getNewVersion(@Query("device") int device);
 
     //----------------------------------------------------政企通 普通消息 api------------------------------------------------------------
 
@@ -543,6 +550,7 @@ public interface RetrofitApiService {
 
     /**
      * 查询普通消息管理附件列表
+     *
      * @return
      */
     @GET("sys/plainmsg/list-attachment/{id}")
@@ -632,4 +640,38 @@ public interface RetrofitApiService {
     @GET("sys/project/listMeHandled")
     Observable<ResponModel<ListBaseResVo<ProjectResVo>>> listMeHandled(@Query("page") int page);
 
+    /**
+     * 已发布企业公告  （企业端）
+     *
+     * @return
+     */
+    @GET("sys/enterprise-notice/list-audit")
+    Observable<ResponModel<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeList(@Query("page") int page, @Query("status") int status);
+
+    /**
+     * 待审核企业公告 （企业端）
+     *
+     * @return
+     */
+    @GET("sys/enterprise-notice/list-audit")
+    Observable<ResponModel<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeAuditList(@Query("page") int page, @Query("status") int status);
+
+    /**
+     * 我的企业列表（企业端）
+     *
+     * @param page
+     * @param status
+     * @return
+     */
+    @GET("sys/enterprise-notice/list-me")
+    Observable<ResponModel<ListBaseResVo<EnpriceOdVo>>> getEnterpriseNoticeListComment(@Query("page") int page, @Query("status") int status);
+
+    /**
+     * 发布公告
+     *
+     * @param addOdReqVo
+     * @return
+     */
+    @POST("sys/enterprise-notice/save")
+    Observable<ResponModel<String>> saveOd(@Body AddOdReqVo addOdReqVo);
 }

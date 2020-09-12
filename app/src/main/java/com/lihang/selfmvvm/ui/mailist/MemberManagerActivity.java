@@ -66,8 +66,8 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
      */
     private String flag = "";
 
-    private GroupManagerAdapter groupManagerAdapter;
     private List<GroupDetailsResVo> groupResVoList = new ArrayList<>();
+    private GroupManagerAdapter groupManagerAdapter;
 
     private List<MemberDetailResVo> memberDetailResVoList = new ArrayList<>();
     private MemberManagerAdapter memberManagerAdapter;
@@ -128,8 +128,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
         groupName = getIntent().getStringExtra("groupName");
         flag = getIntent().getStringExtra("flag");
         initView(flag);
-        initMemberAdapter();
-        initGroupAdapter();
+        initAdapter(flag);
         initData(flag);
     }
 
@@ -139,6 +138,14 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
             binding.tvGroupName.setText("选择发送到");
         } else {
             if (!TextUtils.isEmpty(groupName)) binding.tvGroupName.setText(groupName);
+        }
+    }
+
+    private void initAdapter(String flag) {
+        if (flag.equals(SEND_GROUP_PLAIN_MSG)) {
+            initGroupAdapter();
+        } else if (flag.equals(SEND_MEMBER_PLAIN_MSG) || flag.equals(REMOVE_MEMBER_FROM_CURRENT_GROUP) || flag.equals(ADD_MEMBER_TO_GROUP)) {
+            initMemberAdapter();
         }
     }
 
@@ -228,7 +235,8 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
                             public void onSuccess(List<MemberDetailResVo> data) {
                                 memberDetailResVoList.clear();
                                 memberDetailResVoList.addAll(data);
-                                memberManagerAdapter.notifyDataSetChanged();
+                                if (memberManagerAdapter != null)
+                                    memberManagerAdapter.notifyDataSetChanged();
                             }
                         });
                     });
@@ -335,7 +343,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
                 } else {
                     if (!TextUtils.isEmpty(flag)) {
                         switch (flag) {
-                            case REMOVE_MEMBER_FROM_CURRENT_GROUP:
+                            case REMOVE_MEMBER_FROM_CURRENT_GROUP:  //从当前分组移除
                                 RemoveUserReqVo removeUserReqVo = new RemoveUserReqVo();
                                 removeUserReqVo.setGroupId(groupId);
                                 removeUserReqVo.setUserIdList(selectedUserList);
@@ -350,7 +358,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
                                     });
                                 });
                                 break;
-                            case ADD_MEMBER_TO_GROUP:
+                            case ADD_MEMBER_TO_GROUP:   //添加到当前分组
                                 RemoveUserReqVo moveUserReqVo = new RemoveUserReqVo();
                                 moveUserReqVo.setGroupId(groupId);
                                 moveUserReqVo.setUserIdList(selectedUserList);
@@ -366,8 +374,6 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
                                 });
                                 break;
                             case SEND_GROUP_PLAIN_MSG:
-                                initSendMsgPop(view);
-                                break;
                             case SEND_MEMBER_PLAIN_MSG:
                                 initSendMsgPop(view);
                                 break;
@@ -387,7 +393,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
      */
     private void initSendMsgPop(View rootView) {
         View contentView = LayoutInflater.from(this).inflate(R.layout.dialog_layout, null);
-        initsendMsgPopView(contentView);
+        initSendMsgPopView(contentView);
         int height = (int) getResources().getDimension(R.dimen.dp_350);
         sendMsgPop = new PopupWindow(contentView, ViewGroup.LayoutParams.MATCH_PARENT, height, true);
         sendMsgPop.setAnimationStyle(R.style.ActionSheetDialogAnimation);
@@ -403,7 +409,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
      *
      * @param view
      */
-    private void initsendMsgPopView(View view) {
+    private void initSendMsgPopView(View view) {
         ImageView closeIv = view.findViewById(R.id.iv_close);
         EditText titleEt = view.findViewById(R.id.et_title);
         EditText textEt = view.findViewById(R.id.et_text);
@@ -470,13 +476,15 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
             } else {
                 ToastUtils.showToast("请输入消息内容");
             }
-            //发送全员消息
+
+            //发送分组、成员公有接口
             mViewModel.saveGroupPlainMsg(plainMsgReqVo).observe(this, res -> {
                 res.handler(new OnCallback<String>() {
                     @Override
                     public void onSuccess(String data) {
                         ToastUtils.showToast("消息发布成功");
                         if (sendMsgPop != null) sendMsgPop.dismiss();
+                        finish();
                     }
                 });
             });
@@ -610,11 +618,5 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
     public void onDismiss() {
         backgroundAlpha(1.0f);
         if (sendMsgPop != null) sendMsgPop.dismiss();
-    }
-
-    /**
-     * 按成员发送消息
-     */
-    private void sendMemberPlainMsg() {
     }
 }

@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * 消息详情界面
+ * created by zhangxianpeng
  */
 public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, ActivityMsgDetailBinding> {
 
@@ -50,13 +51,13 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
 
     private void initAdapter() {
         attachmentAdapter = new CommonAdapter<PlainMsgAttachmentListResVo>(getContext(), R.layout.rv_attachment_item, attachmentList) {
-
             @Override
             protected void convert(ViewHolder holder, PlainMsgAttachmentListResVo plainMsgAttachmentListResVo, int position) {
                 holder.setText(R.id.tv_project_title, plainMsgAttachmentListResVo.getName());
                 holder.setOnClickListener(R.id.rl_container, (view -> {
                     Bundle bundle = new Bundle();
                     bundle.putString("plainMsgAttachmentUrl", plainMsgAttachmentListResVo.getUrl());
+                    //图片文件跳转到图片预览界面
                     if (plainMsgAttachmentListResVo.getName().endsWith("PNG") ||
                             plainMsgAttachmentListResVo.getName().endsWith("JPG") ||
                             plainMsgAttachmentListResVo.getName().endsWith("JEPG")) {
@@ -64,6 +65,7 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
                         ActivityUtils.startActivityWithBundle(getContext(), BigPictureActivity.class, bundle);
                     } else {
                         bundle.putString("fileUrl", plainMsgAttachmentListResVo.getUrl());
+                        bundle.putString("fileName", plainMsgAttachmentListResVo.getName());
                         ActivityUtils.startActivityWithBundle(getContext(), FilePreviewActivity.class, bundle);
                     }
                 }));
@@ -117,12 +119,9 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
         binding.ivTitleBarBack.setOnClickListener(this::onClick);
     }
 
-
     @Override
     public void onClick(View view) {
-        if (ButtonClickUtils.isFastClick()) {
-            return;
-        }
+        if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();

@@ -95,7 +95,6 @@ public abstract class BaseActivity<VM extends BaseViewModel, VDB extends ViewDat
                 ToastUtils.showToast(getContext().getResources().getString(R.string.result_network_error));
                 return;
             }
-
             if (throwable instanceof ConnectException) {
                 ToastUtils.showToast(getContext().getResources().getString(R.string.result_server_error));
             } else if (throwable instanceof SocketTimeoutException) {

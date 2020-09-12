@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class QuestionNaireItemResVo implements Serializable {
     private int id;
+    private int questionnaireRecordId;
+
     private int status;
     private int deleted;
     private int updateUserId;
@@ -12,7 +14,7 @@ public class QuestionNaireItemResVo implements Serializable {
     private String jsonConfig;
     private String content;
     private String lastUpdateTime;
-    private String createTime;
+    private String create_time;
 
     public int getId() {
         return id;
@@ -20,6 +22,14 @@ public class QuestionNaireItemResVo implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getQuestionnaireRecordId() {
+        return questionnaireRecordId;
+    }
+
+    public void setQuestionnaireRecordId(int questionnaireRecordId) {
+        this.questionnaireRecordId = questionnaireRecordId;
     }
 
     public int getStatus() {
@@ -86,11 +96,11 @@ public class QuestionNaireItemResVo implements Serializable {
         this.lastUpdateTime = lastUpdateTime;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getCreate_time() {
+        return create_time;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
+    public void setCreate_time(String create_time) {
+        this.create_time = create_time;
     }
 }

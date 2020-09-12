@@ -22,7 +22,6 @@ import android.widget.TextView;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.BadgeView;
-import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<HomeMenuAdapter.MyView
         Integer imagePath = bean.getImageUrl();
         holder.title.setText(name);
         holder.image.setImageResource(imagePath);
-        if (position == homeMenuBeanList.size() - 1 && !TextUtils.isEmpty(unReadMsgCount) && !unReadMsgCount.equals("0")) {
+        if (position == homeMenuBeanList.size() - 2 && !TextUtils.isEmpty(unReadMsgCount) && !unReadMsgCount.equals("0")) {
             holder.badgeView.setVisibility(View.VISIBLE);
             holder.badgeView.setText(String.valueOf(unReadMsgCount));
         }

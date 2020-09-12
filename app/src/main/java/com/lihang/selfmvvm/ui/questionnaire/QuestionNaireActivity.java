@@ -11,8 +11,8 @@ import com.lihang.selfmvvm.ui.activity.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
-import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -38,7 +38,7 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
     /**
      * 0 未填報 1 已填報  "" 全部
      */
-    private String status = null;
+    private String status = "0";
 
 
     private CommonAdapter commonAdapter;
@@ -76,9 +76,9 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
 
             @Override
             protected void convert(ViewHolder holder, QuestionNaireItemResVo projectBean, int position) {
-                holder.setText(R.id.tv_title, completeList.get(position).getName());
+                holder.setText(R.id.tv_title, projectBean.getName());
                 holder.setText(R.id.tv_ui_flag, getString(R.string.questionnaire));
-                holder.setText(R.id.tv_time, completeList.get(position).getCreateTime());
+                holder.setText(R.id.tv_time, projectBean.getCreate_time());
                 if (CheckPermissionUtils.getInstance().isGovernment()) {
                     holder.setOnClickListener(R.id.rl_container, (view -> {
                         Bundle bundle = new Bundle();
@@ -88,7 +88,8 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
                 } else {
                     holder.setOnClickListener(R.id.rl_container, (view -> {
                         Bundle bundle = new Bundle();
-                        bundle.putSerializable("questionNaireItemResVo", projectBean);
+                        bundle.putSerializable("enpriceData", projectBean);
+                        bundle.putString("status", status);
                         ActivityUtils.startActivityWithBundle(getContext(), WebActivity.class, bundle);
                     }));
                 }
@@ -107,9 +108,9 @@ public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, 
      */
     private void getCompleteQuestionList(int page, String status, boolean isClearDataSource) {
         mViewModel.getQuestiontList(page, status).observe(this, res -> {
-            res.handler(new OnCallback<QuestionNaireResVo>() {
+            res.handler(new OnCallback<ListBaseResVo<QuestionNaireItemResVo>>() {
                 @Override
-                public void onSuccess(QuestionNaireResVo data) {
+                public void onSuccess(ListBaseResVo<QuestionNaireItemResVo> data) {
                     if (isClearDataSource) {
                         completeList.clear();
                     }

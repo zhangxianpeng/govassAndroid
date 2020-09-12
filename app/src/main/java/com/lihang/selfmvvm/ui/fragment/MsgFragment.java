@@ -31,6 +31,7 @@ import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.ChildModel;
 import com.lihang.selfmvvm.bean.GroupModel;
 import com.lihang.selfmvvm.customview.iosdialog.DialogUtil;
+import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentMsgBinding;
 import com.lihang.selfmvvm.ui.communicate.CommunicateActivity;
 import com.lihang.selfmvvm.ui.mailist.MemberManagerActivity;
@@ -118,6 +119,11 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     private static final int ADD_REQUEST_CODE = 102;
     private static final int REMOVE_RESPONSE_CODE = 103;
     private static final int ADD_RESPONSE_CODE = 104;
+
+    /**
+     * 删除分组提示框
+     */
+    private NewIOSAlertDialog deleteGroupDialog;
 
     @Override
     protected int getContentViewId() {
@@ -377,30 +383,49 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         });
     }
 
+    /**
+     * 新增成员
+     *
+     * @param groupName
+     * @param groupId
+     */
     private void addMember(String groupName, String groupId) {
         if (mailistPop != null) mailistPop.dismiss();
         Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
-        intent.putExtra("type", defaultType);
         intent.putExtra("flag", "addMember");
+        intent.putExtra("type", defaultType);
         intent.putExtra("groupName", groupName);
         intent.putExtra("groupId", groupId);
-        getActivity().startActivityForResult(intent, ADD_REQUEST_CODE);
+        startActivity(intent);
     }
 
+    /**
+     * 移除成员
+     *
+     * @param groupName
+     * @param groupId
+     */
     private void removeMember(String groupName, String groupId) {
         if (mailistPop != null) mailistPop.dismiss();
         Intent intent = new Intent(getActivity(), MemberManagerActivity.class);
-        intent.putExtra("type", defaultType);
         intent.putExtra("flag", "removeMember");
+        intent.putExtra("type", defaultType);
         intent.putExtra("groupName", groupName);
         intent.putExtra("groupId", groupId);
-        getActivity().startActivityForResult(intent, REMOVE_REQUEST_CODE);
+        startActivity(intent);
     }
 
+    /**
+     * 删除分组
+     *
+     * @param groupName
+     * @param groupId
+     */
     private void deleteGroup(String groupName, String groupId) {
-        DialogUtil.alertIosDialog(getActivity(), "确定要删除该分组?", false, "确定", "取消", new DialogUtil.DialogAlertListener() {
+        deleteGroupDialog = new NewIOSAlertDialog(getContext()).builder();
+        deleteGroupDialog.setGone().setMsg("确定要删除该分组?").setNegativeButton("取消", null).setPositiveButton("确定", new View.OnClickListener() {
             @Override
-            public void yes(String groupName, String groupNameRemark) {
+            public void onClick(View v) {
                 List<Integer> groupIds = new ArrayList<>();
                 groupIds.add(Integer.parseInt(groupId));
                 mViewModel.deleteGroup(groupIds).observe(getActivity(), res -> {
@@ -412,7 +437,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                     });
                 });
             }
-        });
+        }).show();
     }
 
     /**
@@ -585,7 +610,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                 bundle.putString("flag", "sendGroupPlainMsg");
                                 ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle);
                                 break;
-                            case 2: //成员
+                            case 2:  //成员
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putString("flag", "sendMemberPlainMsg");
                                 ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle1);
@@ -851,16 +876,16 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                             @Override
                             public void onItemClick(TextView menu_item, int position) {
                                 switch (position) {
-                                    case 0:   //移除成员
+                                    case 1:   //移除成员
                                         removeMember(data.getTitle(), data.getOnline());
                                         break;
-                                    case 1:  //新增成员
+                                    case 2:  //新增成员
                                         addMember(data.getTitle(), data.getOnline());
                                         break;
-                                    case 2: //重新命名
+                                    case 3: //重新命名
                                         renameGroup(data.getTitle(), data.getOnline());
                                         break;
-                                    case 3: //删除分组
+                                    case 4: //删除分组
                                         deleteGroup(data.getTitle(), data.getOnline());
                                         break;
                                     default:

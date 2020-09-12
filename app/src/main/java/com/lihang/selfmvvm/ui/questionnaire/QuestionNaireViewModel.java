@@ -6,6 +6,8 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.vo.res.ListBaseResVo;
+import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireResVo;
 
 import androidx.annotation.NonNull;
@@ -23,10 +25,8 @@ public class QuestionNaireViewModel extends BaseViewModel<RepositoryImpl> {
      * @param status
      * @return
      */
-    public LiveData<Resource<QuestionNaireResVo>> getQuestiontList(int page, String status) {
+    public LiveData<Resource<ListBaseResVo<QuestionNaireItemResVo>>> getQuestiontList(int page, String status) {
         return CheckPermissionUtils.getInstance().isGovernment() ? getRepository().getQuestiontList(page, status) : getRepository().getEnQuestiontList(page, status);
     }
-
-
 
 }
