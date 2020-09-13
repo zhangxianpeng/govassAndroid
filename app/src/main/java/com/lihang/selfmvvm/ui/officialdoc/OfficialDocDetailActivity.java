@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -72,6 +73,12 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         settings.setDomStorageEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
+        settings.setSupportZoom(true); // 支持缩放
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        if (dm.densityDpi > 240 ) {
+            settings.setDefaultFontSize(40); //可以取1-72之间的任意值，默认16
+        }
         binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
         binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
         binding.normalWebview.setWebChromeClient(new WebChromeClient() {
@@ -135,7 +142,6 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
     protected void onPause() {
         super.onPause();
         binding.normalWebview.onPause();
-
     }
 
     @Override
@@ -151,12 +157,12 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
 
     @Override
     public void onClick(View v) {
-        if (ButtonClickUtils.isFastClick()) {
-            return;
-        }
+        if (ButtonClickUtils.isFastClick()) return;
         switch (v.getId()) {
             case R.id.iv_title_bar_back:
                 onBackPressed();
+                break;
+            default:
                 break;
         }
     }

@@ -63,7 +63,6 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
                     bundle.putInt("id", msgMeResVo.getId());
                     ActivityUtils.startActivityWithBundle(getContext(), PlainMsgDetailActivity.class, bundle);
                 });
-
                 holder.setOnClickListener(R.id.tv_delete, view -> deletePlainMsg(msgMeResVo.getId()));
             }
         };

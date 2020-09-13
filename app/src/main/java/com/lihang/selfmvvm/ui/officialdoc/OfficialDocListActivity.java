@@ -89,15 +89,11 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
                     holder.setText(R.id.tv_title, noticeResVo.getTitle());
                     holder.setText(R.id.tv_time, noticeResVo.getCreateTime());
                     holder.setText(R.id.tv_ui_flag, getString(R.string.system_announcement));
-
-                    holder.setOnClickListener(R.id.rl_container, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
+                    holder.setOnClickListener(R.id.rl_container, view ->  {
                             Bundle bundle = new Bundle();
                             bundle.putString("flag", "noticelist");
                             bundle.putSerializable("noticeResVo", noticeResVo);
                             ActivityUtils.startActivityWithBundle(OfficialDocListActivity.this, OfficialDocDetailActivity.class, bundle);
-                        }
                     });
                 }
             };

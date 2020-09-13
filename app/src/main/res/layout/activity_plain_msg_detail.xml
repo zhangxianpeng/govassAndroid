@@ -27,8 +27,7 @@
                 android:layout_centerInParent="true"
                 android:text="@string/msg"
                 android:textColor="#222222"
-                android:textSize="18sp"
-                android:visibility="gone" />
+                android:textSize="18sp" />
         </RelativeLayout>
 
 

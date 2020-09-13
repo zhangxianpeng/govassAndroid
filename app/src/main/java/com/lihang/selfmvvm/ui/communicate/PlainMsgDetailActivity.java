@@ -22,6 +22,7 @@ public class PlainMsgDetailActivity extends BaseActivity<PlainMsgDetailViewModel
                 @Override
                 public void onSuccess(PlainMsgResVo data) {
                     binding.tvContent.setText(data.getContent());
+                    binding.tvMsg.setText(data.getTitle());
                 }
             });
         });

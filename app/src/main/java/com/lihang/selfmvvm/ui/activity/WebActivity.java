@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
@@ -90,6 +91,12 @@ public class WebActivity extends BaseActivity<WebViewModel, ActivityWebBinding> 
         settings.setDomStorageEnabled(true);
         settings.setUseWideViewPort(true);
         settings.setLoadWithOverviewMode(true);
+        settings.setSupportZoom(true); // 支持缩放
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        if (dm.densityDpi > 240 ) {
+            settings.setDefaultFontSize(40); //可以取1-72之间的任意值，默认16
+        }
         binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
         binding.normalWebview.setWebChromeClient(new WebChromeClient() {
             @Override
