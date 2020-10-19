@@ -66,6 +66,14 @@
                 android:background="@color/line"
                 app:layout_scrollFlags="scroll|snap" />
 
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewPager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_150"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:padding="@dimen/dp_10" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_menu"
                 android:layout_width="match_parent"

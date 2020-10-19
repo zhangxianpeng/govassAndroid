@@ -9,6 +9,10 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivitySplashBinding;
 import com.lihang.selfmvvm.ui.main.BottonNavigationActivity;
 
+/**
+ * created by zhangxianpeng
+ * 引导页面
+ */
 public class SplashActivity extends BaseActivity<SplashViewModel, ActivitySplashBinding> {
 
     private final int SPLASH_DISPLAY_LENGHT = 3000;
@@ -26,16 +30,10 @@ public class SplashActivity extends BaseActivity<SplashViewModel, ActivitySplash
 
     private void startMain() {
         handler = new Handler();
-        // 延迟SPLASH_DISPLAY_LENGHT时间然后跳转到MainActivity
-        handler.postDelayed(new Runnable() {
-
-            @Override
-            public void run() {
-                Intent intent = new Intent(SplashActivity.this,
-                        BottonNavigationActivity.class);
-                startActivity(intent);
-                SplashActivity.this.finish();
-            }
+        handler.postDelayed(() -> {
+            Intent intent = new Intent(SplashActivity.this, BottonNavigationActivity.class);
+            startActivity(intent);
+            SplashActivity.this.finish();
         }, SPLASH_DISPLAY_LENGHT);
     }
 

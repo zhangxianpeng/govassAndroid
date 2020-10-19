@@ -3,32 +3,19 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
-
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
     <color name="red">#ff0000</color>
-    <color name="yellow">#FAE104</color>
     <color name="status_background">#1EB0F1</color>
     <color name="line">#EEEEEE</color>
     <color name="text_pressed">#3EB8EF</color>
-    <color name="background_color">#117de9</color>
-
-    <color name="test_1">#479cea</color>
-    <color name="test_2">#f2faff</color>
-    <color name="blackdb">#dbdbdb</color>
-    <color name="homeyellow">#F4AA4E</color>
-
-    <color name="tab_default">#C6CBCF</color>
-    <color name="tab_select">#222222</color>
-
     <color name="gray_white">#ffcccccc</color>
-
     <color name="blue_gray">#ffcccccc</color>
-
     <color name="tab_selected">#3C66E4</color>
     <color name="tab_normal">#E9E9E9</color>
-
     <color name="action_sheet_blue">#037BFF</color>
     <color name="line_default_color">#e5e5e5</color>
+    <!--浅白色-->
+    <color name="light_gray">#fff4f4f4</color>
 
 </resources>

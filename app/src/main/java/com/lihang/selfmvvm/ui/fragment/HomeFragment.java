@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.adapter.MyFragmentPagerAdapter;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
@@ -49,6 +50,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -56,8 +60,8 @@ import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
-
 /**
+ * created by zhangxianpeng
  * 主界面 fragment
  */
 public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener {
@@ -73,15 +77,16 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     private NewIOSAlertDialog myDialog;
 
-    /**
-     * 默认加载页码
-     */
+    //默认加载页码
     private int page = 1;
 
-    /**
-     * 是否删除数据源
-     */
+    //是否删除数据源
     private boolean isClearData = false;
+
+    //横向滑动卡片相关
+    private ShowIndustryListFragment fragment1, fragment2, fragment3, fragment4;
+    private ArrayList<Fragment> fragments;
+    private FragmentManager fragmentManager;
 
     @Override
     protected int getContentViewId() {
@@ -93,6 +98,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         initFreshLayout();
         initMenuData();
         initMsgAdapter();
+        initHorizontalSwipeView();
         if (TextUtils.isEmpty(MyApplication.getToken())) {
             ActivityUtils.startActivity(getContext(), GovassLoginActivity.class);
             getActivity().finish();
@@ -102,6 +108,29 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             getUnReadMsgCount();
             getNewAppVersion(0);
         }
+    }
+
+    private void initHorizontalSwipeView() {
+        fragmentManager = getActivity().getSupportFragmentManager();
+        fragments = new ArrayList<Fragment>();
+        fragment1 = new ShowIndustryListFragment();
+        fragment2 = new ShowIndustryListFragment();
+        fragment3 = new ShowIndustryListFragment();
+        fragment4 = new ShowIndustryListFragment();
+        fragments.add(fragment1);
+        fragments.add(fragment2);
+        fragments.add(fragment3);
+        fragments.add(fragment4);
+
+        binding.viewPager.setOffscreenPageLimit(fragments.size());//卡片数量
+        binding.viewPager.setPageMargin(10);//两个卡片之间的距离，单位dp
+
+        if (binding.viewPager!=null){
+            binding.viewPager.removeAllViews();
+        }
+
+        MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
+        binding.viewPager.setAdapter(myFragmentPagerAdapter);
     }
 
     /**
@@ -186,7 +215,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
                 }
             } else if (bean.getTitle().equals(getString(R.string.enterprise_account_management))) {
-                ToastUtils.showToast("企业账户管理界面");
+                ToastUtils.showToast(getString(R.string.enterprise_account_management));
             } else if (bean.getTitle().equals(getString(R.string.system_announcement))) {
                 ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
 
@@ -310,7 +339,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         HomeMenuBean mybusinessBean = new HomeMenuBean();
         mybusinessBean.setImageUrl(R.mipmap.home_ic_mybusiness);
         mybusinessBean.setTitle(getContext().getString(R.string.my_business));
-        if (CheckPermissionUtils.getInstance().isGovernment()){
+        if (CheckPermissionUtils.getInstance().isGovernment()) {
             homeMenuPathList.add(mybusinessBean);
         }
 

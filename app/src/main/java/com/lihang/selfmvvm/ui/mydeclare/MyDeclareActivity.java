@@ -22,7 +22,8 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * 项目申报（企業端）
+ * created by zhangxianpeng
+ * 企業端我的申报
  */
 public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, ActivityMyDeclareBinding> {
 

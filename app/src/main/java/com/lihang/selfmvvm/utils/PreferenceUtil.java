@@ -1,5 +1,6 @@
 package com.lihang.selfmvvm.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.google.gson.Gson;
@@ -29,7 +30,7 @@ public final class PreferenceUtil {
     public static void put(String key, Object object) {
 
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
         if (object instanceof String) {
@@ -54,7 +55,7 @@ public final class PreferenceUtil {
      * */
     public static Object get(String key, Object defaultObject) {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
 
         if (defaultObject instanceof String) {
             return sp.getString(key, (String) defaultObject);
@@ -79,7 +80,7 @@ public final class PreferenceUtil {
      */
     public static void setDataList(String tag, List<UserInfoVo> datalist) {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
 
         if (null == datalist || datalist.size() <= 0)
@@ -101,7 +102,7 @@ public final class PreferenceUtil {
      */
     public static List<UserInfoVo> getDataList(String tag) {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
 
         List<UserInfoVo> datalist = new ArrayList<>();
         String strJson = sp.getString(tag, null);
@@ -120,7 +121,7 @@ public final class PreferenceUtil {
      * */
     public static void remove(String key) {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
         editor.commit();
@@ -131,7 +132,7 @@ public final class PreferenceUtil {
      * */
     public static void clear() {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sp.edit();
         editor.clear();
         editor.commit();
@@ -142,7 +143,7 @@ public final class PreferenceUtil {
      * */
     public static boolean contains(String key) {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         return sp.contains(key);
     }
 
@@ -152,7 +153,7 @@ public final class PreferenceUtil {
      * */
     public static Map<String, ?> getAll() {
         SharedPreferences sp = Utils.getApp().getSharedPreferences(FILE_NAME,
-                Utils.getApp().MODE_PRIVATE);
+                Context.MODE_PRIVATE);
         return sp.getAll();
     }
 

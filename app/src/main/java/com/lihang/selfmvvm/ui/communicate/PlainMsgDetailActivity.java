@@ -7,6 +7,10 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityPlainMsgDetailBinding;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 
+/**
+ * created by zhangxianpeng
+ * 普通消息
+ */
 public class PlainMsgDetailActivity extends BaseActivity<PlainMsgDetailViewModel, ActivityPlainMsgDetailBinding> {
 
     @Override

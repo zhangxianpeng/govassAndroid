@@ -21,8 +21,8 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * 消息详情界面
  * created by zhangxianpeng
+ * 消息详情界面
  */
 public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, ActivityMsgDetailBinding> {
 

@@ -48,6 +48,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+/**
+ * created by zhangxianpeng
+ * 用户管理
+ */
 public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, ActivityMemberManagerBinding> implements PopupWindow.OnDismissListener {
     /**
      * 分组id

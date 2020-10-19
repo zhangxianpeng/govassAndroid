@@ -36,8 +36,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 /**
- * 我的企业公告（企业端）
  * created  by zhangxianpeng
+ * 我的企业公告（企业端）
  */
 public class MyEnterprisesOdListActivity extends BaseActivity<EnpriceODViewModel, ActivityMyEnterprisesOdListBinding> implements PopupWindow.OnDismissListener {
 

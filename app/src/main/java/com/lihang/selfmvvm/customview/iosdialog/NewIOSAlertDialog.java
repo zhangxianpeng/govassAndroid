@@ -43,12 +43,12 @@ public class NewIOSAlertDialog {
         View view = LayoutInflater.from(context).inflate(
                 R.layout.view_alert_layout, null);
 
-        lLayout_bg = (LinearLayout) view.findViewById(R.id.lLayout_bg);
-        txt_title = (TextView) view.findViewById(R.id.txt_title);
-        txt_msg = (TextView) view.findViewById(R.id.txt_msg);
-        btn_neg = (Button) view.findViewById(R.id.btn_neg);
-        btn_pos = (Button) view.findViewById(R.id.btn_pos);
-        img_line = (ImageView) view.findViewById(R.id.img_line);
+        lLayout_bg = view.findViewById(R.id.lLayout_bg);
+        txt_title = view.findViewById(R.id.txt_title);
+        txt_msg = view.findViewById(R.id.txt_msg);
+        btn_neg = view.findViewById(R.id.btn_neg);
+        btn_pos = view.findViewById(R.id.btn_pos);
+        img_line = view.findViewById(R.id.img_line);
         setGone();
         dialog = new Dialog(context, R.style.AlertDialogStyle);
         dialog.setContentView(view);
@@ -250,10 +250,7 @@ public class NewIOSAlertDialog {
 
     public boolean isShowing() {
         if (dialog != null) {
-            if (dialog.isShowing())
-                return true;
-            else
-                return false;
+            return dialog.isShowing();
         }
         return false;
     }

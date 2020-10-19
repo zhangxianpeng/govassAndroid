@@ -15,7 +15,8 @@ import java.io.File;
 import androidx.appcompat.app.AppCompatActivity;
 
 /**
- * 公文详情
+ * created by zhangxianpeng
+ * 公文详情界面
  */
 public class DocumentDetailActivity extends AppCompatActivity {
 

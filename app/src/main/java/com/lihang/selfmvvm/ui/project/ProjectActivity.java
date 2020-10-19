@@ -21,6 +21,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+/**
+ * created by zhangxianpeng
+ * 项目审批列表
+ */
 public class ProjectActivity extends BaseActivity<ProjectActivityViewModel, ActivityProjectBinding> {
 
     private List<ProjectResVo> projectList = new ArrayList<>();

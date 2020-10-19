@@ -16,6 +16,10 @@ import com.lihang.selfmvvm.vo.res.UserInfoVo;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
+/**
+ * created by zhangxianpeng
+ * 我的企业详情
+ */
 public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailViewModel, ActivityEnterprisesDetailBinding> {
 
     private EnterpriseVo enterpriseVo;
@@ -55,7 +59,7 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                             binding.tvSetupDate.setText(enterpriseVo.getSetUpDate());
                             binding.tvBusinessScope.setText(enterpriseVo.getBusinessScope());
                         } else {
-                           binding.llEnter.setVisibility(View.GONE);
+                            binding.llEnter.setVisibility(View.GONE);
                         }
 
                     }
@@ -94,7 +98,7 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                 break;
             case R.id.iv_businessLicense_img:
                 Bundle bundle = new Bundle();
-                if(enterpriseVo != null) {
+                if (enterpriseVo != null) {
                     bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
                 }
                 ActivityUtils.startActivityWithBundle(this, BigPictureActivity.class, bundle);

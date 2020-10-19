@@ -19,6 +19,10 @@ import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+/**
+ * created by zhangxianpeng
+ * 消息列表
+ */
 public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsgBinding> {
     private static final String TAG = NewMsgActivity.class.getSimpleName();
 

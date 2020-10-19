@@ -21,9 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class SendDocumentctivity extends BaseActivity<SendDocumentViewModel, ActivitySendDocumentctivityBinding> {
 
-
     private ArrayList<ProjectBean> issuedDocumentList = new ArrayList<>();
-
 
     @Override
     protected int getContentViewId() {

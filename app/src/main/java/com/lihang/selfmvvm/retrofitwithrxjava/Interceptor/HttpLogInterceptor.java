@@ -43,9 +43,7 @@ public class HttpLogInterceptor implements Interceptor {
             String mediaTypeString = (null != mediaType ? mediaType.toString() : null);
             if (!TextUtils.isEmpty(mediaTypeString)) {
                 mediaTypeString = mediaTypeString.toLowerCase();
-                if (mediaTypeString.contains("text") || mediaTypeString.contains("application/json")) {
-                    return true;
-                }
+                return mediaTypeString.contains("text") || mediaTypeString.contains("application/json");
             }
         }
         return false;

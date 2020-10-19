@@ -31,8 +31,8 @@ import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 /**
- * 文件预览
  * created by zhangxianpeng
+ * 文件预览
  */
 public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, ActivityFilePreviewBinding> {
 
@@ -89,7 +89,7 @@ public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, Acti
                 }
 
                 @Override
-                public void onResponse(Call call, Response response) throws IOException {
+                public void onResponse(Call call, Response response) {
                     InputStream is = null;
                     byte[] buf = new byte[2048];
                     int len = 0;

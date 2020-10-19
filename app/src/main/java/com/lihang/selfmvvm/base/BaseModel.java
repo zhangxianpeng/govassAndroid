@@ -63,7 +63,7 @@ public abstract class BaseModel {
     //把统一操作全部放在这，不会重连
     public <T> MutableLiveData<T> observe(Observable observable, final MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
         if (paramsBuilder == null) {
-            paramsBuilder = paramsBuilder.build();
+            paramsBuilder = ParamsBuilder.build();
         }
         boolean showDialog = paramsBuilder.isShowDialog();
         String loadingMessage = paramsBuilder.getLoadingMessage();
@@ -111,7 +111,7 @@ public abstract class BaseModel {
     //把统一操作全部放在这，这是带重连的
     public <T> MutableLiveData<T> observeWithRetry(Observable observable, final MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
         if (paramsBuilder == null) {
-            paramsBuilder = paramsBuilder.build();
+            paramsBuilder = ParamsBuilder.build();
         }
         boolean showDialog = paramsBuilder.isShowDialog();
         String loadingMessage = paramsBuilder.getLoadingMessage();
@@ -224,7 +224,7 @@ public abstract class BaseModel {
     public <T> MutableLiveData<T> upLoad(Observable observable, MutableLiveData<T> liveData, ParamsBuilder paramsBuilder) {
 
         if (paramsBuilder == null) {
-            paramsBuilder = paramsBuilder.build();
+            paramsBuilder = ParamsBuilder.build();
         }
         boolean showDialog = paramsBuilder.isShowDialog();
         String loadingMessage = paramsBuilder.getLoadingMessage();

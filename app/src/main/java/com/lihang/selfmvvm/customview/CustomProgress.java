@@ -26,7 +26,7 @@ public class CustomProgress extends Dialog {
      * 当窗口焦点改变时调用
      */
     public void onWindowFocusChanged(boolean hasFocus) {
-        ImageView imageView = (ImageView) findViewById(R.id.spinnerImageView);
+        ImageView imageView = findViewById(R.id.spinnerImageView);
         // 获取ImageView上的动画背景
         AnimationDrawable spinner = (AnimationDrawable) imageView.getBackground();
         // 开始动画
@@ -41,7 +41,7 @@ public class CustomProgress extends Dialog {
     public void setMessage(CharSequence message) {
         if (message != null && message.length() > 0) {
             findViewById(R.id.message).setVisibility(View.VISIBLE);
-            TextView txt = (TextView) findViewById(R.id.message);
+            TextView txt = findViewById(R.id.message);
             txt.setText(message);
             txt.invalidate();
         }
@@ -67,7 +67,7 @@ public class CustomProgress extends Dialog {
         if (message == null || message.length() == 0) {
             dialog.findViewById(R.id.message).setVisibility(View.GONE);
         } else {
-            TextView txt = (TextView) dialog.findViewById(R.id.message);
+            TextView txt = dialog.findViewById(R.id.message);
             txt.setText(message);
         }
         // 按返回键是否取消

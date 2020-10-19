@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 
 /**
+ * created by zhangxianpeng
  * 推广下载界面
  */
 public class ShareActivity extends BaseActivity<ShareViewModel, ActivityShareBinding> {

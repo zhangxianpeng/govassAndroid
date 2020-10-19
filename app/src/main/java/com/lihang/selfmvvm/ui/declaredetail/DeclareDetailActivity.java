@@ -23,16 +23,12 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * 申报详情
+ * created by zhangxianpeng
+ * 申报详情界面
  */
 public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, ActivityDeclareDetailBinding> {
     private CommonAdapter attachmentAdapter;
     private List<AttachmentResVo> list = new ArrayList<>();
-
-    @Override
-    protected int getContentViewId() {
-        return R.layout.activity_declare_detail;
-    }
 
     /**
      * 是否点击通过
@@ -47,9 +43,14 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
     private int id;
 
     @Override
+    protected int getContentViewId() {
+        return R.layout.activity_declare_detail;
+    }
+
+    @Override
     protected void processLogic() {
         initAdapter();
-        id = getIntent().getIntExtra("id", 0);
+        id = getIntent().getIntExtra("id", -1);
         getDetail(id);
     }
 

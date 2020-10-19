@@ -21,6 +21,7 @@ import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 
 /**
+ * created by zhangxianpeng
  * 公告详情
  */
 public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailViewModel, ActivityOfficialDocDetailBinding> {

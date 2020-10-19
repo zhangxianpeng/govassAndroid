@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
+ * created by zhangxianpeng
  * 企业公告界面（企业端）
  */
 public class EnpriceODActivity extends BaseActivity<EnpriceODViewModel, ActivityEnpriceOdBinding> {

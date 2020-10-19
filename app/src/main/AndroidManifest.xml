@@ -27,7 +27,6 @@
         android:screenOrientation="portrait"
         android:theme="@style/BlackFront_AppTheme">
 
-        <!-- 测试 -->
         <!-- 文件预览 -->
         <activity android:name=".ui.filepreview.FilePreviewActivity" />
         <!-- im 聊天 -->
@@ -55,7 +54,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.WebActivity" />
+        <activity android:name=".ui.web.WebActivity" />
 
         <meta-data
             android:name="android.notch_support"
@@ -98,13 +97,12 @@
         <activity android:name=".ui.myenterprises.EnterprisesDetailActivity" />
         <activity android:name=".ui.bigpicture.BigPictureActivity" />
         <activity android:name=".ui.share.ShareActivity" />
-        <activity android:name=".ui.myarticle.MyArticalListActivity" />
-        <activity android:name=".ui.myarticle.ArticalDetailActivity" />
         <activity android:name=".ui.questionnaire.QuestionNaireOfGovermentActivity" />
         <activity android:name=".ui.enpriceofficedoc.GovermentEnpriceODActivity" />
         <activity android:name=".ui.enpriceofficedoc.EnpriceODActivity" />
         <activity android:name=".ui.enpriceofficedoc.OdDetailActivity" />
-        <activity android:name=".ui.enpriceofficedoc.MyEnterprisesOdListActivity"></activity>
+        <activity android:name=".ui.enpriceofficedoc.MyEnterprisesOdListActivity" />
+        <activity android:name=".ui.senddynamic.SendDynamicActivity"></activity>
     </application>
 
 </manifest>

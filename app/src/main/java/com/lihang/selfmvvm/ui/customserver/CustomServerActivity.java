@@ -8,6 +8,10 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityCustomServerBinding;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
 
+/**
+ * created by zhangxianpeng
+ * 客服界面
+ */
 public class CustomServerActivity extends BaseActivity<CustomServerViewModel, ActivityCustomServerBinding> {
 
     @Override
@@ -30,9 +34,7 @@ public class CustomServerActivity extends BaseActivity<CustomServerViewModel, Ac
     }
 
     @Override
-    protected void setListener() {
-        binding.ivTitleBarBack.setOnClickListener(this::onClick);
-    }
+    protected void setListener() { binding.ivTitleBarBack.setOnClickListener(this::onClick); }
 
     @Override
     public void onClick(View view) {

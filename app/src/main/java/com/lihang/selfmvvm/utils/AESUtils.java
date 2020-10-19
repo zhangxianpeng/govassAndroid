@@ -75,7 +75,7 @@ public class AESUtils {
     /**
      * 主方法测试
      */
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
       /*  String context = "123456";
         System.out.println("元数据" + context);
         String encrypt = encrypt(context);

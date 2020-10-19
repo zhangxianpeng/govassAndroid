@@ -22,6 +22,7 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
+ * created by zhangxianpeng
  * 企业公告界面（政府端）
  */
 public class GovermentEnpriceODActivity extends BaseActivity<EnpriceODViewModel, ActivityGovermentEnpriceOdBinding> {

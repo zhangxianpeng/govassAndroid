@@ -20,6 +20,7 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
+ * created by zhangxianpeng
  * 我的企业列表
  */
 public class MyEnterprisesListActivity extends BaseActivity<MyEnterprisesListViewModel, ActivityMyEnterprisesListBinding> {

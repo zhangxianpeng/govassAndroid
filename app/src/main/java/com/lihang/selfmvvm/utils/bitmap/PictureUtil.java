@@ -24,7 +24,7 @@ public class PictureUtil {
             bm = rotateBitmap(bm, degree);
         }
 
-        File imageFile = new File(MyApplication.getContext().getFilesDir().getAbsolutePath().toString() + "/" + TimeUtils.getDateToStringLeo(System.currentTimeMillis() + "") + "_atmancarm.jpg");
+        File imageFile = new File(MyApplication.getContext().getFilesDir().getAbsolutePath() + "/" + TimeUtils.getDateToStringLeo(System.currentTimeMillis() + "") + "_atmancarm.jpg");
 
         try {
             imageFile.createNewFile();

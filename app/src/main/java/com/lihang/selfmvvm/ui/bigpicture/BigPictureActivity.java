@@ -12,6 +12,7 @@ import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 /**
+ * created by zhangxianpeng
  * 查看大图
  */
 public class BigPictureActivity extends BaseActivity<BigPictureViewModel, ActivityBigPictureBinding> {

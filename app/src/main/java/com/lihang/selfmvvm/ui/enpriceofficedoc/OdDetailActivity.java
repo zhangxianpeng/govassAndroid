@@ -9,8 +9,8 @@ import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.EnpriceOdVo;
 
 /**
+ * created by zhangxianpeng
  * 企业公告详情界面
- * 政府、企业共用
  */
 public class OdDetailActivity extends BaseActivity<EnpriceODViewModel, ActivityOdDetailBinding> {
 

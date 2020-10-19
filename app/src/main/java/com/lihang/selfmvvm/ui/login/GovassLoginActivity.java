@@ -37,6 +37,7 @@ import java.util.UUID;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 
 /**
+ * created by zhangxianpeng
  * 登录界面
  */
 public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, ActivityGovassLoginactivityBinding> implements TextWatcher {
@@ -123,15 +124,11 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         listPopupWindow.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, loginUserStrList));
         listPopupWindow.setAnchorView(binding.etPhone);
         listPopupWindow.setModal(true);
-
-        listPopupWindow.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                binding.etPhone.setText(loginUserStrList.get(i));
-                binding.etUserPassword.setText(getPwd(loginUserStrList.get(i)));
-                updateSwitchView();
-                listPopupWindow.dismiss();
-            }
+        listPopupWindow.setOnItemClickListener((adapterView, view, i, l) -> {
+            binding.etPhone.setText(loginUserStrList.get(i));
+            binding.etUserPassword.setText(getPwd(loginUserStrList.get(i)));
+            updateSwitchView();
+            listPopupWindow.dismiss();
         });
         listPopupWindow.show();
     }

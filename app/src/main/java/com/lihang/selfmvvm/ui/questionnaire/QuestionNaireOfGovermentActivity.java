@@ -7,7 +7,7 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityQuestionNaireOfGovermentBinding;
-import com.lihang.selfmvvm.ui.activity.WebActivity;
+import com.lihang.selfmvvm.ui.web.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.EnterpriseVo;
@@ -24,6 +24,7 @@ import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
+ * created byz zhangxianpeng
  * 调查问卷（政府新增显示界面）
  */
 public class QuestionNaireOfGovermentActivity extends BaseActivity<QuestionNaireOfGovermentViewModel, ActivityQuestionNaireOfGovermentBinding> {

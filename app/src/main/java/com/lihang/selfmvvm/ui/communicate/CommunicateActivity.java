@@ -23,7 +23,8 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
- * im 聊天界面
+ * created by zhangxianpeng
+ * 聊天界面
  */
 public class CommunicateActivity extends BaseActivity<CommunicateViewModel, ActivityCommunicateBinding> {
     private static final String TAG = CommunicateActivity.class.getSimpleName();

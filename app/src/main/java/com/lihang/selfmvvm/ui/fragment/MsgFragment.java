@@ -702,8 +702,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      * @param attachmentList
      */
     private void uploadFile(List<AttachmentResVo> attachmentList) {
-        List<MultipartBody.Part> parts
-                = new ArrayList<>();
+        List<MultipartBody.Part> parts = new ArrayList<>();
         for (File file : trasfer2FileList(attachmentList)) {
             RequestBody body = MultipartBody.create(MultipartBody.FORM, file);
             MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), body);
@@ -852,12 +851,12 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
          */
         private void bindGroupView(View view, GroupModel data, boolean isExpanded) {
             // 绑定组视图的数据 当然这些都是模拟的
-            TextView tv_title = (TextView) view.findViewById(R.id.tv_group_name);
-            TextView tv_online = (TextView) view.findViewById(R.id.tv_msg);
+            TextView tv_title = view.findViewById(R.id.tv_group_name);
+            TextView tv_online = view.findViewById(R.id.tv_msg);
             tv_title.setText(data.getTitle());
             tv_online.setVisibility(data.getOnline().endsWith("0") ? View.GONE : View.VISIBLE);
             if (!use_default_indicator) {
-                ImageView iv_tip = (ImageView) view.findViewById(R.id.iv_left);
+                ImageView iv_tip = view.findViewById(R.id.iv_left);
                 if (isExpanded) {
                     iv_tip.setImageResource(R.mipmap.down);
                 } else {
@@ -904,8 +903,8 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
          */
         private void bindChildView(View view, int groupPosition, ChildModel data) {
             // 绑定组视图的数据 当然这些都是模拟的
-            TextView tv_name = (TextView) view.findViewById(R.id.tv_name);
-            TextView deleteTv = (TextView) view.findViewById(R.id.tv_delete);
+            TextView tv_name = view.findViewById(R.id.tv_name);
+            TextView deleteTv = view.findViewById(R.id.tv_delete);
             CircleImageView iv_head = view.findViewById(R.id.iv_head);
             tv_name.setText(data.getName());
             Glide.with(view).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.getHeadUrl()).placeholder(R.mipmap.default_tx_img)

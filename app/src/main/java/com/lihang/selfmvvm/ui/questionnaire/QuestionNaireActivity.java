@@ -7,7 +7,7 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityQuestionNaireBinding;
-import com.lihang.selfmvvm.ui.activity.WebActivity;
+import com.lihang.selfmvvm.ui.web.WebActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
@@ -23,6 +23,10 @@ import java.util.List;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+/**
+ * created by zhangxianpeng
+ * 调查问卷列表
+ */
 public class QuestionNaireActivity extends BaseActivity<QuestionNaireViewModel, ActivityQuestionNaireBinding> {
 
     /**

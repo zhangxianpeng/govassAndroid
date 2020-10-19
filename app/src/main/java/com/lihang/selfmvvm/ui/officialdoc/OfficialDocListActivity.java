@@ -23,8 +23,8 @@ import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
+ * crated by zhangxianpeng
  * 系统公告界面  +  我的发文/收文界面
- * 公用界面
  */
 public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewModel, ActivityOfficialDocListBinding> {
 

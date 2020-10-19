@@ -148,12 +148,7 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                 // 适配android 10
                 photoUri = createImageUri();
             } else {
-                try {
-                    photoFile = createImageFile();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
+                photoFile = createImageFile();
                 if (photoFile != null) {
                     mCameraImagePath = photoFile.getAbsolutePath();
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -190,7 +185,7 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
     /**
      * 创建保存图片的文件
      */
-    private File createImageFile() throws IOException {
+    private File createImageFile() {
         String imageName = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         if (!storageDir.exists()) {
