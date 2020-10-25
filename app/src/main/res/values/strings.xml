@@ -143,4 +143,7 @@
     <string name="send_dynamic">发布</string>
     <string name="senddynamic">发布动态</string>
     <string name="policy_document_library">政策文件库</string>
+    <string name="policy_sender">发布者：%1$s</string>
+    <string name="like_count">点赞%1$d次</string>
+    <string name="feedback_title">政企会客间</string>
 </resources>

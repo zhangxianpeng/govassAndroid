@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rl_project_list_item"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_70">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/iv_msg"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
-        android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_15"
-        android:src="@mipmap/home_ic_placeholder" />
+    <RelativeLayout
+        android:id="@+id/rl_project_list_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_70">
 
-    <ImageView
-        android:layout_width="@dimen/dp_22"
-        android:layout_height="@dimen/dp_22"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_15"
-        android:src="@mipmap/btn_black_right" />
+        <ImageView
+            android:id="@+id/iv_msg"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_15"
+            android:src="@mipmap/home_ic_placeholder" />
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_5"
-        android:layout_toRightOf="@+id/iv_msg"
-        android:text="关于《政企消息》的审核结果"
-        android:textColor="#ff131008"
-        android:textSize="14sp" />
-</RelativeLayout>
+        <ImageView
+            android:layout_width="@dimen/dp_22"
+            android:layout_height="@dimen/dp_22"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_15"
+            android:src="@mipmap/btn_black_right" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_5"
+            android:layout_toRightOf="@+id/iv_msg"
+            android:text="关于《政企消息》的审核结果"
+            android:textColor="#ff131008"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <include layout="@layout/light_gray_diver_horizontal_1dp"></include>
+</LinearLayout>

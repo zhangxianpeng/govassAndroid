@@ -10,7 +10,9 @@ import com.lihang.selfmvvm.ui.bigpicture.BigPictureActivity;
 import com.lihang.selfmvvm.ui.filepreview.FilePreviewActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
@@ -38,15 +40,39 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
     protected void processLogic() {
         initAdapter();
 
-        MsgMeResVo msgMeResVo = (MsgMeResVo) getIntent().getSerializableExtra("msgMeResVo");
-        int readFlag = msgMeResVo.getReadFlag();
-        int id = msgMeResVo.getId();
-        String title = msgMeResVo.getTitle();
-        binding.tvTitle.setText(title);
+        String uiflag = getIntent().getStringExtra("uiflag");
+        if (uiflag.equals("newmsg")) {
+            MsgMeResVo msgMeResVo = (MsgMeResVo) getIntent().getSerializableExtra("msgMeResVo");
+            int readFlag = msgMeResVo.getReadFlag();
+            int id = msgMeResVo.getId();
+            String title = msgMeResVo.getTitle();
+            binding.tvTitle.setText(title);
+            getPlainMsgAttachmentList(msgMeResVo.getPrimaryId());
+            getPlainMsdDetail(id);
+            transferReadFlag(readFlag, id);
+        } else if (uiflag.equals("policy")) {
+            OfficialDocResVo pilocyResVo = (OfficialDocResVo) getIntent().getSerializableExtra("noticeResVo");
+            binding.tvTitle.setText(pilocyResVo.getTitle());
+            binding.tvTitle.setText(pilocyResVo.getContent());
+            List<AttachmentResVo> data = pilocyResVo.getAttachmentList();
+            if (data != null && data.size() > 0) {
+                binding.cardView.setVisibility(View.VISIBLE);
+                attachmentList.clear();
+                attachmentList.addAll(transfer(data));
+                if (attachmentAdapter != null) attachmentAdapter.notifyDataSetChanged();
+            }
+        }
+    }
 
-        getPlainMsgAttachmentList(msgMeResVo.getPrimaryId());
-        getPlainMsdDetail(id);
-        transferReadFlag(readFlag, id);
+    private List<PlainMsgAttachmentListResVo> transfer(List<AttachmentResVo> data) {
+        List<PlainMsgAttachmentListResVo> resultList = new ArrayList<>();
+        for (AttachmentResVo attachmentResVo : data) {
+            PlainMsgAttachmentListResVo plainMsgAttachmentListResVo = new PlainMsgAttachmentListResVo();
+            plainMsgAttachmentListResVo.setName(attachmentResVo.getName());
+            plainMsgAttachmentListResVo.setUrl(attachmentResVo.getUrl());
+            resultList.add(plainMsgAttachmentListResVo);
+        }
+        return resultList;
     }
 
     private void initAdapter() {

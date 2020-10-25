@@ -74,6 +74,7 @@ public class NewMsgActivity extends BaseActivity<NewMsgViewModel, ActivityNewMsg
 
                 holder.setOnClickListener(R.id.ll_container, (view -> {
                     Bundle bundle = new Bundle();
+                    bundle.putString("uiflag", "newmsg");
                     bundle.putSerializable("msgMeResVo", msgMeResVo);
                     ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
                 }));

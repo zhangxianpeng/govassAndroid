@@ -16,7 +16,6 @@ public abstract class MyAdapter<T> extends BaseAdapter {
     private ArrayList<T> mData;
     private int mLayoutRes;           //布局id
 
-
     public MyAdapter() {
     }
 

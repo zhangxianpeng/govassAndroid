@@ -6,14 +6,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
-import com.lihang.selfmvvm.adapter.MyFragmentPagerAdapter;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
+import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackActivity;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.enpriceofficedoc.EnpriceODActivity;
 import com.lihang.selfmvvm.ui.enpriceofficedoc.GovermentEnpriceODActivity;
@@ -28,10 +30,11 @@ import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
+import com.lihang.selfmvvm.ui.userinfo.UserInfoActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
+import com.lihang.selfmvvm.utils.DensityUtils;
 import com.lihang.selfmvvm.utils.GlideImageLoader;
-import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
@@ -42,6 +45,8 @@ import com.lihang.selfmvvm.vo.res.VersionVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.stx.xhb.androidx.XBanner;
+import com.stx.xhb.androidx.entity.LocalImageInfo;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
@@ -50,9 +55,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -83,11 +85,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     //是否删除数据源
     private boolean isClearData = false;
 
-    //横向滑动卡片相关
-    private ShowIndustryListFragment fragment1, fragment2, fragment3, fragment4;
-    private ArrayList<Fragment> fragments;
-    private FragmentManager fragmentManager;
-
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_home;
@@ -111,26 +108,48 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     }
 
     private void initHorizontalSwipeView() {
-        fragmentManager = getActivity().getSupportFragmentManager();
-        fragments = new ArrayList<Fragment>();
-        fragment1 = new ShowIndustryListFragment();
-        fragment2 = new ShowIndustryListFragment();
-        fragment3 = new ShowIndustryListFragment();
-        fragment4 = new ShowIndustryListFragment();
-        fragments.add(fragment1);
-        fragments.add(fragment2);
-        fragments.add(fragment3);
-        fragments.add(fragment4);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtils.getScreenWidth() / 2);
+        binding.horizontalBanner.setLayoutParams(layoutParams);
+        initBanner(binding.horizontalBanner);
+        initLocalImage();
+    }
 
-        binding.viewPager.setOffscreenPageLimit(fragments.size());//卡片数量
-        binding.viewPager.setPageMargin(10);//两个卡片之间的距离，单位dp
+    private void initBanner(XBanner banner) {
+        banner.setOnItemClickListener((banner1, model, view, position) -> {
+            switch (position) {
+                case 0:
+                    ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
+                    break;
+                case 1:
+                    if (CheckPermissionUtils.getInstance().isGovernment()) {
+                        ActivityUtils.startActivity(getContext(), ProjectActivity.class);
+                    } else {
+                        ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
+                    }
+                    break;
+                case 2:
+                    ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
+                    break;
+                case 3:  //服务新功能
+                    ActivityUtils.startActivity(getContext(), FeedBackActivity.class);
+                    break;
+                case 4:  //党建空卡片
+                    break;
+                default:
+                    break;
+            }
+        });
+        banner.loadImage((banner1, model, view, position) -> ((ImageView) view).setImageResource(((LocalImageInfo) model).getXBannerUrl()));
+    }
 
-        if (binding.viewPager!=null){
-            binding.viewPager.removeAllViews();
-        }
-
-        MyFragmentPagerAdapter myFragmentPagerAdapter = new MyFragmentPagerAdapter(getActivity().getSupportFragmentManager(), fragments);
-        binding.viewPager.setAdapter(myFragmentPagerAdapter);
+    private void initLocalImage() {
+        List<LocalImageInfo> data = new ArrayList<>();
+        data.add(new LocalImageInfo(R.mipmap.home_ic_gonggao));
+        data.add(new LocalImageInfo(R.mipmap.home_ic_xiangmu));
+        data.add(new LocalImageInfo(R.mipmap.home_ic_wenjuan));
+        data.add(new LocalImageInfo(R.mipmap.home_ic_fuwu));
+        data.add(new LocalImageInfo(R.mipmap.home_ic_dangjian));
+        binding.horizontalBanner.setBannerData(data);
     }
 
     /**
@@ -169,6 +188,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     }
                     if (newVersionCode > currentVersionCode)
                         showUpdateDialog(apkUrl, updateContent, updateTitle, forceFlag);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+
+
                 }
             });
         });
@@ -218,7 +243,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 ToastUtils.showToast(getString(R.string.enterprise_account_management));
             } else if (bean.getTitle().equals(getString(R.string.system_announcement))) {
                 ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
-
             } else if (bean.getTitle().equals(getString(R.string.contact_customer_service))) {
                 ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
             } else if (bean.getTitle().equals(getString(R.string.my_business))) {
@@ -242,6 +266,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 public void onSuccess(String data) {
                     initMenuAdapter(data);
                 }
+
+                @Override
+                public void onFailure(String msg) {
+
+                }
             });
         });
     }
@@ -253,6 +282,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         projectListAdapter.setOnItemClickListener((view, position) -> {
             MsgMeResVo msgMeResVo = projectList.get(position);
             Bundle bundle = new Bundle();
+            bundle.putString("uiflag", "newmsg");
             bundle.putSerializable("msgMeResVo", msgMeResVo);
             ActivityUtils.startActivityWithBundle(getContext(), MsgDetailActivity.class, bundle);
         });
@@ -365,18 +395,20 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     projectList.addAll(data.getList());
                     projectListAdapter.notifyDataSetChanged();
                 }
+
+                @Override
+                public void onFailure(String msg) {
+                    myDialog = new NewIOSAlertDialog(getContext()).builder();
+                    myDialog.setGone().setTitle("温馨提示").setMsg(msg).setPositiveButton("确定", view -> getActivity().finish()).show();
+                }
             });
         });
     }
 
-
     @Override
     protected void setListener() {
-        binding.banner.setOnBannerListener(position -> {
-            LogUtils.d(TAG, "CLICK===" + position);
-        });
-
         binding.flNewMsg.setOnClickListener(this::onClick);
+        binding.floatingButton.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -384,6 +416,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         switch (view.getId()) {
             case R.id.fl_new_msg:
                 ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
+                break;
+            case R.id.floatingButton:
+                //todo  跳转到个人中心
+                ActivityUtils.startActivity(getContext(), UserInfoActivity.class);
                 break;
             default:
                 break;

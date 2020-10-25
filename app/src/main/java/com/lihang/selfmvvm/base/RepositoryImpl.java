@@ -3,17 +3,20 @@ package com.lihang.selfmvvm.base;
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.ParamsBuilder;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
+import com.lihang.selfmvvm.vo.req.IdReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.DynamicVo;
 import com.lihang.selfmvvm.vo.res.EnpriceOdVo;
 import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
@@ -378,6 +381,39 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice(int page) {
         MutableLiveData<Resource<ListBaseResVo<NoticeResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getPublishedNotice(page), liveData);
+    }
+
+    /**
+     * 政策文件列表
+     *
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getPolicyList(int page) {
+        MutableLiveData<Resource<ListBaseResVo<OfficialDocResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPolicyList(page), liveData);
+    }
+
+    /**
+     * 千企动态  contentType 0 企业  1  商业信息  status = 2 已审核
+     *
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> getDynamicList(int page, int contentType) {
+        MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getDynamicList(page, contentType), liveData);
+    }
+
+    /**
+     * 点赞/取消点赞
+     *
+     * @param idReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<ResponModel<String>>> likeDynamic(IdReqVo idReqVo) {
+        MutableLiveData<Resource<ResponModel<String>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().likeDynamic(idReqVo), liveData);
     }
 
     /**

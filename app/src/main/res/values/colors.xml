@@ -17,5 +17,7 @@
     <color name="line_default_color">#e5e5e5</color>
     <!--浅白色-->
     <color name="light_gray">#fff4f4f4</color>
-
+    <!--标题选中-->
+    <color name="selected_color">#ff3296fa</color>
+    <color name="normal_color">#ff303030</color>
 </resources>

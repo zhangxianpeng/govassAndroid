@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="@string/trends_of_thousand_enterprises"
-                android:textColor="#ff3296fa"
+                android:textColor="@color/selected_color"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
                 android:layout_marginLeft="@dimen/dp_20"
                 android:layout_toRightOf="@+id/tv_dynamic"
                 android:text="@string/business_information"
-                android:textColor="#ff303030"
+                android:textColor="@color/normal_color"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -46,10 +46,16 @@
 
         <include layout="@layout/light_gray_diver_horizontal_1dp" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_dynamic"
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smartfreshlayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="@dimen/dp_5" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_dynamic"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/dp_5" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
     </LinearLayout>
 </layout>

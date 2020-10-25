@@ -6,17 +6,19 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentPolicyDocumentLibraryBinding;
-import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
+import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
-import com.lihang.selfmvvm.vo.res.NoticeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 /**
  * created by zhangxianpeng
@@ -25,7 +27,7 @@ import java.util.List;
 public class PolicyDocumentLibraryFragment extends BaseFragment<PolicyDocumentLibraryViewModel, FragmentPolicyDocumentLibraryBinding> {
 
     private CommonAdapter officialdocAdapter;
-    private List<NoticeResVo> officialDocList = new ArrayList<>(); //公告
+    private List<OfficialDocResVo> officialDocList = new ArrayList<>(); //公告
 
     /**
      * 是否请求公告
@@ -63,27 +65,29 @@ public class PolicyDocumentLibraryFragment extends BaseFragment<PolicyDocumentLi
     }
 
     private void initAdapter() {
-        officialdocAdapter = new CommonAdapter<NoticeResVo>(getContext(), R.layout.list_item_policy_doc, officialDocList) {
+        officialdocAdapter = new CommonAdapter<OfficialDocResVo>(getContext(), R.layout.list_item_policy_doc, officialDocList) {
             @Override
-            protected void convert(ViewHolder holder, NoticeResVo noticeResVo, int position) {
-                holder.setText(R.id.tv_title, noticeResVo.getTitle());
-                holder.setText(R.id.tv_time, noticeResVo.getCreateTime());
-                holder.setText(R.id.tv_ui_flag, getString(R.string.system_announcement));
+            protected void convert(ViewHolder holder, OfficialDocResVo noticeResVo, int position) {
+                holder.setText(R.id.tv_policy_title, noticeResVo.getTitle());
+                holder.setText(R.id.tv_send_time, noticeResVo.getCreateTime());
+                holder.setText(R.id.tv_sender, getString(R.string.policy_sender, noticeResVo.getCreateUser()));
                 holder.setOnClickListener(R.id.rl_container, view -> {
                     Bundle bundle = new Bundle();
-                    bundle.putString("flag", "noticelist");
+                    bundle.putString("uiflag", "policy");
                     bundle.putSerializable("noticeResVo", noticeResVo);
-                    ActivityUtils.startActivityWithBundle(getActivity(), OfficialDocDetailActivity.class, bundle);
+                    ActivityUtils.startActivityWithBundle(getActivity(), MsgDetailActivity.class, bundle);
                 });
             }
         };
+        binding.rvPolicy.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvPolicy.setAdapter(officialdocAdapter);
     }
 
     private void initData(int page, boolean isClearData) {
-        mViewModel.getPublishedNotice(page).observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<NoticeResVo>>() {
+        mViewModel.getPolicyList(page).observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<OfficialDocResVo>>() {
                 @Override
-                public void onSuccess(ListBaseResVo<NoticeResVo> data) {
+                public void onSuccess(ListBaseResVo<OfficialDocResVo> data) {
                     if (isClearData) {
                         officialDocList.clear();
                     }

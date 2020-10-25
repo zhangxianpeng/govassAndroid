@@ -6,7 +6,7 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
-import com.lihang.selfmvvm.vo.res.NoticeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -20,7 +20,7 @@ public class PolicyDocumentLibraryViewModel extends BaseViewModel<RepositoryImpl
         super(application);
     }
 
-    public LiveData<Resource<ListBaseResVo<NoticeResVo>>> getPublishedNotice(int page) {
-        return getRepository().getPublishedNotice(page);
+    public LiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getPolicyList(int page) {
+        return getRepository().getPolicyList(page);
     }
 }

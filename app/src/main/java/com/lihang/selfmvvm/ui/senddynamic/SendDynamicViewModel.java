@@ -4,8 +4,14 @@ import android.app.Application;
 
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
+import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
+
+import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LiveData;
+import okhttp3.MultipartBody;
 
 /**
  * created by zhangxianpeng
@@ -17,5 +23,13 @@ public class SendDynamicViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
-
+    /**
+     * 多文件上传
+     *
+     * @param parts
+     * @return
+     */
+    public LiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
+        return getRepository().uploadMultyFile(parts);
+    }
 }

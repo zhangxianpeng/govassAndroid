@@ -1,13 +1,13 @@
 package com.lihang.selfmvvm.vo.model;
 
 public class FriendGridItemVo {
-    private int imageRes;
+    private String imageRes;
 
-    public int getImageRes() {
+    public String getImageRes() {
         return imageRes;
     }
 
-    public void setImageRes(int imageRes) {
+    public void setImageRes(String imageRes) {
         this.imageRes = imageRes;
     }
 }

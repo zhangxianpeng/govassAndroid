@@ -77,7 +77,7 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         settings.setSupportZoom(true); // 支持缩放
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        if (dm.densityDpi > 240 ) {
+        if (dm.densityDpi > 240) {
             settings.setDefaultFontSize(40); //可以取1-72之间的任意值，默认16
         }
         binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);

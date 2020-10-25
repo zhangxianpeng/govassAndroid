@@ -9,12 +9,14 @@ import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
+import com.lihang.selfmvvm.vo.req.IdReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
 import com.lihang.selfmvvm.vo.req.RegisterReqVo;
 import com.lihang.selfmvvm.vo.req.RemoveUserReqVo;
 import com.lihang.selfmvvm.vo.res.BaseGroupResVo;
 import com.lihang.selfmvvm.vo.res.CsDataInfoVo;
+import com.lihang.selfmvvm.vo.res.DynamicVo;
 import com.lihang.selfmvvm.vo.res.EnpriceOdVo;
 import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.GroupDetailsResVo;
@@ -495,12 +497,48 @@ public interface RetrofitApiService {
     @POST("sys/msg/readMsg/{id}")
     Observable<ResponModel<MsgMeResVo>> transferReadFlag(@Path("id") int id);
 
-    //----------------------------------------------------政企通 公告 api------------------------------------------------------------
+    /**
+     * 公告
+     *
+     * @param page
+     * @return
+     */
     @GET("sys/notice/list-published")
     Observable<ResponModel<ListBaseResVo<NoticeResVo>>> getPublishedNotice(@Query("page") int page);
 
+    /**
+     * 获取政府文件库列表
+     *
+     * @param page
+     * @return
+     */
+    @GET("sys/policy/list-published")
+    Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getPolicyList(@Query("page") int page);
 
-    //----------------------------------------------------政企通 版本更新 api------------------------------------------------------------
+    /**
+     * 千企动态
+     *
+     * @param page
+     * @return
+     */
+    @GET("sys/enterprise-notice/list")
+    Observable<ResponModel<ListBaseResVo<DynamicVo>>> getDynamicList(@Query("page") int page, @Query("contentType") int contentType);
+
+    /**
+     * 点赞/修改点赞
+     *
+     * @param idReqVo
+     * @return
+     */
+    @POST("sys/enterprise-notice/like")
+    Observable<ResponModel<String>> likeDynamic(@Body IdReqVo idReqVo);
+
+    /**
+     * 版本更新
+     *
+     * @param device
+     * @return
+     */
     @GET("sys/app-version/lastest")
     Observable<ResponModel<VersionVo>> getNewVersion(@Query("device") int device);
 

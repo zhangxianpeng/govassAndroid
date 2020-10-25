@@ -36,7 +36,6 @@ public class UserFragment extends BaseFragment<UserFragmentViewModel, FragmentUs
     private String realName = "";
 
     private NewIOSAlertDialog changeAccountDialog;
-    private NewIOSAlertDialog exitDialog;
 
     @Override
     protected int getContentViewId() {

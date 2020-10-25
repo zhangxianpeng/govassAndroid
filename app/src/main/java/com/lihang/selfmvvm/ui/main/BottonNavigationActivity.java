@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.databinding.ActivityBottonNavigationBinding;
 import com.lihang.selfmvvm.ui.fragment.DynamicFragment;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
+import com.lihang.selfmvvm.ui.fragment.PolicyDocumentLibraryFragment;
 import com.lihang.selfmvvm.ui.fragment.UserFragment;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
@@ -113,20 +114,20 @@ public class BottonNavigationActivity extends BaseActivity<BottomNavigationViewM
 
     private void updateUi(boolean isGovernment) {
         if (isGovernment) {
-            tabText = new String[]{"首页", "千企动态", "通讯录", "个人中心"};
-            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_dynamic, R.mipmap.tabar_default_address, R.mipmap.tabar_default_home};
+            tabText = new String[]{"政企工作间", "千企动态", "通讯录", "政策文件库"};
+            normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_dynamic, R.mipmap.tabar_default_address, R.mipmap.tabar_default_user};
             selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_dynamic, R.mipmap.tabar_selected_address, R.mipmap.tabar_selected_user};
             fragments.add(new HomeFragment());
             fragments.add(new DynamicFragment());
             fragments.add(new MsgFragment());
-            fragments.add(new UserFragment());
+            fragments.add(new PolicyDocumentLibraryFragment());
         } else {
-            tabText = new String[]{"首页", "千企动态", "个人中心"};
+            tabText = new String[]{"政企工作间", "千企动态", "政策文件库"};
             normalIcon = new int[]{R.mipmap.tabar_default_home, R.mipmap.tabar_default_dynamic, R.mipmap.tabar_default_home};
             selectIcon = new int[]{R.mipmap.tabar_selected_home, R.mipmap.tabar_selected_dynamic, R.mipmap.tabar_selected_user};
             fragments.add(new HomeFragment());
             fragments.add(new DynamicFragment());
-            fragments.add(new UserFragment());
+            fragments.add(new PolicyDocumentLibraryFragment());
         }
 
         binding.navigationBar.titleItems(tabText)

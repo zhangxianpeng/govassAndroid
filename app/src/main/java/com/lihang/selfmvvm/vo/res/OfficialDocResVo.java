@@ -1,6 +1,7 @@
 package com.lihang.selfmvvm.vo.res;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class OfficialDocResVo implements Serializable {
 //     "id": 14,
@@ -34,7 +35,7 @@ public class OfficialDocResVo implements Serializable {
     private String lastUpdateTime;
     private String createUser;
     private String createTime;
-    private String attachmentList;
+    private List<AttachmentResVo> attachmentList;
     private String officialDocumentLabelEntityList;
     private String officialDocumentEnterpriseEntityList;
 
@@ -142,11 +143,11 @@ public class OfficialDocResVo implements Serializable {
         this.createTime = createTime;
     }
 
-    public String getAttachmentList() {
+    public List<AttachmentResVo> getAttachmentList() {
         return attachmentList;
     }
 
-    public void setAttachmentList(String attachmentList) {
+    public void setAttachmentList(List<AttachmentResVo> attachmentList) {
         this.attachmentList = attachmentList;
     }
 
