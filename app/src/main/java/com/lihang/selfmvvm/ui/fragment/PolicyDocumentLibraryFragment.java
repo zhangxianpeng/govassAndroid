@@ -75,6 +75,7 @@ public class PolicyDocumentLibraryFragment extends BaseFragment<PolicyDocumentLi
                     Bundle bundle = new Bundle();
                     bundle.putString("uiflag", "policy");
                     bundle.putSerializable("noticeResVo", noticeResVo);
+                    bundle.putInt("id", noticeResVo.getId());
                     ActivityUtils.startActivityWithBundle(getActivity(), MsgDetailActivity.class, bundle);
                 });
             }

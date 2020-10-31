@@ -3,25 +3,6 @@ package com.lihang.selfmvvm.vo.res;
 import java.io.Serializable;
 
 public class EnterpriseVo implements Serializable {
-//     "id": 1,
-//             "enterpriseName": "广西震铄木业有限公司",
-//             "enterpriseCode": "9145012679130400XL",
-//             "legalRepresentative": "何晓宁",
-//             "businessType": "有限责任公司",
-//             "businessScope": "木片、原木、单板、细木工板、胶合板、集成材、木装饰线条加工销售",
-//             "registeredCapital": 6700.00,
-//             "setUpDate": "2006-07-12 00:00:00",
-//             "businessTerm": "长期",
-//             "address": "广西南宁宾阳县芦圩镇新模村委201号",
-//             "businessLicenseImg": "c38219b6-b922-40da-a5e0-5035e374f9fb.jpg",
-//             "authStatus": 1,
-//             "deleted": 0,
-//             "updateUserId": 1,
-//             "lastUpdateTime": "2020-07-01 01:02:48",
-//             "createUserId": 1,
-//             "createTime": "2020-07-01 00:00:06",
-//             "labelIdList": null
-
     private int id;
     private int questionnaireRecordId;
     private String enterpriseName;
@@ -41,6 +22,60 @@ public class EnterpriseVo implements Serializable {
     private int createUserId;
     private String createTime;
     private String labelIdList;
+    private String industryType;
+    private String economicAggregate;
+    private String introduction;
+    private String productionProject;
+    private String nonProductionProject;
+    private String employeeNum;
+
+    public String getIndustryType() {
+        return industryType;
+    }
+
+    public void setIndustryType(String industryType) {
+        this.industryType = industryType;
+    }
+
+    public String getEconomicAggregate() {
+        return economicAggregate;
+    }
+
+    public void setEconomicAggregate(String economicAggregate) {
+        this.economicAggregate = economicAggregate;
+    }
+
+    public String getIntroduction() {
+        return introduction;
+    }
+
+    public void setIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
+
+    public String getProductionProject() {
+        return productionProject;
+    }
+
+    public void setProductionProject(String productionProject) {
+        this.productionProject = productionProject;
+    }
+
+    public String getNonProductionProject() {
+        return nonProductionProject;
+    }
+
+    public void setNonProductionProject(String nonProductionProject) {
+        this.nonProductionProject = nonProductionProject;
+    }
+
+    public String getEmployeeNum() {
+        return employeeNum;
+    }
+
+    public void setEmployeeNum(String employeeNum) {
+        this.employeeNum = employeeNum;
+    }
 
     public int getQuestionnaireRecordId() {
         return questionnaireRecordId;

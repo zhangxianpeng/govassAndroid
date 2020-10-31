@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="130dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/list_bg">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="关于xxxxxxxxxxxxx"
+                android:textColor="#ff303030"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_creattime"
+                android:layout_width="120dp"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/dp_22"
+                android:text="2020-06-23 17:21"
+                android:textColor="#ff999999"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="42dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_toLeftOf="@+id/iv_right"
+            android:text="已回复"
+            android:textColor="#fff50000"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_right"
+            android:layout_width="@dimen/dp_22"
+            android:layout_height="@dimen/dp_22"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@mipmap/btn_gray_right" />
+
+    </RelativeLayout>
+</LinearLayout>

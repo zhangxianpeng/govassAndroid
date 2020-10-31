@@ -17,14 +17,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
-import com.lihang.selfmvvm.adapter.MyAdapter;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivitySendDynamicBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
@@ -32,8 +30,11 @@ import com.lihang.selfmvvm.utils.CommonUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.model.FriendGridItemVo;
+import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -45,8 +46,13 @@ import java.util.Locale;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.core.os.EnvironmentCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+
+import static com.lihang.selfmvvm.base.BaseConstant.ADD_ICON_URL;
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 /**
  * created by zhangxianpeng
@@ -54,10 +60,8 @@ import okhttp3.RequestBody;
  */
 public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, ActivitySendDynamicBinding> implements TextWatcher, PopupWindow.OnDismissListener {
 
-    //是否纯文字
-    private boolean isOnlyWord = false;
-
-    private List<AttachmentResVo> attachmentResVoList = new ArrayList<>();
+    //照片adapter
+    private CommonAdapter picAdapter;
 
     private PopupWindow commonPop;
 
@@ -70,14 +74,15 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
     // 是否是Android 10以上手机
     private boolean isAndroidQ = Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q;
 
-    //gridView Adapter
-    private BaseAdapter mAdapter = null;
-
-
     //需要上传的图片列表
     private List<AttachmentResVo> attachmentList = new ArrayList<>();
+
     //前端展示的图片列表
     private ArrayList<FriendGridItemVo> mData = new ArrayList<>();
+
+    private AddDynamicReqVo addDynamicReqVo = new AddDynamicReqVo();
+
+    private int contentType = -1;
 
     private static final int CAMERA_REQUEST_CODE = 1001;
     private static final int RC_CHOOSE_PHOTO = 1002;
@@ -89,24 +94,35 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
 
     @Override
     protected void processLogic() {
-        isOnlyWord = true;
-        changeView(isOnlyWord);
         initGridAdapter();
+        contentType= getIntent().getIntExtra("contentType",-1);
     }
 
     private void initGridAdapter() {
-        mAdapter = new MyAdapter<FriendGridItemVo>(mData, R.layout.grid_item_friend) {
+        //默认的+号
+        FriendGridItemVo friendGridItemVo = new FriendGridItemVo();
+        friendGridItemVo.setImageRes(ADD_ICON_URL);
+        mData.add(friendGridItemVo);
+        picAdapter = new CommonAdapter<FriendGridItemVo>(getContext(), R.layout.grid_item_friend, mData) {
             @Override
-            public void bindView(ViewHolder holder, FriendGridItemVo obj) {
+            protected void convert(ViewHolder holder, FriendGridItemVo friendGridItemVo, int position) {
                 ImageView imageView = holder.getView(R.id.img_icon);
-                Glide.with(getContext()).load(obj.getImageRes()).placeholder(R.mipmap.default_tx_img)
-                        .error(R.mipmap.default_tx_img).into(imageView);
+                if (position == 0) {
+                    Glide.with(getContext()).load(friendGridItemVo.getImageRes()).placeholder(R.mipmap.btn_addimages)
+                            .error(R.mipmap.btn_addimages).into(imageView);
+                } else {
+                    Glide.with(getContext()).load(friendGridItemVo.getImageRes()).placeholder(R.mipmap.default_tx_img)
+                            .error(R.mipmap.default_tx_img).into(imageView);
+                }
+                holder.setOnClickListener(R.id.img_icon, view -> {
+                    if (position == 0) {
+                        showPicDialog(view);
+                    }
+                });
             }
         };
-        binding.myGridView.setAdapter(mAdapter);
-    }
-
-    private void changeView(boolean isOnlyWord) {
+        binding.rvPic.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        binding.rvPic.setAdapter(picAdapter);
     }
 
     @Override
@@ -114,7 +130,6 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
         binding.tvCancel.setOnClickListener(this::onClick);
         binding.btnSend.setOnClickListener(this::onClick);
         binding.etDynamic.addTextChangedListener(this);
-        binding.ivAdd.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -124,8 +139,6 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
             case R.id.tv_cancel:
                 onBackPressed();
                 break;
-            case R.id.iv_add:
-                showPicDialog(view);
             case R.id.btn_send:
                 sendDynamic();
                 break;
@@ -325,7 +338,6 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
             res.handler(new OnCallback<List<UploadAttachmentResVo>>() {
                 @Override
                 public void onSuccess(List<UploadAttachmentResVo> data) {
-                    mData.clear();
                     List<AttachmentResVo> newList = new ArrayList<>();
                     for (UploadAttachmentResVo uploadAttachmentResVo : data) {
                         AttachmentResVo attachmentResVo = new AttachmentResVo();
@@ -334,10 +346,12 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
                         newList.add(attachmentResVo);
 
                         FriendGridItemVo friendGridItemVo = new FriendGridItemVo();
-                        friendGridItemVo.setImageRes(uploadAttachmentResVo.getFilePath());
+                        friendGridItemVo.setImageRes(DEFAULT_SERVER + DEFAULT_FILE_SERVER + uploadAttachmentResVo.getFilePath());
                         mData.add(friendGridItemVo);
-                        if (mAdapter != null) mAdapter.notifyDataSetChanged();
                     }
+
+                    addDynamicReqVo.setAttachmentList(newList);
+                    if (picAdapter != null) picAdapter.notifyDataSetChanged();
                 }
             });
         });
@@ -371,10 +385,23 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
         String dynamicContent = binding.etDynamic.getText().toString().trim();
         if (!TextUtils.isEmpty(dynamicContent)) {
             binding.btnSend.setEnabled(true);
+        } else {
+            binding.btnSend.setEnabled(false);
         }
     }
 
     private void sendDynamic() {
-
+        addDynamicReqVo.setContent(binding.etDynamic.getText().toString().trim());
+        addDynamicReqVo.setContentType(contentType);
+        addDynamicReqVo.setTitle("android 界面没有标题输入框");
+        mViewModel.saveDynamic(addDynamicReqVo).observe(this, res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    ToastUtils.showToast("发布成功，后台审核通过后方可显示");
+                    finish();
+                }
+            });
+        });
     }
 }

@@ -1,6 +1,5 @@
 package com.lihang.selfmvvm.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,13 +8,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
-import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackActivity;
+import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackListActivity;
 import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
 import com.lihang.selfmvvm.ui.enpriceofficedoc.EnpriceODActivity;
 import com.lihang.selfmvvm.ui.enpriceofficedoc.GovermentEnpriceODActivity;
@@ -34,7 +34,6 @@ import com.lihang.selfmvvm.ui.userinfo.UserInfoActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.DensityUtils;
-import com.lihang.selfmvvm.utils.GlideImageLoader;
 import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.utils.ToastUtils;
@@ -47,9 +46,6 @@ import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.stx.xhb.androidx.XBanner;
 import com.stx.xhb.androidx.entity.LocalImageInfo;
-import com.youth.banner.BannerConfig;
-import com.youth.banner.Transformer;
-import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +72,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     private List<HomeMenuBean> homeMenuPathList = new ArrayList<>();
 
     private List<MsgMeResVo> projectList = new ArrayList<>();
-
     private NewIOSAlertDialog myDialog;
 
     //默认加载页码
@@ -131,7 +126,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                     ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
                     break;
                 case 3:  //服务新功能
-                    ActivityUtils.startActivity(getContext(), FeedBackActivity.class);
+                    ActivityUtils.startActivity(getContext(), FeedBackListActivity.class);
                     break;
                 case 4:  //党建空卡片
                     break;
@@ -192,8 +187,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
                 @Override
                 public void onFailure(String msg) {
-
-
                 }
             });
         });
@@ -293,50 +286,20 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
             res.handler(new OnCallback<List<ImageDataInfo>>() {
                 @Override
                 public void onSuccess(List<ImageDataInfo> data) {
-                    bannerImagePathList.clear();
-                    bannerTitleList.clear();
+                    bannerDataSourceList.clear();
+                    bannerDataSourceList.addAll(data);
+                    List<ImageView> list = new ArrayList<>();
                     for (int i = 0; i < data.size(); i++) {
-                        bannerDataSourceList.addAll(data);
-                        bannerImagePathList.add(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.get(i).getImageUrl());
-                        bannerTitleList.add("");
+                        ImageView imageView = new ImageView(getActivity());
+                        imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));
+                        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+                        Glide.with(getActivity()).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + data.get(i).getImageUrl()).placeholder(R.mipmap.default_img)
+                                .error(R.mipmap.default_img).into(imageView);
+                        list.add(imageView);
                     }
-                    initBannerWidget();
+                    binding.viewflipper.setViews(list);
                 }
             });
-        });
-    }
-
-    private void initBannerWidget() {
-        //样式设置
-        binding.banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
-        //设置图片加载器
-        binding.banner.setImageLoader(new GlideImageLoader());
-        //设置轮播的动画效果,里面有很多种特效,可以都看看效果。
-        binding.banner.setBannerAnimation(Transformer.ZoomOutSlide);
-        //设置轮播间隔时间
-        binding.banner.setDelayTime(3000);
-        //设置是否为自动轮播，默认是true
-        binding.banner.isAutoPlay(true);
-        //设置指示器的位置，小点点，居中显示
-        binding.banner.setIndicatorGravity(BannerConfig.LEFT);
-        //设置图片加载地址
-        binding.banner.setImages(bannerImagePathList)
-                .setBannerTitles(bannerTitleList)
-                .start();
-        binding.banner.setOnBannerListener(new OnBannerListener() {
-            @SuppressLint("NewApi")
-            @Override
-            public void OnBannerClick(int position) {
-                for (int i = 0; i < bannerDataSourceList.size(); i++) {
-                    if (i == position) {
-                        ImageDataInfo imageDataInfo = bannerDataSourceList.get(i);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("flag", "homebanner");
-                        bundle.putSerializable("imageDataInfo", imageDataInfo);
-                        ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
-                    }
-                }
-            }
         });
     }
 
@@ -409,6 +372,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     protected void setListener() {
         binding.flNewMsg.setOnClickListener(this::onClick);
         binding.floatingButton.setOnClickListener(this::onClick);
+        binding.viewflipper.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -418,8 +382,14 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                 break;
             case R.id.floatingButton:
-                //todo  跳转到个人中心
                 ActivityUtils.startActivity(getContext(), UserInfoActivity.class);
+                break;
+            case R.id.viewflipper:
+                ImageDataInfo imageDataInfo = bannerDataSourceList.get(binding.viewflipper.getDisplayedChild());
+                Bundle bundle = new Bundle();
+                bundle.putString("flag", "homebanner");
+                bundle.putSerializable("imageDataInfo", imageDataInfo);
+                ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
                 break;
             default:
                 break;

@@ -41,7 +41,7 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
         initAdapter();
 
         String uiflag = getIntent().getStringExtra("uiflag");
-        if (uiflag.equals("newmsg")) {
+        if (uiflag.equals("newmsg")) {  //新的消息
             MsgMeResVo msgMeResVo = (MsgMeResVo) getIntent().getSerializableExtra("msgMeResVo");
             int readFlag = msgMeResVo.getReadFlag();
             int id = msgMeResVo.getId();
@@ -50,17 +50,25 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
             getPlainMsgAttachmentList(msgMeResVo.getPrimaryId());
             getPlainMsdDetail(id);
             transferReadFlag(readFlag, id);
-        } else if (uiflag.equals("policy")) {
+        } else if (uiflag.equals("policy")) {  //政策文件
             OfficialDocResVo pilocyResVo = (OfficialDocResVo) getIntent().getSerializableExtra("noticeResVo");
             binding.tvTitle.setText(pilocyResVo.getTitle());
-            binding.tvTitle.setText(pilocyResVo.getContent());
-            List<AttachmentResVo> data = pilocyResVo.getAttachmentList();
-            if (data != null && data.size() > 0) {
-                binding.cardView.setVisibility(View.VISIBLE);
-                attachmentList.clear();
-                attachmentList.addAll(transfer(data));
-                if (attachmentAdapter != null) attachmentAdapter.notifyDataSetChanged();
-            }
+            binding.tvContent.setText(pilocyResVo.getContent());
+            int id = getIntent().getIntExtra("id", -1);
+            mViewModel.getPolicyInfo(id).observe(this, res -> {
+                res.handler(new OnCallback<OfficialDocResVo>() {
+                    @Override
+                    public void onSuccess(OfficialDocResVo data) {
+                        List<AttachmentResVo> attachmentResVos = data.getAttachmentList();
+                        if (attachmentResVos != null && attachmentResVos.size() > 0) {
+                            binding.cardView.setVisibility(View.VISIBLE);
+                            attachmentList.clear();
+                            attachmentList.addAll(transfer(attachmentResVos));
+                            if (attachmentAdapter != null) attachmentAdapter.notifyDataSetChanged();
+                        }
+                    }
+                });
+            });
         }
     }
 
@@ -86,7 +94,11 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
                     //图片文件跳转到图片预览界面
                     if (plainMsgAttachmentListResVo.getName().endsWith("PNG") ||
                             plainMsgAttachmentListResVo.getName().endsWith("JPG") ||
-                            plainMsgAttachmentListResVo.getName().endsWith("JEPG")) {
+                            plainMsgAttachmentListResVo.getName().endsWith("JEPG") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("png") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("jpg") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("jepg")) {
+                        bundle.putString("fileName", plainMsgAttachmentListResVo.getName());
                         bundle.putString("imgUrl", plainMsgAttachmentListResVo.getUrl());
                         ActivityUtils.startActivityWithBundle(getContext(), BigPictureActivity.class, bundle);
                     } else {

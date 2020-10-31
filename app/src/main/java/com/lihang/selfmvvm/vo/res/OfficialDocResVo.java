@@ -4,24 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public class OfficialDocResVo implements Serializable {
-//     "id": 14,
-//             "title": "GGGGGGGGGG",
-//             "content": "<p>3434343</p>",
-//             "publishType": 1,
-//             "status": 0,
-//             "auditorId": null,
-//             "auditor": null,
-//             "auditOpinion": null,
-//             "deleted": 0,
-//             "updateUserId": null,
-//             "lastUpdateTime": null,
-//             "createUserId": 1,
-//             "createUser": "admin",
-//             "createTime": "2020-08-05 02:14:39",
-//             "attachmentList": null,
-//             "officialDocumentLabelEntityList": null,
-//             "officialDocumentEnterpriseEntityList": null
-
     private int id;
     private int publishType;
     private int status;

@@ -146,4 +146,7 @@
     <string name="policy_sender">发布者：%1$s</string>
     <string name="like_count">点赞%1$d次</string>
     <string name="feedback_title">政企会客间</string>
+    <string name="feedback_history">反馈历史</string>
+    <string name="dynamic_send_history">发布历史</string>
+    <string name="add_feed_back">新增反馈</string>
 </resources>

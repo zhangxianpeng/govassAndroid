@@ -15,6 +15,7 @@ import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.databinding.FragmentDynamicBinding;
 import com.lihang.selfmvvm.ui.senddynamic.SendDynamicActivity;
+import com.lihang.selfmvvm.ui.senddynamic.SendDynamicListActivity;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.model.FriendGridItemVo;
 import com.lihang.selfmvvm.vo.req.IdReqVo;
@@ -30,6 +31,9 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
+
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 /**
  * created by zhangxianpeng on 20201017
@@ -76,7 +80,7 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
             @Override
             protected void convert(ViewHolder holder, DynamicVo friend, int position) {
                 holder.setImageResource(R.id.iv_head, R.mipmap.default_tx_img);
-                holder.setText(R.id.tv_nick_name, String.valueOf(friend.getCreateUserId()));
+                holder.setText(R.id.tv_nick_name, friend.getEnterpriseName());
                 holder.setText(R.id.tv_send_time, friend.getCreateTime());
                 holder.setText(R.id.tv_content, friend.getContent());
                 holder.setText(R.id.tv_like_count, getString(R.string.like_count, friend.getLikeCount()));
@@ -112,7 +116,6 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
             res.handler(new OnCallback<ResponModel<String>>() {
                 @Override
                 public void onSuccess(ResponModel<String> data) {
-
                 }
             });
         });
@@ -129,7 +132,7 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
             @Override
             public void bindView(ViewHolder holder, FriendGridItemVo obj) {
                 ImageView imageView = holder.getView(R.id.img_icon);
-                Glide.with(getContext()).load(obj.getImageRes()).placeholder(R.mipmap.default_tx_img)
+                Glide.with(getContext()).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + obj.getImageRes()).placeholder(R.mipmap.default_tx_img)
                         .error(R.mipmap.default_tx_img).into(imageView);
             }
         };
@@ -145,11 +148,6 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
         page += 1;
         initData(page, contentType, false);
         binding.smartfreshlayout.finishLoadMore();
-    }
-
-    //切换点赞状态
-    private void switchLikeStatus(int position) {
-
     }
 
     private void initData(int page, int contentType, boolean isClearData) {
@@ -172,15 +170,13 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
         binding.tvDynamic.setOnClickListener(this::onClick);
         binding.tvBusiness.setOnClickListener(this::onClick);
         binding.btnSend.setOnClickListener(this::onClick);
-        binding.btnSend.setOnLongClickListener(view -> {
-            gotoSendDynamicPage();
-            return false;
-        });
+        binding.btnSendHistory.setOnClickListener(this::onClick);
     }
 
     private void gotoSendDynamicPage() {
         Intent intent = new Intent(getContext(), SendDynamicActivity.class);
-        startActivityForResult(intent, SKIP_TO_SEND_DYNAMIC);
+        intent.putExtra("contentType", contentType);
+        startActivity(intent);
     }
 
     @Override
@@ -194,7 +190,11 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
                 updateView(1);
                 break;
             case R.id.btn_send:
-//                ActivityUtils.startActivity(getContext(), SendDynamicActivity.class);
+                gotoSendDynamicPage();
+                break;
+            case R.id.btn_send_history:
+                Intent intent = new Intent(getContext(), SendDynamicListActivity.class);
+                startActivity(intent);
                 break;
         }
     }

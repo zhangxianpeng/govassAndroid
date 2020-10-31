@@ -5,6 +5,7 @@ import android.app.Application;
 import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
+import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 
 import java.util.List;
@@ -31,5 +32,15 @@ public class SendDynamicViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<List<UploadAttachmentResVo>>> uploadMultyFile(List<MultipartBody.Part> parts) {
         return getRepository().uploadMultyFile(parts);
+    }
+
+    /**
+     * 发布千企动态
+     *
+     * @param addDynamicReqVo
+     * @return
+     */
+    public LiveData<Resource<String>> saveDynamic(AddDynamicReqVo addDynamicReqVo) {
+        return getRepository().saveDynamic(addDynamicReqVo);
     }
 }

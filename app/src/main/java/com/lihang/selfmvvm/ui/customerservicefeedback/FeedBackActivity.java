@@ -10,7 +10,9 @@ import com.lihang.selfmvvm.adapter.CommunicateMsgAdapter;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityFeedBackBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
-import com.lihang.selfmvvm.vo.model.CommunicateMsgvO;
+import com.lihang.selfmvvm.utils.ToastUtils;
+import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
+import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
  */
 public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFeedBackBinding> implements TextWatcher {
 
-    private List<CommunicateMsgvO> msgList = new ArrayList<>();
+    private List<CommunicateMsgVo> msgList = new ArrayList<>();
     private CommunicateMsgAdapter msgAdapter;
 
+    private AddFeedBackReqVo addFeedBackReqVo;
+    //会话id
+    private int id = -1;
+    //状态
+    private int status;
 
     @Override
     protected int getContentViewId() {
@@ -39,6 +46,9 @@ public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFe
     }
 
     private void initData() {
+        id = getIntent().getIntExtra("id", -1);
+        status = getIntent().getIntExtra("status", -1);
+        if (id != -1) getCommunicateInfo(id);
     }
 
     private void initAdapter() {
@@ -52,6 +62,7 @@ public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFe
     protected void setListener() {
         binding.ivTitleBarBack.setOnClickListener(this::onClick);
         binding.etInput.addTextChangedListener(this);
+        binding.btnSend.setOnClickListener(this::onClick);
     }
 
     @Override
@@ -60,6 +71,9 @@ public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFe
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();
+                break;
+            case R.id.btn_send:
+                sendFeedBack();
                 break;
         }
     }
@@ -82,5 +96,52 @@ public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFe
     private void updateSendBtn() {
         String input = binding.etInput.getText().toString().trim();
         binding.btnSend.setEnabled(TextUtils.isEmpty(input) ? false : true);
+        if (status == 1) {
+            binding.btnSend.setEnabled(false);
+        }
+    }
+
+    private void sendFeedBack() {
+        addFeedBackReqVo = new AddFeedBackReqVo();
+        addFeedBackReqVo.setContent(binding.etInput.getText().toString().trim());
+        addFeedBackReqVo.setTitle("app无标题输入框");
+        mViewModel.saveFeedBack(addFeedBackReqVo).observe(this, res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    //请求info
+                    ToastUtils.showToast("消息反馈成功，请持续关注");
+                    finish();
+                }
+            });
+        });
+    }
+
+    private void getCommunicateInfo(int id) {
+        mViewModel.getFeedBackInfo(id).observe(this, res -> {
+            res.handler(new OnCallback<CommunicateMsgVo>() {
+                @Override
+                public void onSuccess(CommunicateMsgVo data) {
+                    msgList.clear();
+                    CommunicateMsgVo sendData = new CommunicateMsgVo();
+                    sendData.setSend(true);
+                    if (data != null) {
+                        sendData.setContent(data.getContent());
+                    }
+
+                    msgList.add(sendData);
+
+                    CommunicateMsgVo receiveData = new CommunicateMsgVo();
+                    receiveData.setSend(false);
+                    if (data != null) {
+                        receiveData.setAnswer(data.getAnswer());
+                        receiveData.setAttachmentList(data.getAttachmentList());
+                    }
+                    msgList.add(receiveData);
+
+                    if (msgAdapter != null) msgAdapter.notifyDataSetChanged();
+                }
+            });
+        });
     }
 }

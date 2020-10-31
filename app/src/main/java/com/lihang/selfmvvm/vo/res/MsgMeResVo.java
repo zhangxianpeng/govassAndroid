@@ -3,21 +3,6 @@ package com.lihang.selfmvvm.vo.res;
 import java.io.Serializable;
 
 public class MsgMeResVo implements Serializable {
-//    "id": 20,
-//            "userId": 1,
-//            "username": "admin",
-//            "title": "3434",
-//            "content": "34343",
-//            "type": 1,
-//            "primaryId": 19,
-//            "readFlag": 1,
-//            "readTime": "2020-08-09 22:27:11",
-//            "updateUserId": null,
-//            "lastUpdateTime": "2020-08-09 22:27:10",
-//            "createUserId": 1,
-//            "createUser": "admin",
-//            "createTime": "2020-08-09 20:25:18"
-
     private int id;
     private int userId;
     private String username;

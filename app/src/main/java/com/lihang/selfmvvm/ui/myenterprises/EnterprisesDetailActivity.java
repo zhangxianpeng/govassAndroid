@@ -58,6 +58,12 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                             binding.tvRegisteredCapital.setText(enterpriseVo.getRegisteredCapital());
                             binding.tvSetupDate.setText(enterpriseVo.getSetUpDate());
                             binding.tvBusinessScope.setText(enterpriseVo.getBusinessScope());
+                            binding.tvFenlei.setText(enterpriseVo.getIndustryType());
+                            binding.tvJingjizongliang.setText(enterpriseVo.getEconomicAggregate() + "元");
+                            binding.tvZongrenshu.setText(enterpriseVo.getEmployeeNum());
+                            binding.tvJianjie.setText(enterpriseVo.getIntroduction());
+                            binding.tvYitouchanxiangmu.setText(enterpriseVo.getProductionProject());
+                            binding.tvWeitouchanxiangmu.setText(enterpriseVo.getNonProductionProject());
                         } else {
                             binding.llEnter.setVisibility(View.GONE);
                         }
@@ -100,6 +106,7 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
                 Bundle bundle = new Bundle();
                 if (enterpriseVo != null) {
                     bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
+                    bundle.putString("fileName", enterpriseVo.getEnterpriseName());
                 }
                 ActivityUtils.startActivityWithBundle(this, BigPictureActivity.class, bundle);
                 break;

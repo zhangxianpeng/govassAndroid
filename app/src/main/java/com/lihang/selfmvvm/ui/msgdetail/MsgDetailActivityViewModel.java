@@ -6,6 +6,7 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 
 import java.util.List;
@@ -43,5 +44,15 @@ public class MsgDetailActivityViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<List<PlainMsgAttachmentListResVo>>> getPlainMsgAttachmentList(int id) {
         return getRepository().getPlainMsgAttachmentList(id);
+    }
+
+    /**
+     * 获取政策文件详情
+     *
+     * @param id
+     * @return
+     */
+    public LiveData<Resource<OfficialDocResVo>> getPolicyInfo(int id) {
+        return getRepository().getPolicyInfo(id);
     }
 }

@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityBigPictureBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
@@ -26,6 +27,9 @@ public class BigPictureActivity extends BaseActivity<BigPictureViewModel, Activi
     @Override
     protected void processLogic() {
         String imgUrl = getIntent().getStringExtra("imgUrl");
+        String fileName = getIntent().getStringExtra("fileName");
+        binding.tvMsg.setText(fileName);
+        LogUtils.d("zhangxianpeng===", DEFAULT_SERVER + DEFAULT_FILE_SERVER + imgUrl);
         Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + imgUrl).placeholder(R.mipmap.default_img)
                 .error(R.mipmap.default_img).into(binding.ivBigPicture);
     }

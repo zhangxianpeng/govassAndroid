@@ -12,4 +12,6 @@ public class BaseConstant {
     public static final String USER_LOGIN_HEAD_URL = "userLoginHeadUrl";
     public static final String USER_NICK_NAME = "userRealName";
     public static final String APK_URL = "apkUrl";
+
+    public static final String ADD_ICON_URL = "https://i.loli.net/2020/10/27/ywQqNRD9VrCXfnl.png";
 }

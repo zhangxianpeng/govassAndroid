@@ -5,6 +5,9 @@ import com.lihang.selfmvvm.bean.BannerBean;
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
+import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
+import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
@@ -516,6 +519,15 @@ public interface RetrofitApiService {
     Observable<ResponModel<ListBaseResVo<OfficialDocResVo>>> getPolicyList(@Query("page") int page);
 
     /**
+     * 获取政策文件库详情
+     *
+     * @param id
+     * @return
+     */
+    @GET("sys/policy/info/{id}")
+    Observable<ResponModel<OfficialDocResVo>> getPolicyInfo(@Path("id") int id);
+
+    /**
      * 千企动态
      *
      * @param page
@@ -523,6 +535,51 @@ public interface RetrofitApiService {
      */
     @GET("sys/enterprise-notice/list")
     Observable<ResponModel<ListBaseResVo<DynamicVo>>> getDynamicList(@Query("page") int page, @Query("contentType") int contentType);
+
+    /**
+     * 千企动态发布历史
+     *
+     * @param page
+     * @return
+     */
+    @GET("sys/enterprise-notice/list-me")
+    Observable<ResponModel<ListBaseResVo<DynamicVo>>> getDynamicHistoryList(@Query("page") int page);
+
+    /**
+     * 发布千企动态
+     *
+     * @param addDynamicReqVo
+     * @return
+     */
+    @POST("sys/enterprise-notice/save")
+    Observable<ResponModel<String>> saveDynamic(@Body AddDynamicReqVo addDynamicReqVo);
+
+    /**
+     * 新增反馈
+     *
+     * @param addFeedBackReqVo
+     * @return
+     */
+    @POST("sys/feedback/save")
+    Observable<ResponModel<String>> saveFeedBack(@Body AddFeedBackReqVo addFeedBackReqVo);
+
+    /**
+     * 获取反馈列表
+     *
+     * @param page
+     * @return
+     */
+    @GET("sys/feedback/list-me")
+    Observable<ResponModel<ListBaseResVo<CommunicateMsgVo>>> getFeedBackList(@Query("page") int page);
+
+    /**
+     * 获取会话内容
+     *
+     * @param id
+     * @return
+     */
+    @GET("sys/feedback/info/{id}")
+    Observable<ResponModel<CommunicateMsgVo>> getFeedBackInfo(@Path("id") int id);
 
     /**
      * 点赞/修改点赞

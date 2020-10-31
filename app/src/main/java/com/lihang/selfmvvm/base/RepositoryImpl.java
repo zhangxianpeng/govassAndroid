@@ -6,6 +6,9 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
+import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
+import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
+import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
 import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
@@ -320,12 +323,32 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getEnterpriseList(page), liveData);
     }
 
+    /**
+     * 获取反馈内容列表
+     *
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> getFeedBackList(int page) {
+        MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getFeedBackList(page), liveData);
+    }
+
+    /**
+     * 获取会话内容
+     *
+     * @param id
+     * @return
+     */
+    public MutableLiveData<Resource<CommunicateMsgVo>> getFeedBackInfo(int id) {
+        MutableLiveData<Resource<CommunicateMsgVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getFeedBackInfo(id), liveData);
+    }
 
     public MutableLiveData<Resource<String>> getMsgUnRead() {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getMsgUnRead(), liveData);
     }
-
 
 //    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getProjectList() {
 //        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
@@ -395,6 +418,16 @@ public class RepositoryImpl extends BaseModel {
     }
 
     /**
+     * 政策文件详情
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<OfficialDocResVo>> getPolicyInfo(int page) {
+        MutableLiveData<Resource<OfficialDocResVo>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPolicyInfo(page), liveData);
+    }
+
+    /**
      * 千企动态  contentType 0 企业  1  商业信息  status = 2 已审核
      *
      * @param page
@@ -403,6 +436,33 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> getDynamicList(int page, int contentType) {
         MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getDynamicList(page, contentType), liveData);
+    }
+
+    /**
+     * 千企动态发布历史
+     *
+     * @param page
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> getDynamicHistoryList(int page) {
+        MutableLiveData<Resource<ListBaseResVo<DynamicVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getDynamicHistoryList(page), liveData);
+    }
+
+    /**
+     * 发布千企动态
+     *
+     * @param addDynamicReqVo
+     * @return
+     */
+    public MutableLiveData<Resource<String>> saveDynamic(AddDynamicReqVo addDynamicReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().saveDynamic(addDynamicReqVo), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> saveFeedBack(AddFeedBackReqVo addFeedBackReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().saveFeedBack(addFeedBackReqVo), liveData);
     }
 
     /**
@@ -442,6 +502,12 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getMsgDetail(id), liveData);
     }
 
+    /**
+     * 更新阅读状态
+     *
+     * @param id
+     * @return
+     */
     public MutableLiveData<Resource<MsgMeResVo>> transferReadFlag(int id) {
         MutableLiveData<Resource<MsgMeResVo>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().transferReadFlag(id), liveData);
@@ -468,7 +534,6 @@ public class RepositoryImpl extends BaseModel {
         MutableLiveData<Resource<List<PlainMsgAttachmentListResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getPlainMsgAttachmentList(id), liveData);
     }
-
 
     /**
      * 待审核项目 （政府）
