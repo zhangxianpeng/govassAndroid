@@ -37,8 +37,6 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
      */
     private int page = 1;
 
-    private boolean isHaveDeclare = true;
-
     @Override
     protected int getContentViewId() {
         return R.layout.activity_my_declare;
@@ -127,15 +125,13 @@ public class MyDeclareActivity extends BaseActivity<MyDeclareViewModel, Activity
                 binding.viewProjectDeclare.setVisibility(View.VISIBLE);
                 binding.viewProjectDeclare.setBackgroundColor(R.color.tab_selected);
                 binding.viewMyDeclare.setVisibility(View.GONE);
-                isHaveDeclare = true;
-                getHaveDeclareProject(1,false);
+                getHaveDeclareProject(1,true);
                 break;
             case R.id.ll_my_declare:  //待审核
                 binding.viewProjectDeclare.setVisibility(View.GONE);
                 binding.viewMyDeclare.setVisibility(View.VISIBLE);
                 binding.viewMyDeclare.setBackgroundColor(R.color.tab_selected);
-                isHaveDeclare = false;
-                getWaitDeclareProject(1,false);
+                getWaitDeclareProject(1,true);
                 break;
             default:
                 break;

@@ -18,7 +18,7 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
-import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
+import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 import com.lihang.selfmvvm.vo.res.VersionVo;
 
 import java.util.List;
@@ -75,6 +75,17 @@ public class HomeFragmentViewModel extends BaseViewModel<RepositoryImpl> {
      */
     public LiveData<Resource<VersionVo>> getNewVersion(int device) {
         return getRepository().getNewVersion(device);
+    }
+
+    /**
+     * 获取搜索结果
+     *
+     * @param page
+     * @param searchValue
+     * @return
+     */
+    public LiveData<Resource<ListBaseResVo<SearchValueResVo>>> getSearchValue(int page, int limit, String searchValue) {
+        return getRepository().getSearchValue(page, limit,searchValue);
     }
 
 }

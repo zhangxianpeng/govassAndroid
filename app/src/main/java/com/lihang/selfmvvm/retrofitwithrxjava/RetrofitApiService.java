@@ -35,6 +35,7 @@ import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
+import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -544,6 +545,15 @@ public interface RetrofitApiService {
      */
     @GET("sys/enterprise-notice/list-me")
     Observable<ResponModel<ListBaseResVo<DynamicVo>>> getDynamicHistoryList(@Query("page") int page);
+
+    /**
+     * 获取搜索结果
+     *
+     * @param page
+     * @return
+     */
+    @GET("sys/common-search/list")
+    Observable<ResponModel<ListBaseResVo<SearchValueResVo>>> getSearchValue(@Query("page") int page,@Query("limit") int limit, @Query("query") String query);
 
     /**
      * 发布千企动态

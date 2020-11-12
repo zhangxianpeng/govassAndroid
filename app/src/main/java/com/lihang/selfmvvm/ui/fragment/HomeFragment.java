@@ -4,26 +4,24 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListPopupWindow;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.MyApplication;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
-import com.lihang.selfmvvm.bean.HomeMenuBean;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackListActivity;
-import com.lihang.selfmvvm.ui.customserver.CustomServerActivity;
-import com.lihang.selfmvvm.ui.enpriceofficedoc.EnpriceODActivity;
-import com.lihang.selfmvvm.ui.enpriceofficedoc.GovermentEnpriceODActivity;
-import com.lihang.selfmvvm.ui.fragment.adapter.HomeMenuAdapter;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
-import com.lihang.selfmvvm.ui.myenterprises.MyEnterprisesListActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
@@ -36,10 +34,10 @@ import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.DensityUtils;
 import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
-import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
+import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 import com.lihang.selfmvvm.vo.res.VersionVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -51,7 +49,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import static com.lihang.selfmvvm.base.BaseConstant.APK_URL;
@@ -62,23 +60,20 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
  * created by zhangxianpeng
  * 主界面 fragment
  */
-public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener {
-    private static final String TAG = "HomeFragment";
-    private HomeMenuAdapter homeMenuAdapter;
-    private ProjectListAdapter projectListAdapter;
-    private List<String> bannerImagePathList = new ArrayList<>();
-    private List<ImageDataInfo> bannerDataSourceList = new ArrayList<>();
-    private List<String> bannerTitleList = new ArrayList<>();
-    private List<HomeMenuBean> homeMenuPathList = new ArrayList<>();
+public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener, TextView.OnEditorActionListener {
 
+    private ProjectListAdapter projectListAdapter;
+    private List<ImageDataInfo> bannerDataSourceList = new ArrayList<>();
     private List<MsgMeResVo> projectList = new ArrayList<>();
     private NewIOSAlertDialog myDialog;
 
     //默认加载页码
     private int page = 1;
 
-    //是否删除数据源
-    private boolean isClearData = false;
+    private List<SearchValueResVo> searchValueResVos = new ArrayList<>();
+    private List<String> searchValueStrList = new ArrayList<>();
+
+    private static final int REQUEST_CODE = 0X100;
 
     @Override
     protected int getContentViewId() {
@@ -88,7 +83,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     @Override
     protected void processLogic(Bundle savedInstanceState) {
         initFreshLayout();
-        initMenuData();
         initMsgAdapter();
         initHorizontalSwipeView();
         if (TextUtils.isEmpty(MyApplication.getToken())) {
@@ -218,46 +212,13 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.smartfreshlayout.setOnLoadMoreListener(this::onLoadMore);
     }
 
-    private void initMenuAdapter(String unReadMsgCount) {
-        homeMenuAdapter = new HomeMenuAdapter(getContext(), homeMenuPathList, unReadMsgCount);
-        binding.rvMenu.setLayoutManager(new GridLayoutManager(getContext(), 4));
-        binding.rvMenu.setAdapter(homeMenuAdapter);
-        homeMenuAdapter.setOnItemClickListener((view, position) -> {
-            HomeMenuBean bean = homeMenuPathList.get(position);
-            if (bean.getTitle().equals(getString(R.string.questionnaire))) {
-                ActivityUtils.startActivity(getContext(), QuestionNaireActivity.class);
-            } else if (bean.getTitle().equals(getString(R.string.project_application))) {
-                if (CheckPermissionUtils.getInstance().isGovernment()) {
-                    ActivityUtils.startActivity(getContext(), ProjectActivity.class);
-                } else {
-                    ActivityUtils.startActivity(getContext(), ProjectDeclareActivity.class);
-                }
-            } else if (bean.getTitle().equals(getString(R.string.enterprise_account_management))) {
-                ToastUtils.showToast(getString(R.string.enterprise_account_management));
-            } else if (bean.getTitle().equals(getString(R.string.system_announcement))) {
-                ActivityUtils.startActivity(getContext(), OfficialDocListActivity.class);
-            } else if (bean.getTitle().equals(getString(R.string.contact_customer_service))) {
-                ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
-            } else if (bean.getTitle().equals(getString(R.string.my_business))) {
-                ActivityUtils.startActivity(getContext(), MyEnterprisesListActivity.class);
-            } else if (bean.getTitle().equals(getString(R.string.message_notification))) {
-                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
-            } else if (bean.getTitle().equals(getString(R.string.enprice_od))) {
-                if (CheckPermissionUtils.getInstance().isGovernment()) {
-                    ActivityUtils.startActivity(getContext(), GovermentEnpriceODActivity.class);
-                } else {
-                    ActivityUtils.startActivity(getContext(), EnpriceODActivity.class);
-                }
-            }
-        });
-    }
-
     private void getUnReadMsgCount() {
         mViewModel.getMsgUnRead().observe(getActivity(), res -> {
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
-                    initMenuAdapter(data);
+                    binding.badgeView.setVisibility(data.equals("0") ? View.GONE : View.VISIBLE);
+                    binding.badgeView.setText(data);
                 }
 
                 @Override
@@ -303,50 +264,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         });
     }
 
-    private void initMenuData() {
-        HomeMenuBean surveyBean = new HomeMenuBean();
-        surveyBean.setImageUrl(R.mipmap.home_ic_survey);
-        surveyBean.setTitle(getContext().getString(R.string.questionnaire));
-        homeMenuPathList.add(surveyBean);
-
-        HomeMenuBean declareBean = new HomeMenuBean();
-        declareBean.setImageUrl(R.mipmap.home_ic_declare);
-        declareBean.setTitle(getContext().getString(R.string.project_application));
-        homeMenuPathList.add(declareBean);
-
-        HomeMenuBean accountBean = new HomeMenuBean();
-        accountBean.setImageUrl(R.mipmap.home_ic_account);
-        accountBean.setTitle(getContext().getString(R.string.enterprise_account_management));
-        homeMenuPathList.add(accountBean);
-
-        HomeMenuBean announcementBean = new HomeMenuBean();
-        announcementBean.setImageUrl(R.mipmap.home_ic_announcement);
-        announcementBean.setTitle(getContext().getString(R.string.system_announcement));
-        homeMenuPathList.add(announcementBean);
-
-        HomeMenuBean callBean = new HomeMenuBean();
-        callBean.setImageUrl(R.mipmap.home_ic_call);
-        callBean.setTitle(getContext().getString(R.string.contact_customer_service));
-        homeMenuPathList.add(callBean);
-
-        HomeMenuBean mybusinessBean = new HomeMenuBean();
-        mybusinessBean.setImageUrl(R.mipmap.home_ic_mybusiness);
-        mybusinessBean.setTitle(getContext().getString(R.string.my_business));
-        if (CheckPermissionUtils.getInstance().isGovernment()) {
-            homeMenuPathList.add(mybusinessBean);
-        }
-
-        HomeMenuBean msgBean = new HomeMenuBean();
-        msgBean.setImageUrl(R.mipmap.home_ic_alerts);
-        msgBean.setTitle(getContext().getString(R.string.message_notification));
-        homeMenuPathList.add(msgBean);
-
-        HomeMenuBean odBean = new HomeMenuBean();
-        odBean.setImageUrl(R.mipmap.home_ic_send);
-        odBean.setTitle(getContext().getString(R.string.enprice_od));
-        homeMenuPathList.add(odBean);
-    }
-
     private void initMsgMeList(int page, boolean isClearData) {
         mViewModel.getMsgMeList(page).observe(getActivity(), res -> {
             res.handler(new OnCallback<ListBaseResVo<MsgMeResVo>>() {
@@ -373,6 +290,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.flNewMsg.setOnClickListener(this::onClick);
         binding.floatingButton.setOnClickListener(this::onClick);
         binding.viewflipper.setOnClickListener(this::onClick);
+        binding.etSearch.setOnEditorActionListener(this::onEditorAction);
     }
 
     @Override
@@ -382,7 +300,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                 break;
             case R.id.floatingButton:
-                ActivityUtils.startActivity(getContext(), UserInfoActivity.class);
+                startActivityForResult(new Intent(getActivity(), UserInfoActivity.class), REQUEST_CODE);
                 break;
             case R.id.viewflipper:
                 ImageDataInfo imageDataInfo = bannerDataSourceList.get(binding.viewflipper.getDisplayedChild());
@@ -393,6 +311,14 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 break;
             default:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == requestCode && resultCode == 3) {
+            getActivity().finish();
         }
     }
 
@@ -415,5 +341,55 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     public void onResume() {
         super.onResume();
         getUnReadMsgCount();
+    }
+
+    //监听回车按钮
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent event) {
+        String searchValue = binding.etSearch.getText().toString().trim();
+        if ((!TextUtils.isEmpty(searchValue) && event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+            search(searchValue);
+            return true;
+        }
+        return false;
+    }
+
+    private void search(String searchValue) {
+        mViewModel.getSearchValue(1, 100, searchValue).observe(this, res -> {
+            res.handler(new OnCallback<ListBaseResVo<SearchValueResVo>>() {
+                @Override
+                public void onSuccess(ListBaseResVo<SearchValueResVo> data) {
+                    searchValueResVos.clear();
+                    searchValueResVos.addAll(data.getList());
+                    searchValueStrList = change2StringList(searchValueResVos);
+                    showListPopulWindow(searchValueStrList);
+                }
+            });
+        });
+    }
+
+    private List<String> change2StringList(List<SearchValueResVo> searchValueResVos) {
+        List<String> newList = new ArrayList<>();
+        for (SearchValueResVo searchValueResVo : searchValueResVos) {
+            newList.add(searchValueResVo.getContent());
+        }
+        return newList;
+    }
+
+    private void showListPopulWindow(List<String> data) {
+        final ListPopupWindow listPopupWindow;
+        listPopupWindow = new ListPopupWindow(getContext());
+        listPopupWindow.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, data));
+        listPopupWindow.setAnchorView(binding.llSearchBar);
+        listPopupWindow.setModal(true);
+        listPopupWindow.setOnItemClickListener((adapterView, view, i, l) -> {
+            SearchValueResVo searchValueResVo = searchValueResVos.get(i);
+            Bundle bundle = new Bundle();
+            bundle.putString("flag", "commonSearch");
+            bundle.putSerializable("searchValueResVo", searchValueResVo);
+            ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
+            listPopupWindow.dismiss();
+        });
+        listPopupWindow.show();
     }
 }

@@ -23,9 +23,7 @@ import com.tencent.smtt.sdk.QbSdk;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
 
 public class MyApplication extends Application {
-
     private static MyApplication context;
-    private static User loginUser;
 
     static {
         //设置全局的Header构建器
@@ -75,26 +73,7 @@ public class MyApplication extends Application {
                 Log.e("snow", "x5初始化结果====" + b);
             }
         });
-
     }
-
-    public static User getLoginUser() {
-        if (loginUser == null) {
-            loginUser = PreferenceUtil.getByClass("user", User.class);
-        }
-        return loginUser;
-    }
-
-    public static void updateUser(User user) {
-        PreferenceUtil.putByClass("user", user);
-        loginUser = user;
-    }
-
-    public static void logOut() {
-        loginUser = null;
-        PreferenceUtil.clearByClass(User.class);
-    }
-
 
     public static Context getContext() {
         return context;

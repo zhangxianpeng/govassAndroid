@@ -8,7 +8,11 @@ import android.view.View;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityDeclareDetailBinding;
+import com.lihang.selfmvvm.ui.bigpicture.BigPictureActivity;
+import com.lihang.selfmvvm.ui.filepreview.FilePreviewActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
@@ -49,22 +53,42 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
 
     @Override
     protected void processLogic() {
+        initView();
         initAdapter();
         id = getIntent().getIntExtra("id", -1);
         getDetail(id);
     }
 
+    private void initView() {
+        binding.btnSubmit.setVisibility(CheckPermissionUtils.getInstance().isGovernment() ? View.VISIBLE : View.GONE);
+        binding.btnAdopt.setEnabled(CheckPermissionUtils.getInstance().isGovernment());
+        binding.btnNotadopt.setEnabled(CheckPermissionUtils.getInstance().isGovernment());
+    }
+
     private void initAdapter() {
         attachmentAdapter = new CommonAdapter<AttachmentResVo>(getContext(), R.layout.attachment_list_item, list) {
-
             @Override
             protected void convert(ViewHolder holder, AttachmentResVo attachmentResVo, int position) {
                 holder.setText(R.id.tv_file_path, attachmentResVo.getName());
                 holder.setVisible(R.id.tv_delete, false);
                 holder.setOnClickListener(R.id.rl_container, view -> {
                     Bundle bundle = new Bundle();
-                    bundle.putSerializable("attachmentResVo", attachmentResVo);
-//                    ActivityUtils.startActivityWithBundle(getContext(), PlainMsgDetailActivity.class, bundle);
+                    bundle.putString("plainMsgAttachmentUrl", attachmentResVo.getUrl());
+                    //图片文件跳转到图片预览界面
+                    if (attachmentResVo.getName().endsWith("PNG") ||
+                            attachmentResVo.getName().endsWith("JPG") ||
+                            attachmentResVo.getName().endsWith("JEPG") ||
+                            attachmentResVo.getName().endsWith("png") ||
+                            attachmentResVo.getName().endsWith("jpg") ||
+                            attachmentResVo.getName().endsWith("jepg")) {
+                        bundle.putString("fileName", attachmentResVo.getName());
+                        bundle.putString("imgUrl", attachmentResVo.getUrl());
+                        ActivityUtils.startActivityWithBundle(getContext(), BigPictureActivity.class, bundle);
+                    } else {
+                        bundle.putString("fileUrl", attachmentResVo.getUrl());
+                        bundle.putString("fileName", attachmentResVo.getName());
+                        ActivityUtils.startActivityWithBundle(getContext(), FilePreviewActivity.class, bundle);
+                    }
                 });
             }
         };
@@ -94,7 +118,7 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
                         binding.btnNotadopt.setTextColor(getContext().getColor(R.color.tab_selected));
                         binding.btnAdopt.setTextColor(getContext().getColor(R.color.tab_normal));
                     } else if (data.getStatus() == 0) { //未审核
-                        binding.btnSubmit.setVisibility(View.VISIBLE);
+                        binding.btnSubmit.setVisibility(CheckPermissionUtils.getInstance().isGovernment() ? View.VISIBLE : View.GONE);
                         binding.btnNotadopt.setClickable(true);
                         binding.btnAdopt.setClickable(true);
                     }
@@ -134,7 +158,7 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
             case R.id.ibtn_title_bar_back:
                 finish();
                 break;
-            case R.id.btn_adopt:
+            case R.id.btn_adopt: //通过
                 binding.btnNotadopt.setBackground(getContext().getDrawable(R.mipmap.ic_moren));
                 binding.btnAdopt.setBackground(getContext().getDrawable(R.mipmap.ic_pass));
                 binding.btnNotadopt.setTextColor(getContext().getColor(R.color.tab_normal));
@@ -142,7 +166,7 @@ public class DeclareDetailActivity extends BaseActivity<DeclareDetailViewModel, 
                 isClickPass = true;
                 isClickNoPass = false;
                 break;
-            case R.id.btn_notadopt:
+            case R.id.btn_notadopt:  //不通过
                 binding.btnNotadopt.setBackground(getContext().getDrawable(R.mipmap.ic_fail));
                 binding.btnAdopt.setBackground(getContext().getDrawable(R.mipmap.ic_moren));
                 binding.btnNotadopt.setTextColor(getContext().getColor(R.color.tab_selected));

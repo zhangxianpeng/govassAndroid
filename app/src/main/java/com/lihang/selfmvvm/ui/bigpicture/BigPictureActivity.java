@@ -18,7 +18,6 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
  */
 public class BigPictureActivity extends BaseActivity<BigPictureViewModel, ActivityBigPictureBinding> {
 
-
     @Override
     protected int getContentViewId() {
         return R.layout.activity_big_picture;

@@ -36,10 +36,8 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
  * 个人中心
  */
 public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, ActivityUserInfoBinding> {
-
     private String headUrl = "";
     private String realName = "";
-
     private NewIOSAlertDialog changeAccountDialog;
 
     @Override
@@ -131,7 +129,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
                     changeAccout();
                     break;
                 case R.id.rl_exit:
-                    logout(2);
+                    logout();
                     break;
                 case R.id.fl_new_msg:
                     ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
@@ -153,14 +151,10 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
         }).show();
     }
 
-    private void logout(int flag) {
+    private void logout() {
         changeAccountDialog = new NewIOSAlertDialog(getContext()).builder();
-        changeAccountDialog.setGone().setTitle("提示").setMsg("是否确定退出系统").setNegativeButton("取消", null).setPositiveButton("确定", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logoutAndClearToken();
-            }
-        }).show();
+        changeAccountDialog.setGone().setTitle("提示").setMsg("是否确定退出系统").setNegativeButton("取消", null)
+                .setPositiveButton("确定", view -> logoutAndClearToken()).show();
     }
 
     private void logoutAndClearToken() {
@@ -171,6 +165,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
                 @Override
                 public void onSuccess(String data) {
                     PreferenceUtil.remove(USER_LOGIN_TOKEN);
+                    setResult(3);
                     finish();
                 }
             });

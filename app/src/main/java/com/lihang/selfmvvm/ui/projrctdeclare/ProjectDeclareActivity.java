@@ -158,6 +158,7 @@ public class ProjectDeclareActivity extends BaseActivity<ProjectDeclareViewModel
                     @Override
                     public void onSuccess(String data) {
                         ToastUtils.showToast("项目申报添加成功");
+                        finish();
                     }
                 });
             });

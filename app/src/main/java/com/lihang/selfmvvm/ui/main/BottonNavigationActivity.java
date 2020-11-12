@@ -13,7 +13,6 @@ import com.lihang.selfmvvm.ui.fragment.DynamicFragment;
 import com.lihang.selfmvvm.ui.fragment.HomeFragment;
 import com.lihang.selfmvvm.ui.fragment.MsgFragment;
 import com.lihang.selfmvvm.ui.fragment.PolicyDocumentLibraryFragment;
-import com.lihang.selfmvvm.ui.fragment.UserFragment;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;

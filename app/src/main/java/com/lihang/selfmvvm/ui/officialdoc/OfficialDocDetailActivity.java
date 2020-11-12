@@ -19,6 +19,7 @@ import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
+import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 
 /**
  * created by zhangxianpeng
@@ -37,11 +38,12 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         NoticeResVo noticeResVo = (NoticeResVo) getIntent().getSerializableExtra("noticeResVo");  //公告
         ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");   //轮播图
         OfficialDocResVo officialDocResVo = (OfficialDocResVo) getIntent().getSerializableExtra("officialDocResVo");  //发文、收文
+        SearchValueResVo searchValueResVo = (SearchValueResVo) getIntent().getSerializableExtra("searchValueResVo");  //全局搜索
         if (flag.equals("homebanner")) {  //首页banner
             binding.tvTitle.setText(imageDataInfo.getTitle());
             if (imageDataInfo.getContentType() == 0) {
                 initNormalWebView(imageDataInfo.getContent());
-            } else {
+            } else {  //传地址
                 loadHtml(imageDataInfo.getContent());
             }
         } else if (flag.equals("noticelist")) {  //公告
@@ -54,6 +56,9 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         } else if (flag.equals("articallist")) {
             binding.tvTitle.setText(officialDocResVo.getTitle());
             initNormalWebView(officialDocResVo.getContent());
+        } else if (flag.equals("commonSearch")) { //全局搜索
+            binding.tvTitle.setText(searchValueResVo.getTitle());
+            initNormalWebView(searchValueResVo.getContent());
         }
     }
 
@@ -171,7 +176,11 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
     @Override
     public void onBackPressed() {
         if (binding.normalWebview.canGoBack()) {
-            binding.normalWebview.goBack();
+            if (binding.normalWebview.copyBackForwardList().getSize() == 2) {
+                finish();
+            } else {
+                binding.normalWebview.goBack();
+            }
         } else {
             super.onBackPressed();
         }

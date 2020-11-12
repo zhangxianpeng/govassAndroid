@@ -35,6 +35,7 @@ import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.lihang.selfmvvm.vo.res.ProjectResVo;
 import com.lihang.selfmvvm.vo.res.QuestionNaireItemResVo;
+import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 import com.lihang.selfmvvm.vo.res.UploadAttachmentResVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
@@ -419,6 +420,7 @@ public class RepositoryImpl extends BaseModel {
 
     /**
      * 政策文件详情
+     *
      * @param page
      * @return
      */
@@ -486,6 +488,16 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getNewVersion(device), liveData);
     }
 
+    /**
+     * 获取搜索结果
+     *
+     * @param searchValue
+     * @return
+     */
+    public MutableLiveData<Resource<ListBaseResVo<SearchValueResVo>>> getSearchValue(int page,int limit,String searchValue) {
+        MutableLiveData<Resource<ListBaseResVo<SearchValueResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getSearchValue(page,limit,searchValue), liveData);
+    }
 
     /**
      * 公文详情
