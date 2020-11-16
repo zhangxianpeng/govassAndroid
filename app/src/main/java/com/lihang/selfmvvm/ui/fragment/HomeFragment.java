@@ -27,6 +27,7 @@ import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
 import com.lihang.selfmvvm.ui.userinfo.UserInfoActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.DensityUtils;
 import com.lihang.selfmvvm.utils.PackageUtils;
@@ -34,7 +35,6 @@ import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.MsgMeResVo;
-import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 import com.lihang.selfmvvm.vo.res.VersionVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -57,7 +57,7 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
  * created by zhangxianpeng
  * 主界面 fragment
  */
-public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener, View.OnFocusChangeListener {
+public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener {
 
     private ProjectListAdapter projectListAdapter;
     private List<ImageDataInfo> bannerDataSourceList = new ArrayList<>();
@@ -273,7 +273,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 @Override
                 public void onFailure(String msg) {
                     myDialog = new NewIOSAlertDialog(getContext()).builder();
-                    myDialog.setGone().setTitle("温馨提示").setMsg(msg).setPositiveButton("确定", view -> getActivity().finish()).show();
+                    myDialog.setGone().setTitle("温馨提示").setCancelable(false).setMsg(msg).setPositiveButton("确定", view -> {
+                        ActivityUtils.startActivity(getActivity(), GovassLoginActivity.class);
+                        getActivity().finish();
+                    }).show();
                 }
             });
         });
@@ -284,11 +287,12 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.flNewMsg.setOnClickListener(this::onClick);
         binding.floatingButton.setOnClickListener(this::onClick);
         binding.viewflipper.setOnClickListener(this::onClick);
-        binding.etSearch.setOnFocusChangeListener(this);
+        binding.etSearch.setOnClickListener(this::onClick);
     }
 
     @Override
     public void onClick(View view) {
+        if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.fl_new_msg:
                 ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
@@ -302,6 +306,9 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 bundle.putString("flag", "homebanner");
                 bundle.putSerializable("imageDataInfo", imageDataInfo);
                 ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
+                break;
+            case R.id.et_search:
+                ActivityUtils.startActivity(getActivity(), GlobalSearchActivity.class);
                 break;
             default:
                 break;
@@ -335,13 +342,5 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
     public void onResume() {
         super.onResume();
         getUnReadMsgCount();
-    }
-
-
-    @Override
-    public void onFocusChange(View view, boolean b) {
-        if (b) {
-            ActivityUtils.startActivity(getActivity(), GlobalSearchActivity.class);
-        }
     }
 }

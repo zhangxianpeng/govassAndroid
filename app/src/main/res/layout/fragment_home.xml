@@ -36,6 +36,7 @@
                         android:layout_height="@dimen/dp_30"
                         android:layout_gravity="center"
                         android:layout_marginLeft="@dimen/dp_3"
+                        android:enabled="false"
                         android:layout_weight="8" />
 
                     <FrameLayout

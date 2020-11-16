@@ -68,6 +68,26 @@ public class RegisterReqVo implements Serializable {
 
     private String username;
 
+    private String realname;
+
+    public String getRealname() {
+        return realname;
+    }
+
+    public void setRealname(String realname) {
+        this.realname = realname;
+    }
+
+    private int enterpriseUserType;
+
+    public int getEnterpriseUserType() {
+        return enterpriseUserType;
+    }
+
+    public void setEnterpriseUserType(int enterpriseUserType) {
+        this.enterpriseUserType = enterpriseUserType;
+    }
+
     public String getAddress() {
         return address;
     }

@@ -19,6 +19,7 @@ import com.lihang.selfmvvm.common.SystemConst;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.ActivityGovassLoginactivityBinding;
 import com.lihang.selfmvvm.ui.main.BottonNavigationActivity;
+import com.lihang.selfmvvm.ui.register.RegisterActivity;
 import com.lihang.selfmvvm.ui.register.RegisterStepOneActivity;
 import com.lihang.selfmvvm.utils.AESUtils;
 import com.lihang.selfmvvm.utils.ActivityUtils;
@@ -163,7 +164,7 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                     doLogin();
                     break;
                 case R.id.tv_register:
-                    ActivityUtils.startActivity(getContext(), RegisterStepOneActivity.class);
+                    ActivityUtils.startActivity(getContext(), RegisterActivity.class);
                     finish();
                     break;
                 case R.id.iv_clear_input_pwd:

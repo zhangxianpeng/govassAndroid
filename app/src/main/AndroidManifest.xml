@@ -108,7 +108,8 @@
         <activity android:name=".ui.customerservicefeedback.FeedBackListActivity" />
         <activity android:name=".ui.senddynamic.SendDynamicListActivity" />
         <activity android:name=".ui.globalsearch.GlobalSearchActivity" />
-        <activity android:name=".ui.globalsearch.MoreSearchResultActivity"></activity>
+        <activity android:name=".ui.globalsearch.MoreSearchResultActivity" />
+        <activity android:name=".ui.register.RegisterActivity"></activity>
     </application>
 
 </manifest>
