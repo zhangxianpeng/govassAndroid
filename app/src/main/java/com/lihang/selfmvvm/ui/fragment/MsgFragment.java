@@ -85,7 +85,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
 
     private PopupWindow mailistPop;
 
-
     /**
      * 默认传入的参数
      * 政府用户

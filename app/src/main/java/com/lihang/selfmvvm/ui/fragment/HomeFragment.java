@@ -4,13 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListPopupWindow;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.MyApplication;
@@ -20,6 +16,7 @@ import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
 import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackListActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
+import com.lihang.selfmvvm.ui.globalsearch.GlobalSearchActivity;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
 import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
@@ -60,7 +57,7 @@ import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
  * created by zhangxianpeng
  * 主界面 fragment
  */
-public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener, TextView.OnEditorActionListener {
+public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHomeBinding> implements OnRefreshListener, OnLoadMoreListener, View.OnFocusChangeListener {
 
     private ProjectListAdapter projectListAdapter;
     private List<ImageDataInfo> bannerDataSourceList = new ArrayList<>();
@@ -69,9 +66,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
     //默认加载页码
     private int page = 1;
-
-    private List<SearchValueResVo> searchValueResVos = new ArrayList<>();
-    private List<String> searchValueStrList = new ArrayList<>();
 
     private static final int REQUEST_CODE = 0X100;
 
@@ -290,7 +284,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         binding.flNewMsg.setOnClickListener(this::onClick);
         binding.floatingButton.setOnClickListener(this::onClick);
         binding.viewflipper.setOnClickListener(this::onClick);
-        binding.etSearch.setOnEditorActionListener(this::onEditorAction);
+        binding.etSearch.setOnFocusChangeListener(this);
     }
 
     @Override
@@ -343,53 +337,11 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         getUnReadMsgCount();
     }
 
-    //监听回车按钮
+
     @Override
-    public boolean onEditorAction(TextView textView, int i, KeyEvent event) {
-        String searchValue = binding.etSearch.getText().toString().trim();
-        if ((!TextUtils.isEmpty(searchValue) && event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-            search(searchValue);
-            return true;
+    public void onFocusChange(View view, boolean b) {
+        if (b) {
+            ActivityUtils.startActivity(getActivity(), GlobalSearchActivity.class);
         }
-        return false;
-    }
-
-    private void search(String searchValue) {
-        mViewModel.getSearchValue(1, 100, searchValue).observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<SearchValueResVo>>() {
-                @Override
-                public void onSuccess(ListBaseResVo<SearchValueResVo> data) {
-                    searchValueResVos.clear();
-                    searchValueResVos.addAll(data.getList());
-                    searchValueStrList = change2StringList(searchValueResVos);
-                    showListPopulWindow(searchValueStrList);
-                }
-            });
-        });
-    }
-
-    private List<String> change2StringList(List<SearchValueResVo> searchValueResVos) {
-        List<String> newList = new ArrayList<>();
-        for (SearchValueResVo searchValueResVo : searchValueResVos) {
-            newList.add(searchValueResVo.getContent());
-        }
-        return newList;
-    }
-
-    private void showListPopulWindow(List<String> data) {
-        final ListPopupWindow listPopupWindow;
-        listPopupWindow = new ListPopupWindow(getContext());
-        listPopupWindow.setAdapter(new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, data));
-        listPopupWindow.setAnchorView(binding.llSearchBar);
-        listPopupWindow.setModal(true);
-        listPopupWindow.setOnItemClickListener((adapterView, view, i, l) -> {
-            SearchValueResVo searchValueResVo = searchValueResVos.get(i);
-            Bundle bundle = new Bundle();
-            bundle.putString("flag", "commonSearch");
-            bundle.putSerializable("searchValueResVo", searchValueResVo);
-            ActivityUtils.startActivityWithBundle(getContext(), OfficialDocDetailActivity.class, bundle);
-            listPopupWindow.dismiss();
-        });
-        listPopupWindow.show();
     }
 }

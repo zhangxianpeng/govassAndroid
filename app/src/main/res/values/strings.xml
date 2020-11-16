@@ -149,4 +149,5 @@
     <string name="feedback_history">反馈历史</string>
     <string name="dynamic_send_history">发布历史</string>
     <string name="add_feed_back">新增反馈</string>
+    <string name="check_more">查看更多(%1$s)</string>
 </resources>

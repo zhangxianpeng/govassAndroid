@@ -8,6 +8,8 @@ import com.google.gson.reflect.TypeToken;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -157,6 +159,105 @@ public final class PreferenceUtil {
         return sp.getAll();
     }
 
+    public static void putStrListValue(Context context, String key, List<String> strList) {
+        if (null == strList) {
+            return;
+        }
+        int size = strList.size();
+        putIntValue(context, key + "size", size);
+        for (int i = 0; i < size; i++) {
+            putStringValue(context, key + i, strList.get(i));
+        }
+    }
+
+    public static List<String> getStrListValue(Context context, String key) {
+        List<String> strList = new ArrayList<String>();
+        int size = getIntValue(context, key + "size", 0);
+        //Log.d("sp", "" + size);
+        for (int i = 0; i < size; i++) {
+            strList.add(getStringValue(context, key + i, null));
+        }
+        return strList;
+    }
+
+    public static int getIntValue(Context context, String s, int i) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        int value = sp.getInt(s, i);
+        return value;
+    }
+
+    public static String getStringValue(Context context, String s, String o) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String value = sp.getString(s, o);
+        return value;
+    }
+
+    public static void putIntValue(Context context, String s, int size) {
+        SharedPreferences.Editor sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).edit();
+        sp.putInt(s, size);
+        sp.commit();
+    }
+
+    public static void putStringValue(Context context, String s, String s1) {
+        SharedPreferences.Editor sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE).edit();
+        sp.putString(s, s1);
+        sp.commit();
+    }
+
+    public static void removeStrList(Context context, String key) {
+        int size = getIntValue(context, key + "size", 0);
+        if (0 == size) {
+            return;
+        }
+        removeKey(context, key + "size");
+        for (int i = 0; i < size; i++) {
+            removeKey(context, key + i);
+        }
+    }
+
+    public static void removeKey(Context context, String key) {
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.remove(key);
+        SharedPreferencesCompat.apply(editor);
+    }
+
+    private static class SharedPreferencesCompat {
+        private static final Method sApplyMethod = findApplyMethod();
+
+        /**
+         * 反射查找apply的方法
+         *
+         * @return
+         */
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        private static Method findApplyMethod() {
+            try {
+                Class clz = SharedPreferences.Editor.class;
+                return clz.getMethod("apply");
+            } catch (NoSuchMethodException e) {
+            }
+            return null;
+        }
+
+        /**
+         * 如果找到则使用apply执行，否则使用commit
+         *
+         * @param editor
+         */
+        public static void apply(SharedPreferences.Editor editor) {
+            try {
+                if (sApplyMethod != null) {
+                    sApplyMethod.invoke(editor);
+                    return;
+                }
+            } catch (IllegalArgumentException e) {
+            } catch (IllegalAccessException e) {
+            } catch (InvocationTargetException e) {
+            }
+            editor.commit();
+        }
+    }
 
     /**
      * 以下是保存类的方式，跟上面的FILE_NAME表不在一个表里
