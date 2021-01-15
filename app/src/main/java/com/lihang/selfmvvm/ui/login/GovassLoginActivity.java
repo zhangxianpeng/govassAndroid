@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListPopupWindow;
 
@@ -20,7 +19,6 @@ import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.ActivityGovassLoginactivityBinding;
 import com.lihang.selfmvvm.ui.main.BottonNavigationActivity;
 import com.lihang.selfmvvm.ui.register.RegisterActivity;
-import com.lihang.selfmvvm.ui.register.RegisterStepOneActivity;
 import com.lihang.selfmvvm.utils.AESUtils;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;

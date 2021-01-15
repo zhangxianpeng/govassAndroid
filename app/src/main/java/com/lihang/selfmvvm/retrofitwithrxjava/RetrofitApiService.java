@@ -12,6 +12,7 @@ import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
+import com.lihang.selfmvvm.vo.req.FillEnterpriseReqVo;
 import com.lihang.selfmvvm.vo.req.IdReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
@@ -553,7 +554,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/common-search/list")
-    Observable<ResponModel<ListBaseResVo<SearchValueResVo>>> getSearchValue(@Query("page") int page,@Query("limit") int limit, @Query("query") String query);
+    Observable<ResponModel<ListBaseResVo<SearchValueResVo>>> getSearchValue(@Query("page") int page, @Query("limit") int limit, @Query("query") String query);
 
     /**
      * 发布千企动态
@@ -563,6 +564,10 @@ public interface RetrofitApiService {
      */
     @POST("sys/enterprise-notice/save")
     Observable<ResponModel<String>> saveDynamic(@Body AddDynamicReqVo addDynamicReqVo);
+
+    //完善企业信息
+    @POST("sys/enterprise/fill")
+    Observable<ResponModel<String>> fillEnterpriseInfo(@Body FillEnterpriseReqVo enterpriseVo);
 
     /**
      * 新增反馈

@@ -1,8 +1,6 @@
 package com.lihang.selfmvvm.ui.register;
 
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
@@ -91,7 +89,7 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
             return;
         }
 
-        if(!getStringByUI(binding.etPassword).equals(getStringByUI(binding.etPasswordVerify))) {
+        if (!getStringByUI(binding.etPassword).equals(getStringByUI(binding.etPasswordVerify))) {
             ToastUtils.showToast(getContext().getString(R.string.pwd_not_equal));
             return;
         }
@@ -102,12 +100,12 @@ public class RegisterStepTwoActivity extends BaseActivity<RegisterStepTwoViewMod
         registerReqVo.setIdentityCard(getStringByUI(binding.etIdCard));
         registerReqVo.setPassword(AESUtils.encrypt(getStringByUI(binding.etPassword)));
 
-        mViewModel.register(registerReqVo).observe(this,res-> {
+        mViewModel.register(registerReqVo).observe(this, res -> {
             res.handler(new OnCallback<String>() {
                 @Override
                 public void onSuccess(String data) {
                     ToastUtils.showToast("注册成功");
-                    ActivityUtils.startActivity(RegisterStepTwoActivity.this,GovassLoginActivity.class);
+                    ActivityUtils.startActivity(RegisterStepTwoActivity.this, GovassLoginActivity.class);
                     finish();
                 }
 

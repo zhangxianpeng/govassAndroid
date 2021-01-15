@@ -13,6 +13,7 @@ import com.lihang.selfmvvm.vo.req.AddGroupReqVo;
 import com.lihang.selfmvvm.vo.req.AddOdReqVo;
 import com.lihang.selfmvvm.vo.req.AddProjectReqVo;
 import com.lihang.selfmvvm.vo.req.AuditReqVo;
+import com.lihang.selfmvvm.vo.req.FillEnterpriseReqVo;
 import com.lihang.selfmvvm.vo.req.IdReqVo;
 import com.lihang.selfmvvm.vo.req.LoginReqVo;
 import com.lihang.selfmvvm.vo.req.PlainMsgReqVo;
@@ -223,7 +224,6 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getAllEnterprise(), liveData);
     }
 
-
     public MutableLiveData<Resource<List<MemberDetailResVo>>> getEnterpriseFromId(int groupId) {
         MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getEnterpriseFromId(groupId), liveData);
@@ -349,6 +349,12 @@ public class RepositoryImpl extends BaseModel {
     public MutableLiveData<Resource<String>> getMsgUnRead() {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getMsgUnRead(), liveData);
+    }
+
+
+    public MutableLiveData<Resource<String>> fillEnterpriseInfo(FillEnterpriseReqVo enterpriseVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().fillEnterpriseInfo(enterpriseVo), liveData);
     }
 
 //    public MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> getProjectList() {

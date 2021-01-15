@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.text.TextUtils;
@@ -25,7 +24,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
-import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.databinding.ActivityRegisterStepOneBinding;
 import com.lihang.selfmvvm.ui.login.GovassLoginActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
@@ -34,11 +32,11 @@ import com.lihang.selfmvvm.utils.FileUtils;
 import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
-import com.lihang.selfmvvm.vo.req.RegisterReqVo;
+import com.lihang.selfmvvm.vo.req.FillEnterpriseReqVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -48,6 +46,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.core.os.EnvironmentCompat;
 
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
 public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewModel, ActivityRegisterStepOneBinding> implements PopupWindow.OnDismissListener {
     private static final String TAG = "RegisterStepOneActivity";
@@ -69,7 +69,11 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
     //是否选择的是头像
     private boolean isClickHead = false;
 
-    RegisterReqVo registerReqVo = new RegisterReqVo();
+    FillEnterpriseReqVo fillEnterpriseReqVo = new FillEnterpriseReqVo();
+
+    //设为全局变量
+    String businessLicenseImg = "";
+    int enterpriseId = -1;
 
     @Override
     protected int getContentViewId() {
@@ -78,7 +82,47 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
 
     @Override
     protected void processLogic() {
+        //先去获取一遍用户信息
+        mViewModel.getUserInfo().observe(this, res -> {
+            res.handler(new OnCallback<UserInfoVo>() {
+                @Override
+                public void onSuccess(UserInfoVo data) {
+                    if (data != null) {
+                        enterpriseId = data.getEnterpriseId();
+                        String enterpriseName = data.getEnterpriseEntity().getEnterpriseName();
+                        String enterpriseCode = data.getEnterpriseEntity().getEnterpriseCode();
+                        String legalRepresentative = data.getEnterpriseEntity().getLegalRepresentative();
+                        String businessType = data.getEnterpriseEntity().getBusinessType();
+                        String businessScope = data.getEnterpriseEntity().getBusinessScope();
+                        String registeredCapital = data.getEnterpriseEntity().getRegisteredCapital();
+                        String setUpDate = data.getEnterpriseEntity().getSetUpDate();
+                        String businessTerm = data.getEnterpriseEntity().getBusinessTerm();
+                        String address = data.getEnterpriseEntity().getAddress();
+                        businessLicenseImg = data.getEnterpriseEntity().getBusinessLicenseImg();
 
+                        binding.etCompanyName.setText(enterpriseName);
+                        binding.etCompanyCode.setText(enterpriseCode);
+                        binding.etLegalRepresentative.setText(legalRepresentative);
+                        binding.etBusinessType.setText(businessType);
+                        binding.etBusinessScope.setText(businessScope);
+                        binding.etBusinessTerm.setText(businessTerm);
+                        binding.etRegisteredCapital.setText(registeredCapital);
+                        binding.etSetUpDate.setText(setUpDate);
+                        binding.etComAddress.setText(address);
+                        if (!TextUtils.isEmpty(businessLicenseImg))
+                            binding.ivAdd.setVisibility(View.GONE);
+                        binding.ivPreview.setVisibility(View.VISIBLE);
+                        Glide.with(RegisterStepOneActivity.this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + businessLicenseImg).placeholder(R.mipmap.default_img)
+                                .error(R.mipmap.default_img).into(binding.ivPreview);
+                    }
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                    super.onFailure(msg);
+                }
+            });
+        });
     }
 
     @Override
@@ -89,7 +133,6 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         binding.tvLogin.setOnClickListener(mNoDoubleClickListener);
         binding.flAddCompanyFile.setOnClickListener(mNoDoubleClickListener);
         binding.etSetUpDate.setOnClickListener(mNoDoubleClickListener);
-
     }
 
     private NoDoubleClickListener mNoDoubleClickListener = new NoDoubleClickListener() {
@@ -198,7 +241,6 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
         return tempFile;
     }
 
-
     private void gotoNextStep() {
         if (TextUtils.isEmpty(getStringByUI(binding.etCompanyName))) {
             ToastUtils.showToast(getContext().getString(R.string.message_must));
@@ -245,18 +287,31 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
             return;
         }
 
-        registerReqVo.setEnterpriseName(getStringByUI(binding.etCompanyName));
-        registerReqVo.setAddress(getStringByUI(binding.etComAddress));
-        registerReqVo.setBusinessScope(getStringByUI(binding.etBusinessScope));
-        registerReqVo.setBusinessTerm(getStringByUI(binding.etBusinessTerm));
-        registerReqVo.setBusinessType(getStringByUI(binding.etBusinessType));
-        registerReqVo.setEnterpriseCode(getStringByUI(binding.etCompanyCode));
-        registerReqVo.setLegalRepresentative(getStringByUI(binding.etLegalRepresentative));
-        registerReqVo.setRegisteredCapital(getStringByUI(binding.etRegisteredCapital));
-        registerReqVo.setSetUpDate(getStringByUI(binding.etSetUpDate));
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("registerReqVo", registerReqVo);
-        ActivityUtils.startActivityWithBundle(this, RegisterStepTwoActivity.class, bundle);
+        fillEnterpriseReqVo.setEnterpriseName(getStringByUI(binding.etCompanyName));
+        fillEnterpriseReqVo.setAddress(getStringByUI(binding.etComAddress));
+        fillEnterpriseReqVo.setBusinessScope(getStringByUI(binding.etBusinessScope));
+        fillEnterpriseReqVo.setBusinessTerm(getStringByUI(binding.etBusinessTerm));
+        fillEnterpriseReqVo.setBusinessType(getStringByUI(binding.etBusinessType));
+        fillEnterpriseReqVo.setEnterpriseCode(getStringByUI(binding.etCompanyCode));
+        fillEnterpriseReqVo.setLegalRepresentative(getStringByUI(binding.etLegalRepresentative));
+        fillEnterpriseReqVo.setRegisteredCapital(getStringByUI(binding.etRegisteredCapital));
+        fillEnterpriseReqVo.setSetUpDate(getStringByUI(binding.etSetUpDate));
+        fillEnterpriseReqVo.setId(enterpriseId);
+        fillEnterpriseReqVo.setBusinessLicenseImg(businessLicenseImg);
+//        Bundle bundle = new Bundle();
+//        bundle.putSerializable("registerReqVo", registerReqVo);
+//        ActivityUtils.startActivityWithBundle(this, RegisterStepTwoActivity.class, bundle);
+
+        //提交企业信息
+        mViewModel.fillEnterpriseInfo(fillEnterpriseReqVo).observe(this, res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    ToastUtils.showToast("完善成功，待管理员审核通过后可正常使用！");
+                    finish();
+                }
+            });
+        });
     }
 
     private void showPicDialog(View rootView) {
@@ -364,10 +419,10 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
             res.handler(new OnCallback<UploadSingleResVo>() {
                 @Override
                 public void onSuccess(UploadSingleResVo data) {
-                    registerReqVo.setBusinessLicenseImg(data.getFilePath());
-                    if (isClickHead) {
-                        registerReqVo.setHeadUrl(data.getFilePath());
-                    }
+                    fillEnterpriseReqVo.setBusinessLicenseImg(data.getFilePath());
+//                    if (isClickHead) {
+//                        enterpriseVo.setHeadUrl(data.getFilePath());
+//                    }
                 }
             });
         });

@@ -6,7 +6,10 @@ import com.lihang.selfmvvm.base.BaseViewModel;
 import com.lihang.selfmvvm.base.RepositoryImpl;
 import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.vo.req.FillEnterpriseReqVo;
+import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
+import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
 import java.io.File;
 
@@ -29,4 +32,13 @@ public class RegisterStepOneViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().uploadSigleFile(type, file);
     }
 
+    //获取用户信息
+    public LiveData<Resource<UserInfoVo>> getUserInfo() {
+        return getRepository().getUserInfo();
+    }
+
+    //完善企业信息
+    public LiveData<Resource<String>> fillEnterpriseInfo(FillEnterpriseReqVo enterpriseVo) {
+        return getRepository().fillEnterpriseInfo(enterpriseVo);
+    }
 }

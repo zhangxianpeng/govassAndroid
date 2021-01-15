@@ -25,6 +25,7 @@ import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.projrctdeclare.ProjectDeclareActivity;
 import com.lihang.selfmvvm.ui.questionnaire.QuestionNaireActivity;
+import com.lihang.selfmvvm.ui.register.RegisterStepOneActivity;
 import com.lihang.selfmvvm.ui.userinfo.UserInfoActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
@@ -274,7 +275,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 public void onFailure(String msg) {
                     myDialog = new NewIOSAlertDialog(getContext()).builder();
                     myDialog.setGone().setTitle("温馨提示").setCancelable(false).setMsg(msg).setPositiveButton("确定", view -> {
-                        ActivityUtils.startActivity(getActivity(), GovassLoginActivity.class);
+                        ActivityUtils.startActivity(getActivity(), RegisterStepOneActivity.class);
                         getActivity().finish();
                     }).show();
                 }
