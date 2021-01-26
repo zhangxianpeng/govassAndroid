@@ -1,10 +1,12 @@
 package com.lihang.selfmvvm.utils;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
+
 import java.security.Key;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  * AES加密解密类 与前端统一key iv
@@ -31,6 +33,17 @@ public class AESUtils {
             byte[] decode = context.getBytes(CHARSET);
             byte[] bytes = createKeyAndIv(decode, Cipher.ENCRYPT_MODE);
             return Base64.getEncoder().encodeToString(bytes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String encryptAndroid(String context) {
+        try {
+            byte[] decode = context.getBytes(CHARSET);
+            byte[] bytes = createKeyAndIv(decode, Cipher.ENCRYPT_MODE);
+            return android.util.Base64.encodeToString(bytes, android.util.Base64.DEFAULT);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -76,15 +89,10 @@ public class AESUtils {
      * 主方法测试
      */
     public static void main(String[] args) {
-      /*  String context = "123456";
+        String context = "Aa@987654321";
         System.out.println("元数据" + context);
         String encrypt = encrypt(context);
-        System.out.println("加密之后：" + encrypt);
-//        String decrypt = decrypt(URLDecoder.decode("5Dnkd5vCD6EWgbXCreIgUQ==", "GBK"));
-        String decrypt = decrypt(encrypt);
-        System.out.println("解密之后：" + decrypt);
-        System.out.println(Encrypt.sha("7c4a8d09ca3762af61e59520943dc26494f8941b"));*/
-
+        System.out.println("JAVA加密之后：" + encrypt);
+        System.out.println("android加密之后：" + encryptAndroid(context));
     }
-
 }

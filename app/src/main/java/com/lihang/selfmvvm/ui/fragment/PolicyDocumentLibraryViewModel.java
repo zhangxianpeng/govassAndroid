@@ -23,4 +23,8 @@ public class PolicyDocumentLibraryViewModel extends BaseViewModel<RepositoryImpl
     public LiveData<Resource<ListBaseResVo<OfficialDocResVo>>> getPolicyList(int page) {
         return getRepository().getPolicyList(page);
     }
+
+    public LiveData<Resource<String>> getMsgUnRead() {
+        return getRepository().getMsgUnRead();
+    }
 }

@@ -187,6 +187,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
             long timestamp = System.currentTimeMillis();
             String time = formatter.format(new Date());
             String fileName = "crash-" + time + "-" + timestamp + ".log";
+            //直接写入文件存储
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 String path = "/sdcard/LianSou/";
                 File dir = new File(path);
@@ -194,6 +195,15 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                     dir.mkdirs();
                 }
                 FileOutputStream fos = new FileOutputStream(path + fileName);
+                fos.write(sb.toString().getBytes());
+                fos.close();
+            } else {
+                String crashFilePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/com.wuwei.govass/crash/";
+                File dir = new File(crashFilePath);
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+                FileOutputStream fos = new FileOutputStream(crashFilePath + fileName);
                 fos.write(sb.toString().getBytes());
                 fos.close();
             }

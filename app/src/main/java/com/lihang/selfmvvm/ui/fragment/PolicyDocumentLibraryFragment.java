@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.databinding.FragmentPolicyDocumentLibraryBinding;
 import com.lihang.selfmvvm.ui.msgdetail.MsgDetailActivity;
+import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
@@ -51,6 +52,23 @@ public class PolicyDocumentLibraryFragment extends BaseFragment<PolicyDocumentLi
     protected void processLogic(Bundle savedInstanceState) {
         initAdapter();
         initData(page, isClearData);
+        getUnReadMsgCount();
+    }
+
+    private void getUnReadMsgCount() {
+        mViewModel.getMsgUnRead().observe(getActivity(), res -> {
+            res.handler(new OnCallback<String>() {
+                @Override
+                public void onSuccess(String data) {
+                    binding.badgeView.setVisibility(data.equals("0") ? View.GONE : View.VISIBLE);
+                    binding.badgeView.setText(data);
+                }
+
+                @Override
+                public void onFailure(String msg) {
+                }
+            });
+        });
     }
 
     @Override
@@ -104,6 +122,7 @@ public class PolicyDocumentLibraryFragment extends BaseFragment<PolicyDocumentLi
         if (ButtonClickUtils.isFastClick()) return;
         switch (view.getId()) {
             case R.id.fl_new_msg:
+                ActivityUtils.startActivity(getContext(), NewMsgActivity.class);
                 break;
             default:
                 break;

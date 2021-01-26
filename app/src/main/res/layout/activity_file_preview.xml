@@ -31,8 +31,12 @@
                 android:id="@+id/tv_file_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="文件名"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/ibtn_title_bar_back"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginRight="@dimen/dp_10"
+                android:singleLine="true"
+                android:ellipsize="end"
                 android:textColor="#ff222222"
                 android:textSize="18sp" />
         </RelativeLayout>

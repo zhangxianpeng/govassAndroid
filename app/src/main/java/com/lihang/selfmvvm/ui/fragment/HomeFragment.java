@@ -218,7 +218,6 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
 
                 @Override
                 public void onFailure(String msg) {
-
                 }
             });
         });
