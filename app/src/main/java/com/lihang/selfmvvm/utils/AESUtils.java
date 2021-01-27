@@ -1,9 +1,8 @@
 package com.lihang.selfmvvm.utils;
 
+import android.util.Base64;
 import java.security.Key;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.Base64;
-
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -32,33 +31,7 @@ public class AESUtils {
         try {
             byte[] decode = context.getBytes(CHARSET);
             byte[] bytes = createKeyAndIv(decode, Cipher.ENCRYPT_MODE);
-            return Base64.getEncoder().encodeToString(bytes);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static String encryptAndroid(String context) {
-        try {
-            byte[] decode = context.getBytes(CHARSET);
-            byte[] bytes = createKeyAndIv(decode, Cipher.ENCRYPT_MODE);
-            return android.util.Base64.encodeToString(bytes, android.util.Base64.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
-     * 解密
-     */
-    public static String decrypt(String context) {
-        try {
-            Base64.Decoder decoder = Base64.getDecoder();
-            byte[] decode = decoder.decode(context);
-            byte[] bytes = createKeyAndIv(decode, Cipher.DECRYPT_MODE);
-            return new String(bytes, CHARSET);
+            return Base64.encodeToString(bytes,Base64.NO_WRAP);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,10 +62,10 @@ public class AESUtils {
      * 主方法测试
      */
     public static void main(String[] args) {
-        String context = "Aa@987654321";
-        System.out.println("元数据" + context);
-        String encrypt = encrypt(context);
-        System.out.println("JAVA加密之后：" + encrypt);
-        System.out.println("android加密之后：" + encryptAndroid(context));
+//        String context = "Aa@987654321";
+//        System.out.println("元数据" + context);
+//        String encrypt = encrypt(context);
+//        System.out.println("JAVA加密之后：" + encrypt);
+//        System.out.println("android加密之后：" + encryptAndroid(context));
     }
 }
