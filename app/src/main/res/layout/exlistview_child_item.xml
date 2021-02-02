@@ -31,7 +31,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_11"
             android:layout_toRightOf="@+id/iv_head"
-            android:text="计总强"
+            android:layout_toLeftOf="@+id/img_right"
+            android:layout_marginRight="@dimen/dp_5"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:textColor="#ff303030"
             android:textSize="14sp" />
     </RelativeLayout>

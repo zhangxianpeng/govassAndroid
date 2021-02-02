@@ -28,6 +28,4 @@ public class QuestionNaireOfGovermentViewModel extends BaseViewModel<RepositoryI
     public LiveData<Resource<ListBaseResVo<EnterpriseVo>>> getEnpriceList(int page, String status, int questionnaireRecordId) {
         return getRepository().getEnpriceList(page, status, questionnaireRecordId);
     }
-
-
 }

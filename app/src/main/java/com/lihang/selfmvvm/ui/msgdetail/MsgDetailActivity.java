@@ -1,13 +1,24 @@
 package com.lihang.selfmvvm.ui.msgdetail;
 
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.net.http.SslError;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityMsgDetailBinding;
 import com.lihang.selfmvvm.ui.bigpicture.BigPictureActivity;
 import com.lihang.selfmvvm.ui.filepreview.FilePreviewActivity;
+import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
@@ -16,6 +27,8 @@ import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgAttachmentListResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
+
+import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +54,10 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
         initAdapter();
 
         String uiflag = getIntent().getStringExtra("uiflag");
+
         if (uiflag.equals("newmsg")) {  //新的消息
+            binding.tvContent.setVisibility(View.VISIBLE);
+            binding.normalWebview.setVisibility(View.GONE);
             MsgMeResVo msgMeResVo = (MsgMeResVo) getIntent().getSerializableExtra("msgMeResVo");
             int readFlag = msgMeResVo.getReadFlag();
             int id = msgMeResVo.getId();
@@ -51,9 +67,11 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
             getPlainMsdDetail(id);
             transferReadFlag(readFlag, id);
         } else if (uiflag.equals("policy")) {  //政策文件
+            binding.tvContent.setVisibility(View.GONE);
+            binding.normalWebview.setVisibility(View.VISIBLE);
             OfficialDocResVo pilocyResVo = (OfficialDocResVo) getIntent().getSerializableExtra("noticeResVo");
             binding.tvTitle.setText(pilocyResVo.getTitle());
-            binding.tvContent.setText(pilocyResVo.getContent());
+            loadHtml(StringEscapeUtils.unescapeHtml4(pilocyResVo.getContent()));
             int id = getIntent().getIntExtra("id", -1);
             mViewModel.getPolicyInfo(id).observe(this, res -> {
                 res.handler(new OnCallback<OfficialDocResVo>() {
@@ -69,6 +87,64 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
                     }
                 });
             });
+        }
+    }
+
+    private void loadHtml(String content) {
+        WebSettings settings = binding.normalWebview.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setUseWideViewPort(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setSupportZoom(true); // 支持缩放
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        if (dm.densityDpi > 240) {
+            settings.setDefaultFontSize(40); //可以取1-72之间的任意值，默认16
+        }
+        binding.normalWebview.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        binding.normalWebview.setWebViewClient(new MyWebViewClient(this));
+        binding.normalWebview.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+            }
+        });
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.TEXT_AUTOSIZING);
+        } else {
+            settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
+        }
+        binding.normalWebview.loadData(content, "text/html;charset=utf-8", "utf-8");
+    }
+
+    static class MyWebViewClient extends WebViewClient {
+        private Activity activity;
+
+        public MyWebViewClient(Activity activity) {
+            this.activity = activity;
+        }
+
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+
+        @Override
+        public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            super.onPageStarted(view, url, favicon);
+        }
+
+        @Override
+        public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+            handler.proceed();
+            super.onReceivedSslError(view, handler, error);
+        }
+
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
         }
     }
 

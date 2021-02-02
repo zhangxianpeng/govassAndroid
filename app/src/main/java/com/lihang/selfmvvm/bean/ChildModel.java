@@ -21,7 +21,7 @@ public class ChildModel {
     private String name;
     private String userId;
 
-    public ChildModel(String headUrl, String name, String userId) {
+    public ChildModel(String headUrl, String name,String userId) {
         this.headUrl = headUrl;
         this.name = name;
         this.userId = userId;

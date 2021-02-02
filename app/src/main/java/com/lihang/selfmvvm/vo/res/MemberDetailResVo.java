@@ -31,6 +31,7 @@ public class MemberDetailResVo {
     private int userType;
     private String email;
     private String mobile;
+    private String enterpriseName;
     private int status;
     private int deleted;
     private String roleIdList;
@@ -39,6 +40,14 @@ public class MemberDetailResVo {
     private int createUserId;
     private String lastUpdateTime;
     private String createTime;
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
 
     public int getUserId() {
         return userId;

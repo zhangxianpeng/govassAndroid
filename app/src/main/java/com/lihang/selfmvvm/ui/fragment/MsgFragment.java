@@ -170,7 +170,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         childModels.clear();
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                            String realName = memberDetailResVo.getRealname();
+                                            String companyName = memberDetailResVo.getEnterpriseName();
+                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
                                         //打开分组
@@ -187,7 +190,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         childModels.clear();
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                            String realName = memberDetailResVo.getRealname();
+                                            String companyName = memberDetailResVo.getEnterpriseName();
+                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
                                         //打开分组
@@ -207,7 +213,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         childModels.clear();
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                            String realName = memberDetailResVo.getRealname();
+                                            String companyName = memberDetailResVo.getEnterpriseName();
+                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
                                         //打开分组
@@ -224,7 +233,10 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         childModels.clear();
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), memberDetailResVo.getRealname(), String.valueOf(memberDetailResVo.getUserId())));
+                                            String realName = memberDetailResVo.getRealname();
+                                            String companyName = memberDetailResVo.getEnterpriseName();
+                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
                                         //打开分组
