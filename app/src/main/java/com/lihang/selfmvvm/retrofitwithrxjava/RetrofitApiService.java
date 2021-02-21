@@ -351,12 +351,28 @@ public interface RetrofitApiService {
     Observable<ResponModel<List<MemberDetailResVo>>> getAllGovernment();
 
     /**
+     * 查询政府用户
+     * @param username
+     * @return
+     */
+    @GET("sys/user/listAllGovernment")
+    Observable<ResponModel<List<MemberDetailResVo>>> searchGovernmentUser(@Query("username") String username);
+
+    /**
      * 获取全部企业用户
      *
      * @return
      */
     @GET("sys/enterpriseuser/listAllEnterprise")
     Observable<ResponModel<List<MemberDetailResVo>>> getAllEnterprise();
+
+    /**
+     * 查询企业用户
+     * @param username
+     * @return
+     */
+    @GET("sys/enterpriseuser/listAllEnterprise")
+    Observable<ResponModel<List<MemberDetailResVo>>> searchEnterpriseUser(@Query("username") String username);
 
     /**
      * 获取政府某个分组下所有用户信息

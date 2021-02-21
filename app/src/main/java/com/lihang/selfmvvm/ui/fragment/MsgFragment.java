@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ import com.lihang.selfmvvm.customview.iosdialog.DialogUtil;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentMsgBinding;
 import com.lihang.selfmvvm.ui.communicate.CommunicateActivity;
+import com.lihang.selfmvvm.ui.fragment.adapter.UserSearchAdapter;
 import com.lihang.selfmvvm.ui.mailist.MemberManagerActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
@@ -124,6 +127,11 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      */
     private NewIOSAlertDialog deleteGroupDialog;
 
+    //用户搜索结果
+    private PopupWindow userSearchPop;
+    private ArrayList<MemberDetailResVo> searchResultList = new ArrayList<>();
+    private UserSearchAdapter userSearchAdapter;
+
     @Override
     protected int getContentViewId() {
         return R.layout.fragment_msg;
@@ -139,7 +147,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
      * 初始化控件
      */
     private void initView() {
-
         groupArray = new ArrayList<>();
         childArray = new ArrayList<>();
 
@@ -203,7 +210,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                             });
                         }
                     } else {  //根据id
-
                         if (defaultType == 0) {
                             mViewModel.getGovernmentFromId(Integer.parseInt(groupArray.get(groupPosition).getOnline())).observe(getActivity(), res -> {
                                 res.handler(new OnCallback<List<MemberDetailResVo>>() {
@@ -259,8 +265,71 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             return true;
         });
 
+        binding.etSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int i, KeyEvent event) {
+                if ((event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
+                    String key = binding.etSearch.getText().toString().trim();
+                    if (!TextUtils.isEmpty(key)) {
+                        searchUser(key);
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
     }
 
+    /**
+     * 搜索用户
+     *
+     * @param key 关键字
+     */
+    private void searchUser(String key) {
+        if (defaultType == 0) { //政府
+            mViewModel.searchGovernmentUser(key).observe(getActivity(), res -> {
+                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                    @Override
+                    public void onSuccess(List<MemberDetailResVo> data) {
+                        searchResultList.clear();
+                        searchResultList.addAll(data);
+                        showSearchResultListPop();
+                    }
+                });
+            });
+        } else { //企业
+            mViewModel.searchEnterpriseUser(key).observe(getActivity(), res -> {
+                res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                    @Override
+                    public void onSuccess(List<MemberDetailResVo> data) {
+                        searchResultList.clear();
+                        searchResultList.addAll(data);
+                        showSearchResultListPop();
+                    }
+                });
+            });
+        }
+    }
+
+    private void showSearchResultListPop() {
+        View view1 = getActivity().getLayoutInflater().inflate(R.layout.popu_search_user_result, null,false);
+        RecyclerView searchUserResultRv = (RecyclerView) view1.findViewById(R.id.rv_search_result);
+        userSearchAdapter = new UserSearchAdapter(getActivity(), searchResultList);
+        searchUserResultRv.setLayoutManager(new LinearLayoutManager(getContext()));
+        searchUserResultRv.setAdapter(userSearchAdapter);
+        userSearchPop = new PopupWindow(view1, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        userSearchPop.setTouchable(true);
+        userSearchPop.setBackgroundDrawable(new ColorDrawable(0x00000000));
+
+        userSearchAdapter.setOnItemClickListener((view, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("realName", searchResultList.get(position).getRealname());
+            ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
+            userSearchPop.dismiss();
+        });
+
+        userSearchPop.showAsDropDown(binding.etSearch, 0,0);
+    }
 
     /**
      * 初始化发消息界面
@@ -388,7 +457,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                             }
                         });
                     });
-
                 }
             }
         });
@@ -652,7 +720,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         sendMsgPop.setBackgroundDrawable(new BitmapDrawable());
         sendMsgPop.showAtLocation(rootView, Gravity.BOTTOM, 0, 0);
     }
-
 
     /**
      * 切换tab默认全部关闭，点击group 后重新去拉数据

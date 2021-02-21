@@ -58,6 +58,14 @@ public class MsgFragmentViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().getAllGovernment();
     }
 
+    public LiveData<Resource<List<MemberDetailResVo>>> searchGovernmentUser(String username) {
+        return getRepository().searchGovernmentUser(username);
+    }
+
+    public LiveData<Resource<List<MemberDetailResVo>>> searchEnterpriseUser(String username) {
+        return getRepository().searchEnterpriseUser(username);
+    }
+
     /**
      * 根据分组id获取分组下所有成员信息（政府）
      *

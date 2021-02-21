@@ -214,6 +214,17 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getAllGovernment(), liveData);
     }
 
+    //查询政府用户
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> searchGovernmentUser(String userName) {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().searchGovernmentUser(userName), liveData);
+    }
+
+    public MutableLiveData<Resource<List<MemberDetailResVo>>> searchEnterpriseUser(String userName) {
+        MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().searchEnterpriseUser(userName), liveData);
+    }
+
     public MutableLiveData<Resource<List<MemberDetailResVo>>> getGovernmentFromId(int groupId) {
         MutableLiveData<Resource<List<MemberDetailResVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getGovernmentFromId(groupId), liveData);

@@ -40,10 +40,10 @@
                 android:id="@+id/iv_add_group"
                 android:layout_width="@dimen/dp_15"
                 android:layout_height="@dimen/dp_15"
-                android:src="@mipmap/ic_increase"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_15"/>
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_15"
+                android:src="@mipmap/ic_increase" />
         </RelativeLayout>
 
         <EditText
@@ -80,7 +80,6 @@
                 android:textColor="#ff303030"
                 android:textSize="16sp" />
 
-
             <ImageView
                 android:id="@+id/iv_manage"
                 android:layout_width="@dimen/dp_20"
@@ -99,7 +98,6 @@
                 android:text="@string/send_msg"
                 android:textColor="#ff5379a0"
                 android:textSize="14sp" />
-
         </RelativeLayout>
 
         <View
@@ -122,15 +120,5 @@
             android:groupIndicator="@null"
             android:overScrollMode="never"
             android:scrollbars="none" />
-
-        <!--<androidx.recyclerview.widget.RecyclerView-->
-        <!--android:id="@+id/rv_group_user"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginLeft="@dimen/dp_26"-->
-        <!--android:layout_marginTop="@dimen/dp_5"-->
-        <!--android:layout_marginRight="@dimen/dp_15"-->
-        <!--android:overScrollMode="never"-->
-        <!--android:scrollbars="none" />-->
     </LinearLayout>
 </layout>
