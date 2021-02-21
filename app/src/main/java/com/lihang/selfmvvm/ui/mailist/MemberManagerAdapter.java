@@ -1,6 +1,7 @@
 package com.lihang.selfmvvm.ui.mailist;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,8 +53,9 @@ public class MemberManagerAdapter extends RecyclerView.Adapter<MemberManagerAdap
         MemberDetailResVo memberDetailResVo = memberDetailResVoList.get(position);
         Glide.with(context).load(memberDetailResVo.getHeadUrl()).placeholder(R.mipmap.default_tx_img)
                 .error(R.mipmap.default_tx_img).into(holder.headIv);
-        holder.nameTv.setText(memberDetailResVo.getRealname());
-
+        String realName = memberDetailResVo.getRealname();
+        String userName = memberDetailResVo.getUsername();
+        holder.nameTv.setText(TextUtils.isEmpty(realName) ? userName: realName);
         holder.selectCb.setTag(position);
         holder.selectCb.setOnCheckedChangeListener(this);
     }

@@ -178,8 +178,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
                                             String realName = memberDetailResVo.getRealname();
+                                            String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
-                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
                                             childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
@@ -198,8 +199,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
                                             String realName = memberDetailResVo.getRealname();
+                                            String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
-                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
                                             childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
@@ -220,8 +222,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
                                             String realName = memberDetailResVo.getRealname();
+                                            String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
-                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
                                             childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
@@ -240,8 +243,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                         for (int i = 0; i < data.size(); i++) {
                                             MemberDetailResVo memberDetailResVo = data.get(i);
                                             String realName = memberDetailResVo.getRealname();
+                                            String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
-                                            String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+                                            String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
                                             childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
                                         }
 
@@ -312,7 +316,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     }
 
     private void showSearchResultListPop() {
-        View view1 = getActivity().getLayoutInflater().inflate(R.layout.popu_search_user_result, null,false);
+        View view1 = getActivity().getLayoutInflater().inflate(R.layout.popu_search_user_result, null, false);
         RecyclerView searchUserResultRv = (RecyclerView) view1.findViewById(R.id.rv_search_result);
         userSearchAdapter = new UserSearchAdapter(getActivity(), searchResultList);
         searchUserResultRv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -323,12 +327,14 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
 
         userSearchAdapter.setOnItemClickListener((view, position) -> {
             Bundle bundle = new Bundle();
-            bundle.putString("realName", searchResultList.get(position).getRealname());
+            String realName = searchResultList.get(position).getRealname();
+            String userName = searchResultList.get(position).getUsername();
+            bundle.putString("realName", TextUtils.isEmpty(realName) ? userName : realName);
             ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
             userSearchPop.dismiss();
         });
 
-        userSearchPop.showAsDropDown(binding.etSearch, 0,0);
+        userSearchPop.showAsDropDown(binding.etSearch, 0, 0);
     }
 
     /**

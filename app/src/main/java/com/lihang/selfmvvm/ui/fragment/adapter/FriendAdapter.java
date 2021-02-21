@@ -6,10 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.vo.model.Friend;
+import com.lihang.selfmvvm.vo.model.FriendGridItemVo;
 
 import java.util.List;
 
@@ -17,36 +20,26 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
+import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
+
 /**
  * created by zhangxianpeng on 20201017
  * 朋友圈列表适配器
  */
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
     private Context mContext;
-    private List<Friend> mFriendList;
+    private List<FriendGridItemVo> mFriendList;
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardView;
-        CircleImageView headCirceleImageView;
-        TextView nameTv;
-        TextView timeTv;
-        GridView imageGridView;
-        Button likeBtn;
-        TextView likeCountTv;
-
+        ImageView headCirceleImageView;
         public ViewHolder(View view) {
             super(view);
-            cardView = (CardView) view;
-            headCirceleImageView = view.findViewById(R.id.iv_head);
-            nameTv = view.findViewById(R.id.tv_nick_name);
-            timeTv = view.findViewById(R.id.tv_send_time);
-            imageGridView = view.findViewById(R.id.image_gridView);
-            likeBtn = view.findViewById(R.id.btn_like);
-            likeCountTv = view.findViewById(R.id.tv_like_count);
+            headCirceleImageView = view.findViewById(R.id.img_icon);
         }
     }
 
-    public FriendAdapter(List<Friend> friendList) {
+    public FriendAdapter(List<FriendGridItemVo> friendList) {
         mFriendList = friendList;
     }
 
@@ -55,14 +48,15 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         if (mContext == null) {
             mContext = parent.getContext();
         }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.list_item_friend, parent, false);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.grid_item_friend, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Friend friend = mFriendList.get(position);
-
+        FriendGridItemVo friend = mFriendList.get(position);
+        Glide.with(mContext).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + friend.getImageRes()).placeholder(R.mipmap.default_tx_img)
+                .error(R.mipmap.default_tx_img).into(holder.headCirceleImageView);
     }
 
     @Override

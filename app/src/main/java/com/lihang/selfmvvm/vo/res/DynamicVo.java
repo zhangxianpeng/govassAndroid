@@ -27,6 +27,15 @@ public class DynamicVo implements Serializable {
     private int createUserId;
     private String createTime;
     private List<AttachmentResVo> attachmentList;
+    private boolean liked;
+
+    public boolean isLiked() {
+        return liked;
+    }
+
+    public void setLiked(boolean liked) {
+        this.liked = liked;
+    }
 
     public int getId() {
         return id;

@@ -54,8 +54,9 @@ public class UserSearchAdapter extends RecyclerView.Adapter<UserSearchAdapter.My
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         MemberDetailResVo memberDetailResVo = projectList.get(position);
         String realName = memberDetailResVo.getRealname();
+        String userName = memberDetailResVo.getUsername();
         String companyName = memberDetailResVo.getEnterpriseName();
-        String result = TextUtils.isEmpty(companyName) ? realName : realName + "-" + companyName;
+        String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : realName + "-" + companyName;
         holder.user.setText(result);
         holder.user.setTag(position);
         holder.user.setOnClickListener(this);

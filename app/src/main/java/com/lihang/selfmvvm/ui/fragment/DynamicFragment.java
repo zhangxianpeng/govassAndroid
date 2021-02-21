@@ -3,20 +3,16 @@ package com.lihang.selfmvvm.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.BaseAdapter;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
-import com.lihang.selfmvvm.adapter.MyAdapter;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.databinding.FragmentDynamicBinding;
+import com.lihang.selfmvvm.ui.fragment.adapter.FriendAdapter;
 import com.lihang.selfmvvm.ui.senddynamic.SendDynamicActivity;
 import com.lihang.selfmvvm.ui.senddynamic.SendDynamicListActivity;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.vo.model.FriendGridItemVo;
 import com.lihang.selfmvvm.vo.req.IdReqVo;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
@@ -30,10 +26,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
-import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
-import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * created by zhangxianpeng on 20201017
@@ -44,7 +39,7 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
     private CommonAdapter commonAdapter;
     private List<DynamicVo> friendDynamicList = new ArrayList<>();
 
-    private BaseAdapter mAdapter = null;
+    private FriendAdapter mAdapter = null;
     private ArrayList<FriendGridItemVo> mData = new ArrayList<>();
 
     private int page = 1;
@@ -84,20 +79,19 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
                 holder.setText(R.id.tv_send_time, friend.getCreateTime());
                 holder.setText(R.id.tv_content, friend.getContent());
                 holder.setText(R.id.tv_like_count, getString(R.string.like_count, friend.getLikeCount()));
-                GridView gridView = holder.getView(R.id.image_gridView);
+                holder.setBackgroundRes(R.id.btn_like, friend.isLiked() ? R.mipmap.ic_lianxi_love : R.mipmap.ic_like);
+                RecyclerView gridView = holder.getView(R.id.rv_pic);
                 if (friend.getAttachmentList() != null && !friend.getAttachmentList().isEmpty()) {
                     setGridViewData(gridView, friend.getAttachmentList());
                 }
                 holder.setOnClickListener(R.id.btn_like, view -> {
-                    Button like = holder.itemView.findViewById(R.id.btn_like);
-                    //有问题
                     if (!isLike) {
                         isLike = true;
-                        like.setBackgroundResource(R.mipmap.ic_lianxi_love);
+                        holder.setBackgroundRes(R.id.btn_like, R.mipmap.ic_lianxi_love);
                         holder.setText(R.id.tv_like_count, getString(R.string.like_count, friend.getLikeCount() + 1));
                     } else {
                         isLike = false;
-                        like.setBackgroundResource(R.mipmap.ic_like);
+                        holder.setBackgroundRes(R.id.btn_like, R.mipmap.ic_like);
                         holder.setText(R.id.tv_like_count, getString(R.string.like_count, friend.getLikeCount()));
                     }
 
@@ -121,21 +115,23 @@ public class DynamicFragment extends BaseFragment<DynamicFragmentViewModel, Frag
         });
     }
 
-    private void setGridViewData(GridView gridView, List<AttachmentResVo> imageList) {
+    private void setGridViewData(RecyclerView gridView, List<AttachmentResVo> imageList) {
         mData.clear();
         for (AttachmentResVo attachmentResVo : imageList) {
             FriendGridItemVo friendGridItemVo = new FriendGridItemVo();
             friendGridItemVo.setImageRes(attachmentResVo.getUrl());
             mData.add(friendGridItemVo);
+
         }
-        mAdapter = new MyAdapter<FriendGridItemVo>(mData, R.layout.grid_item_friend) {
+        LogUtils.e("zzzzz" + mData.size());
+        mAdapter = new FriendAdapter(mData);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 3){
             @Override
-            public void bindView(ViewHolder holder, FriendGridItemVo obj) {
-                ImageView imageView = holder.getView(R.id.img_icon);
-                Glide.with(getContext()).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + obj.getImageRes()).placeholder(R.mipmap.default_tx_img)
-                        .error(R.mipmap.default_tx_img).into(imageView);
+            public boolean canScrollVertically() {
+                return false;
             }
         };
+        gridView.setLayoutManager(layoutManager);
         gridView.setAdapter(mAdapter);
     }
 
