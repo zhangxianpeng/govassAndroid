@@ -1,5 +1,6 @@
 package com.lihang.selfmvvm.ui.userinfo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -18,12 +19,15 @@ import com.lihang.selfmvvm.ui.newmsg.NewMsgActivity;
 import com.lihang.selfmvvm.ui.officialdoc.OfficialDocListActivity;
 import com.lihang.selfmvvm.ui.project.ProjectActivity;
 import com.lihang.selfmvvm.ui.share.ShareActivity;
+import com.lihang.selfmvvm.ui.updatepwd.UpdatePwdActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.PackageUtils;
 import com.lihang.selfmvvm.utils.PreferenceUtil;
 import com.lihang.selfmvvm.vo.req.TokenReqVo;
+
+import androidx.annotation.Nullable;
 
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_HEAD_URL;
@@ -91,6 +95,7 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
         binding.rlShareDown.setOnClickListener(mNoDoubleClickListener);
         binding.rlContactUs.setOnClickListener(mNoDoubleClickListener);
         binding.rlChangeAccount.setOnClickListener(mNoDoubleClickListener);
+        binding.rlUpdatePwd.setOnClickListener(mNoDoubleClickListener);
         binding.rlExit.setOnClickListener(mNoDoubleClickListener);
         binding.flNewMsg.setOnClickListener(mNoDoubleClickListener);
     }
@@ -125,6 +130,9 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
                 case R.id.rl_contact_us:
                     ActivityUtils.startActivity(getContext(), CustomServerActivity.class);
                     break;
+                case R.id.rl_update_pwd:
+                    updatePwd();
+                    break;
                 case R.id.rl_change_account:
                     changeAccout();
                     break;
@@ -151,6 +159,11 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
         }).show();
     }
 
+    private void updatePwd() {
+        Intent intent = new Intent(this, UpdatePwdActivity.class);
+        startActivityForResult(intent, 1001);
+    }
+
     private void logout() {
         changeAccountDialog = new NewIOSAlertDialog(getContext()).builder();
         changeAccountDialog.setGone().setTitle("提示").setMsg("是否确定退出系统").setNegativeButton("取消", null)
@@ -175,5 +188,14 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
     @Override
     public void onClick(View view) {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //此处可以根据两个Code进行判断，本页面和结果页面跳过来的值
+        if (requestCode == 1001 && resultCode == 1003) {
+            logoutAndClearToken();
+        }
     }
 }

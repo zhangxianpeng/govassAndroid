@@ -25,15 +25,12 @@
     <string name="exit">退出</string>
     <string name="questionnaire">调查问卷</string>
     <string name="project_application">项目申报</string>
-    <string name="enterprise_account_management">企业账户管理</string>
     <string name="system_announcement">系统公告</string>
     <string name="my_business">我的企业</string>
-    <string name="message_notification">消息通知</string>
     <string name="message_alert">消息提醒</string>
     <string name="projects_to_be_approved">待审核</string>
     <string name="enprice_od">企业公告</string>
     <string name="my_enprice_od">我的企业公告</string>
-    <string name="enprice_od_detail">企业公告详情</string>
     <string name="approved_projects">已审核</string>
     <string name="enterprise_project">企业项目</string>
     <string name="my_declaration">我的申报</string>
@@ -96,11 +93,9 @@
     <string name="setUpDate">成立日期*</string>
     <string name="com_address">住所*</string>
     <string name="company_verify">营业执照上传*</string>
-    <string name="next_step">下一步</string>
     <string name="complete">完成</string>
     <string name="preview_step">上一步</string>
     <string name="username_must">用户名*</string>
-    <string name="name_must">名称*</string>
     <string name="phone_must">手机号码*</string>
     <string name="mail_must">邮箱*</string>
     <string name="id_must">身份证*</string>
@@ -120,8 +115,6 @@
     <string name="have_selected_member">已选择 %1$s 人</string>
     <string name="have_selected_group">已选择 %1$s 组</string>
     <string name="ensure">确定</string>
-    <string name="msgdetail">消息详情</string>
-    <string name="officialdocdetail">公告详情</string>
     <string name="declare_name">申报项目名称</string>
     <string name="declare_type">申报类别</string>
     <string name="declare_info">项目描述</string>
@@ -140,7 +133,6 @@
     <string name="business_information">商业信息</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="send_dynamic">发布</string>
     <string name="senddynamic">发布动态</string>
     <string name="policy_document_library">政策文件库</string>

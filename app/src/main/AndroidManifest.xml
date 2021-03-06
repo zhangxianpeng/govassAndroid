@@ -27,30 +27,18 @@
         android:screenOrientation="portrait"
         android:theme="@style/BlackFront_AppTheme">
 
-        <!-- 文件预览 -->
         <activity android:name=".ui.filepreview.FilePreviewActivity" />
-        <!-- im 聊天 -->
         <activity android:name=".ui.communicate.CommunicateActivity" />
-        <!-- 通讯录 -->
         <activity android:name=".ui.communicationlist.CommunicationListActivity" />
-        <!-- 公文详情 -->
         <activity android:name=".ui.documentdetail.DocumentDetailActivity" />
-        <!-- 已发公文 -->
         <activity android:name=".ui.senddocument.SendDocumentctivity" />
-        <!-- 申报详情 -->
         <activity android:name=".ui.declaredetail.DeclareDetailActivity" />
-
-        <!-- 登录 -->
         <activity android:name=".ui.login.GovassLoginActivity" />
-        <!-- 项目申报 -->
         <activity android:name=".ui.projrctdeclare.ProjectDeclareActivity" />
-        <!-- 我的申报 -->
         <activity android:name=".ui.mydeclare.MyDeclareActivity" />
-        <!-- 引导页 -->
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,14 +47,10 @@
         <meta-data
             android:name="android.notch_support"
             android:value="true" />
-        <!-- 问卷调查 -->
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
-        <!-- 消息 -->
         <activity android:name=".ui.newmsg.NewMsgActivity" />
-        <!-- 注册 -->
         <activity android:name=".ui.register.RegisterStepOneActivity" />
         <activity android:name=".ui.register.RegisterStepTwoActivity" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -77,21 +61,13 @@
                 android:resource="@xml/file_paths"
                 tools:replace="android:resource" />
         </provider>
-        <!-- 客服 -->
         <activity android:name=".ui.customserver.CustomServerActivity" />
-        <!-- 主页面 -->
         <activity android:name=".ui.main.BottonNavigationActivity" />
-        <!-- 成员管理 -->
         <activity android:name=".ui.mailist.MemberManagerActivity" />
-        <!-- 项目管理 -->
         <activity android:name=".ui.project.ProjectActivity" />
-        <!-- 消息详情 -->
         <activity android:name=".ui.msgdetail.MsgDetailActivity" />
-        <!-- 普通消息详情 -->
         <activity android:name=".ui.communicate.PlainMsgDetailActivity" />
-        <!-- 公告列表 -->
         <activity android:name=".ui.officialdoc.OfficialDocListActivity" />
-        <!-- 公告详情 -->
         <activity android:name=".ui.officialdoc.OfficialDocDetailActivity" />
         <activity android:name=".ui.myenterprises.MyEnterprisesListActivity" />
         <activity android:name=".ui.myenterprises.EnterprisesDetailActivity" />
@@ -109,7 +85,8 @@
         <activity android:name=".ui.senddynamic.SendDynamicListActivity" />
         <activity android:name=".ui.globalsearch.GlobalSearchActivity" />
         <activity android:name=".ui.globalsearch.MoreSearchResultActivity" />
-        <activity android:name=".ui.register.RegisterActivity"></activity>
+        <activity android:name=".ui.register.RegisterActivity" />
+        <activity android:name=".ui.updatepwd.UpdatePwdActivity"></activity>
     </application>
 
 </manifest>

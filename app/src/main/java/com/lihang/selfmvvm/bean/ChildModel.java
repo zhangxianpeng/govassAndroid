@@ -20,15 +20,25 @@ public class ChildModel {
     private String headUrl;
     private String name;
     private String userId;
+    private String phone;
 
-    public ChildModel(String headUrl, String name,String userId) {
+    public ChildModel(String headUrl, String name,String userId,String phone) {
         this.headUrl = headUrl;
         this.name = name;
         this.userId = userId;
+        this.phone = phone;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public void setName(String name) {

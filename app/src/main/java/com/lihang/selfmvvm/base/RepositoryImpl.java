@@ -6,6 +6,7 @@ import com.lihang.selfmvvm.bean.basebean.Resource;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
 import com.lihang.selfmvvm.common.PARAMS;
 import com.lihang.selfmvvm.retrofitwithrxjava.uploadutils.UploadFileRequestBody;
+import com.lihang.selfmvvm.ui.updatepwd.UpdatePwdBean;
 import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
 import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
 import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
@@ -263,7 +264,12 @@ public class RepositoryImpl extends BaseModel {
      */
     public MutableLiveData<Resource<String>> deleteGroup(List<Integer> groupIds) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().deletePlainMsg(groupIds), liveData);
+        return observeGo(getApiService().deleteGroup(groupIds), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> updatePwd(UpdatePwdBean bean) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().updatePwd(bean), liveData);
     }
 
     /**

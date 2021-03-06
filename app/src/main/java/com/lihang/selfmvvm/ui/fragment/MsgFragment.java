@@ -181,7 +181,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                             String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
                                             String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
                                         }
 
                                         //打开分组
@@ -202,7 +202,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                             String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
                                             String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
                                         }
 
                                         //打开分组
@@ -225,7 +225,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                             String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
                                             String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
                                         }
 
                                         //打开分组
@@ -246,7 +246,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                                             String userName = memberDetailResVo.getUsername();
                                             String companyName = memberDetailResVo.getEnterpriseName();
                                             String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
-                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId())));
+                                            childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
                                         }
 
                                         //打开分组
@@ -265,6 +265,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         binding.exListView.setOnChildClickListener((expandableListView, view, groupPosition, childPosition, id) -> {
             Bundle bundle = new Bundle();
             bundle.putString("realName", childArray.get(groupPosition).get(childPosition).getName());
+            bundle.putString("phone", childArray.get(groupPosition).get(childPosition).getPhone());
             ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
             return true;
         });
@@ -329,7 +330,9 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             Bundle bundle = new Bundle();
             String realName = searchResultList.get(position).getRealname();
             String userName = searchResultList.get(position).getUsername();
+            String phone = searchResultList.get(position).getMobile();
             bundle.putString("realName", TextUtils.isEmpty(realName) ? userName : realName);
+            bundle.putString("phone", phone);
             ActivityUtils.startActivityWithBundle(getContext(), CommunicateActivity.class, bundle);
             userSearchPop.dismiss();
         });
@@ -922,7 +925,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
             } else {
                 v = convertView;
             }
-            bindGroupView(v, mGroupArray.get(groupPosition), isExpanded);
+            bindGroupView(v, groupPosition, mGroupArray.get(groupPosition), isExpanded);
             return v;
         }
 
@@ -933,12 +936,12 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
          * @param data
          * @param isExpanded
          */
-        private void bindGroupView(View view, GroupModel data, boolean isExpanded) {
+        private void bindGroupView(View view, int position, GroupModel data, boolean isExpanded) {
             // 绑定组视图的数据 当然这些都是模拟的
             TextView tv_title = view.findViewById(R.id.tv_group_name);
             TextView tv_online = view.findViewById(R.id.tv_msg);
             tv_title.setText(data.getTitle());
-            tv_online.setVisibility(data.getOnline().endsWith("0") ? View.GONE : View.VISIBLE);
+            tv_online.setVisibility(position == 0 ? View.GONE : View.VISIBLE);
             if (!use_default_indicator) {
                 ImageView iv_tip = view.findViewById(R.id.iv_left);
                 if (isExpanded) {

@@ -5,6 +5,7 @@ import com.lihang.selfmvvm.bean.BannerBean;
 import com.lihang.selfmvvm.bean.User;
 import com.lihang.selfmvvm.bean.basebean.HomeFatherBean;
 import com.lihang.selfmvvm.bean.basebean.ResponModel;
+import com.lihang.selfmvvm.ui.updatepwd.UpdatePwdBean;
 import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
 import com.lihang.selfmvvm.vo.req.AddDynamicReqVo;
 import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
@@ -352,6 +353,7 @@ public interface RetrofitApiService {
 
     /**
      * 查询政府用户
+     *
      * @param username
      * @return
      */
@@ -368,6 +370,7 @@ public interface RetrofitApiService {
 
     /**
      * 查询企业用户
+     *
      * @param username
      * @return
      */
@@ -580,6 +583,9 @@ public interface RetrofitApiService {
      */
     @POST("sys/enterprise-notice/save")
     Observable<ResponModel<String>> saveDynamic(@Body AddDynamicReqVo addDynamicReqVo);
+
+    @POST("sys/user/password")
+    Observable<ResponModel<String>> updatePwd(@Body UpdatePwdBean updatePwdBean);
 
     //完善企业信息
     @POST("sys/enterprise/fill")

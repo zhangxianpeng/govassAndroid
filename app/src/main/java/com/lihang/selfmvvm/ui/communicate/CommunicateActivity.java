@@ -1,16 +1,17 @@
 package com.lihang.selfmvvm.ui.communicate;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityCommunicateBinding;
-import com.lihang.selfmvvm.ui.projrctdeclare.AttchmentListAdapter;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
-import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.lihang.selfmvvm.vo.res.PlainMsgResVo;
 import com.zhy.adapter.recyclerview.CommonAdapter;
@@ -21,6 +22,8 @@ import java.util.List;
 
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import sakura.bottommenulibrary.bottompopfragmentmenu.BottomMenuFragment;
+import sakura.bottommenulibrary.bottompopfragmentmenu.MenuItem;
 
 /**
  * created by zhangxianpeng
@@ -35,6 +38,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     private CommonAdapter projectAdapter;
 
     private String realName = "";
+    private String phone = "";
 
     @Override
     protected int getContentViewId() {
@@ -44,9 +48,13 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     @Override
     protected void processLogic() {
         realName = getIntent().getStringExtra("realName");
+        phone = getIntent().getStringExtra("phone");
         initView();
         initAdapter();
         initData();
+        if (!TextUtils.isEmpty(phone)) {
+            initAddMsgGroupDialog(getWindow().getDecorView());
+        }
     }
 
     private void initView() {
@@ -106,6 +114,24 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
     @Override
     protected void setListener() {
         binding.ivTitleBarBack.setOnClickListener(this::onClick);
+    }
+
+    private void initAddMsgGroupDialog(View rootView) {
+        new BottomMenuFragment(this)
+                .addMenuItems(new MenuItem(phone))
+                .setOnItemClickListener(new BottomMenuFragment.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(TextView menu_item, int position) {
+                        switch (position) {
+                            case 0://拨号
+                                Intent dialIntent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + phone));
+                                startActivity(dialIntent);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }).show();
     }
 
     @Override
