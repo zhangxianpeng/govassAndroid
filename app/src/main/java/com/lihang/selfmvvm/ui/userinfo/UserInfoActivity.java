@@ -45,20 +45,22 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
     private NewIOSAlertDialog changeAccountDialog;
 
     @Override
-    protected int getContentViewId() {
-        return R.layout.activity_user_info;
-    }
+    protected int getContentViewId() { return R.layout.activity_user_info; }
 
     @Override
     protected void processLogic() {
         binding.tvVersion.setText("V" + PackageUtils.getVersionName(getContext()));
         headUrl = (String) PreferenceUtil.get(USER_LOGIN_HEAD_URL, "");
         realName = (String) PreferenceUtil.get(USER_NICK_NAME, "");
-        if (!TextUtils.isEmpty(headUrl))
-            Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + headUrl).placeholder(R.mipmap.default_tx_img)
+        if (!TextUtils.isEmpty(headUrl)) {
+            Glide.with(this)
+                    .load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + headUrl)
+                    .placeholder(R.mipmap.default_tx_img)
                     .error(R.mipmap.default_tx_img).into(binding.ivHead);
-        if (!TextUtils.isEmpty(realName)) binding.tvUserName.setText(realName);
-
+        }
+        if (!TextUtils.isEmpty(realName)) {
+            binding.tvUserName.setText(realName);
+        }
         if (CheckPermissionUtils.getInstance().isGovernment()) {
             binding.projectDeclare.setText(getString(R.string.project_approval));
             binding.myMsg.setText(getString(R.string.my_post));
@@ -66,7 +68,6 @@ public class UserInfoActivity extends BaseActivity<UserInfoActivityViewModel, Ac
             binding.projectDeclare.setText(getString(R.string.my_declaration));
             binding.myMsg.setText(getString(R.string.my_receive_msg));
         }
-
         getUnReadMsgCount();
     }
 

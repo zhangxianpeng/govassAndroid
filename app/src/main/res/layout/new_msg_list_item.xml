@@ -30,8 +30,12 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_5"
+            android:layout_marginRight="@dimen/dp_5"
             android:layout_toRightOf="@+id/tv_declare_status"
+            android:layout_toLeftOf="@+id/tv_declare_time"
             android:text="审核成功通知"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textColor="#222222"
             android:textSize="16sp" />
 

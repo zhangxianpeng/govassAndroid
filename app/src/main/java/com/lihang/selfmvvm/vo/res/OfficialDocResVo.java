@@ -15,7 +15,7 @@ public class OfficialDocResVo implements Serializable {
     private String auditor;
     private String auditOpinion;
     private String lastUpdateTime;
-    private String createUser;
+        private String createUser;
     private String createTime;
     private List<AttachmentResVo> attachmentList;
     private String officialDocumentLabelEntityList;

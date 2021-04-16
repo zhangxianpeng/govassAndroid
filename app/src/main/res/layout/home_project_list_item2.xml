@@ -24,6 +24,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_15"
+            android:visibility="gone"
             android:src="@mipmap/btn_black_right" />
 
         <TextView

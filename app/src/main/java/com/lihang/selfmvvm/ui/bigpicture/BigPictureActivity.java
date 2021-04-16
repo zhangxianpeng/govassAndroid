@@ -29,7 +29,8 @@ public class BigPictureActivity extends BaseActivity<BigPictureViewModel, Activi
         String fileName = getIntent().getStringExtra("fileName");
         binding.tvMsg.setText(fileName);
         LogUtils.d("zhangxianpeng===", DEFAULT_SERVER + DEFAULT_FILE_SERVER + imgUrl);
-        Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + imgUrl).placeholder(R.mipmap.default_img)
+        Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + imgUrl)
+                .placeholder(R.mipmap.default_img)
                 .error(R.mipmap.default_img).into(binding.ivBigPicture);
     }
 
@@ -40,9 +41,7 @@ public class BigPictureActivity extends BaseActivity<BigPictureViewModel, Activi
 
     @Override
     public void onClick(View view) {
-        if (ButtonClickUtils.isFastClick()) {
-            return;
-        }
+        if (ButtonClickUtils.isFastClick()) { return; }
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();

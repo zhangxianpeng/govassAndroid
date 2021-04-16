@@ -47,8 +47,16 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
 
                         EnterpriseVo enterpriseVo = data.getEnterpriseEntity();
                         if (enterpriseVo != null) {
-                            Glide.with(EnterprisesDetailActivity.this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg()).placeholder(R.mipmap.default_img)
+                            Glide.with(EnterprisesDetailActivity.this)
+                                    .load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg())
+                                    .placeholder(R.mipmap.default_img)
                                     .error(R.mipmap.default_img).into(binding.ivBusinessLicenseImg);
+                            binding.ivBusinessLicenseImg.setOnClickListener(view -> {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
+                                bundle.putString("fileName", enterpriseVo.getEnterpriseName());
+                                ActivityUtils.startActivityWithBundle(EnterprisesDetailActivity.this, BigPictureActivity.class, bundle);
+                            });
                             binding.tvEnterAddress.setText(enterpriseVo.getAddress());
                             binding.tvBusinessTerm.setText(enterpriseVo.getBusinessTerm());
                             binding.tvType.setText(enterpriseVo.getBusinessType());
@@ -75,8 +83,16 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
             binding.tvMsg.setText(getContext().getString(R.string.my_business));
             binding.llUserInfo.setVisibility(View.GONE);
             binding.tvEnterAddress.setText(enterpriseVo.getAddress());
-            Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg()).placeholder(R.mipmap.default_img)
-                    .error(R.mipmap.default_img).into(binding.ivBusinessLicenseImg);
+            Glide.with(this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + enterpriseVo.getBusinessLicenseImg())
+                    .placeholder(R.mipmap.default_img)
+                    .error(R.mipmap.default_img)
+                    .into(binding.ivBusinessLicenseImg);
+            binding.ivBusinessLicenseImg.setOnClickListener(view -> {
+                Bundle bundle = new Bundle();
+                bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
+                bundle.putString("fileName", enterpriseVo.getEnterpriseName());
+                ActivityUtils.startActivityWithBundle(EnterprisesDetailActivity.this, BigPictureActivity.class, bundle);
+            });
             binding.tvBusinessTerm.setText(enterpriseVo.getBusinessTerm());
             binding.tvType.setText(enterpriseVo.getBusinessType());
             binding.tvEnterpriseCode.setText(enterpriseVo.getEnterpriseCode());
@@ -101,14 +117,6 @@ public class EnterprisesDetailActivity extends BaseActivity<EnterprisesDetailVie
         switch (view.getId()) {
             case R.id.iv_title_bar_back:
                 finish();
-                break;
-            case R.id.iv_businessLicense_img:
-                Bundle bundle = new Bundle();
-                if (enterpriseVo != null) {
-                    bundle.putString("imgUrl", enterpriseVo.getBusinessLicenseImg());
-                    bundle.putString("fileName", enterpriseVo.getEnterpriseName());
-                }
-                ActivityUtils.startActivityWithBundle(this, BigPictureActivity.class, bundle);
                 break;
             default:
                 break;

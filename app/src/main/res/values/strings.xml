@@ -38,8 +38,6 @@
     <string name="issued_documents">已发公文</string>
     <string name="completed">已填报</string>
     <string name="not_filled_in">未填报</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="declare_detail_title">申报详情</string>
     <string name="project_name">申报项目名称</string>
     <string name="project_type">申报类别</string>
@@ -131,8 +129,6 @@
     <string name="tv_offiline">已下线</string>
     <string name="trends_of_thousand_enterprises">千企动态</string>
     <string name="business_information">商业信息</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="send_dynamic">发布</string>
     <string name="senddynamic">发布动态</string>
     <string name="policy_document_library">政策文件库</string>

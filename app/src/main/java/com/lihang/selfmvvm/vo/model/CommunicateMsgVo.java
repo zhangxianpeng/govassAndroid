@@ -24,6 +24,16 @@ public class CommunicateMsgVo {
     private String createTime;
     private String username;
     private String answerer;
+    private String enterpriseName;
+
+    public String getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(String enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
+
     private List<AttachmentResVo> attachmentList;
 
     public boolean isSend() {

@@ -270,7 +270,6 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
                 ToastUtils.showToast("取消");
             }
         } else if (requestCode == RC_CHOOSE_PHOTO) {
-
             if (data.getData() != null) { //单次点击未使用多选
                 try {
                     Uri uri = data.getData();
@@ -393,7 +392,7 @@ public class SendDynamicActivity extends BaseActivity<SendDynamicViewModel, Acti
     private void sendDynamic() {
         addDynamicReqVo.setContent(binding.etDynamic.getText().toString().trim());
         addDynamicReqVo.setContentType(contentType);
-        addDynamicReqVo.setTitle("android 界面没有标题输入框");
+        addDynamicReqVo.setTitle("");
         mViewModel.saveDynamic(addDynamicReqVo).observe(this, res -> {
             res.handler(new OnCallback<String>() {
                 @Override

@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -40,30 +42,20 @@ import static com.lihang.selfmvvm.base.BaseConstant.USER_LOGIN_TOKEN;
  * 登录界面
  */
 public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, ActivityGovassLoginactivityBinding> implements TextWatcher {
-    private static final String TAG = "GovassLoginActivity";
     private String uuid = "";
     private String userName = "";
     private String passwprd = "";
     private String verifyCode = "";
 
-    /**
-     * 已登录用户数据
-     */
+    //已登录用户数据
     private List<UserInfoVo> loginUserList = new ArrayList<>();
     private List<String> loginUserStrList = new ArrayList<>();
 
-    /**
-     * 已登录用户列表
-     */
+    //已登录用户列表
     private static final String LOGIN_USER_LIST = "loginUserList";
-
-    /**
-     * 联系客服弹框
-     */
     private NewIOSAlertDialog myDialog;
 
-    private static final int RESPONSE_CODE = 10002;
-
+    private boolean isShowPassword = false;
     @Override
     protected int getContentViewId() {
         return R.layout.activity_govass_loginactivity;
@@ -78,7 +70,8 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
     private void initVerifyCode() {
         uuid = UUID.randomUUID().toString();
         String verifyCodeImgUrl = SystemConst.DEFAULT_SERVER + SystemConst.CAPTCHA + "?uuid=" + uuid;
-        Glide.with(this).load(verifyCodeImgUrl).placeholder(R.mipmap.ic_launcher)
+        Glide.with(this).load(verifyCodeImgUrl)
+                .placeholder(R.mipmap.ic_launcher)
                 .error(R.mipmap.ic_launcher).into(binding.ivVerifycode);
     }
 
@@ -99,7 +92,6 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
         }
         return newList;
     }
-
 
     @Override
     protected void setListener() {
@@ -166,8 +158,15 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
                     finish();
                     break;
                 case R.id.iv_clear_input_pwd:
-                    passwprd = "";
-                    binding.etUserPassword.setText("");
+                    if(!isShowPassword) {
+                        isShowPassword = true;
+                        binding.ivClearInputPwd.setImageResource(R.mipmap.icon_password_visible);
+                        binding.etUserPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    }else {
+                        isShowPassword = false;
+                        binding.ivClearInputPwd.setImageResource(R.mipmap.icon_password_invisible);
+                        binding.etUserPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    }
                     break;
                 case R.id.tv_forget_pwd:
                     mViewModel.getCustomerService(MyApplication.getToken()).observe(GovassLoginActivity.this, res -> {
@@ -187,7 +186,6 @@ public class GovassLoginActivity extends BaseActivity<GovassLoginViewModel, Acti
             }
         }
     };
-
 
     /**
      * 联系客服

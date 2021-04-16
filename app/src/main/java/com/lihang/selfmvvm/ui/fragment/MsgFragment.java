@@ -100,11 +100,6 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     private PopupWindow sendMsgPop;
 
     /**
-     * 发送类型
-     */
-    private int sendType = 0;
-
-    /**
      * 附件列表适配器
      */
     private CommonAdapter attachmentAdapter;
@@ -690,17 +685,18 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                     public void onItemClick(TextView menu_item, int position) {
                         switch (position) {
                             case 0:   //全员
-                                sendType = 0;
                                 initSendMsgPop(rootView);
                                 break;
                             case 1:  //分组
                                 Bundle bundle = new Bundle();
                                 bundle.putString("flag", "sendGroupPlainMsg");
+                                bundle.putInt("type",defaultType);
                                 ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle);
                                 break;
                             case 2:  //成员
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putString("flag", "sendMemberPlainMsg");
+                                bundle1.putInt("type",defaultType);
                                 ActivityUtils.startActivityWithBundle(getActivity(), MemberManagerActivity.class, bundle1);
                                 break;
                             case 3: //取消
@@ -843,7 +839,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
         private Context mContext;
         private int mExpandedGroupLayout;
         private int mChildLayout;
-        private List<GroupModel> mGroupArray;
+        private List<GroupModel>    mGroupArray;
         private List<List<ChildModel>> mChildArray;
 
         /**

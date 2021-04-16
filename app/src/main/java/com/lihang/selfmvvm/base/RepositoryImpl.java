@@ -347,6 +347,11 @@ public class RepositoryImpl extends BaseModel {
      * @param page
      * @return
      */
+    public MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> getFeedBackListMe(int page) {
+        MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getFeedBackListMe(page), liveData);
+    }
+
     public MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> getFeedBackList(int page) {
         MutableLiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().getFeedBackList(page), liveData);

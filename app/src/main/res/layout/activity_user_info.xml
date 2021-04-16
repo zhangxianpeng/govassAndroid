@@ -60,7 +60,7 @@
                 android:layout_height="@dimen/dp_68"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_21"
-                android:src="@mipmap/card_zan_10" />
+                android:src="@mipmap/default_tx_img" />
 
             <TextView
                 android:id="@+id/tv_userName"

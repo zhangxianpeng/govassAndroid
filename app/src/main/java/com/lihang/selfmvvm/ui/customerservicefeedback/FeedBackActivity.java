@@ -10,6 +10,7 @@ import com.lihang.selfmvvm.adapter.CommunicateMsgAdapter;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityFeedBackBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
 import com.lihang.selfmvvm.vo.req.AddFeedBackReqVo;
@@ -124,17 +125,22 @@ public class FeedBackActivity extends BaseActivity<FeedBackViewModel, ActivityFe
                 public void onSuccess(CommunicateMsgVo data) {
                     msgList.clear();
                     CommunicateMsgVo sendData = new CommunicateMsgVo();
+                    String userName = data.getUsername();
+                    String answer = data.getAnswer();
+                    String enterpriseName = data.getEnterpriseName();
+                    String result = !TextUtils.isEmpty(enterpriseName) ? (userName + "-" + enterpriseName) : userName;
                     sendData.setSend(true);
                     if (data != null) {
                         sendData.setContent(data.getContent());
+                        sendData.setUsername(result);
+                        sendData.setAttachmentList(data.getAttachmentList());
                     }
-
                     msgList.add(sendData);
 
                     CommunicateMsgVo receiveData = new CommunicateMsgVo();
                     receiveData.setSend(false);
                     if (data != null) {
-                        receiveData.setAnswer(data.getAnswer());
+                        receiveData.setAnswer(answer);
                         receiveData.setAttachmentList(data.getAttachmentList());
                     }
                     msgList.add(receiveData);

@@ -5,22 +5,6 @@ import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import java.util.List;
 
 public class AddProjectReqVo {
-    //    {
-//        "address": "string",
-//            "amount": 0,
-//            "attachmentList": [
-//        {
-//            "name": "string",
-//                "url": "string"
-//        }
-//  ],
-//        "contact": "string",
-//            "description": "string",
-//            "id": 0,
-//            "linkman": "string",
-//            "name": "string",
-//            "type": "string"
-//    }
     private String address;
     private int amount;
     private int id;  //修改时必传

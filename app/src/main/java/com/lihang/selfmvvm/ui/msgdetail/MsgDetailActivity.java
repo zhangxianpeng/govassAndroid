@@ -6,6 +6,7 @@ import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
@@ -18,7 +19,6 @@ import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityMsgDetailBinding;
 import com.lihang.selfmvvm.ui.bigpicture.BigPictureActivity;
 import com.lihang.selfmvvm.ui.filepreview.FilePreviewActivity;
-import com.lihang.selfmvvm.ui.officialdoc.OfficialDocDetailActivity;
 import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.vo.res.AttachmentResVo;
@@ -63,6 +63,7 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
             int id = msgMeResVo.getId();
             String title = msgMeResVo.getTitle();
             binding.tvTitle.setText(title);
+            binding.tvTitle.setGravity(Gravity.CENTER);
             getPlainMsgAttachmentList(msgMeResVo.getPrimaryId());
             getPlainMsdDetail(id);
             transferReadFlag(readFlag, id);
@@ -71,6 +72,7 @@ public class MsgDetailActivity extends BaseActivity<MsgDetailActivityViewModel, 
             binding.normalWebview.setVisibility(View.VISIBLE);
             OfficialDocResVo pilocyResVo = (OfficialDocResVo) getIntent().getSerializableExtra("noticeResVo");
             binding.tvTitle.setText(pilocyResVo.getTitle());
+            binding.tvTitle.setGravity(Gravity.LEFT);
             loadHtml(StringEscapeUtils.unescapeHtml4(pilocyResVo.getContent()));
             int id = getIntent().getIntExtra("id", -1);
             mViewModel.getPolicyInfo(id).observe(this, res -> {

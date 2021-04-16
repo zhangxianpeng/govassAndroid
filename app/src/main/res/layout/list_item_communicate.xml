@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dp">
@@ -22,14 +23,49 @@
             android:layout_marginLeft="@dimen/dp_15"
             android:src="@mipmap/feedback_ic_blue_mehead" />
 
-        <TextView
-            android:id="@+id/left_msg"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:gravity="left"
-            android:text="ahahahhaha" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_answer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginLeft="5dp"
+                android:ellipsize="end"
+                android:gravity="left"
+                android:maxEms="20"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:singleLine="true"
+                android:text="ahahahhaha"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/left_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="5dp"
+                android:gravity="left"
+                android:visibility="gone"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="ahahahhaha" />
+
+            <WebView
+                android:id="@+id/replayWebView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_10"
+                android:visibility="gone"
+                tools:ignore="WebViewLayout" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -42,14 +78,49 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/right_msg"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginRight="@dimen/dp_10"
-            android:gravity="right"
-            android:text="sadsa" />
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_creater"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginRight="5dp"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxEms="20"
+                android:maxLines="1"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="5dp"
+                android:singleLine="true"
+                android:text="admin" />
+
+            <TextView
+                android:id="@+id/right_msg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginRight="5dp"
+                android:gravity="right"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:text="sadsasdaddsad" />
+
+            <ImageView
+                android:id="@+id/craetePicIv"
+                android:layout_width="180dp"
+                android:layout_marginRight="@dimen/dp_10"
+                android:layout_height="180dp"
+                android:visibility="gone"
+                android:layout_marginTop="@dimen/dp_10"
+                android:scaleType="fitXY"
+                android:layout_gravity="end"
+                android:src="@mipmap/ic_launcher" />
+        </LinearLayout>
 
         <ImageView
             android:id="@+id/right_head"

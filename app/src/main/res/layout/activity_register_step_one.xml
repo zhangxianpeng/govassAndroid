@@ -363,7 +363,6 @@
                         android:layout_height="@dimen/dp_150"
                         android:background="@drawable/shape_line_dash" />
 
-
                     <ImageView
                         android:id="@+id/iv_preview"
                         android:layout_width="match_parent"

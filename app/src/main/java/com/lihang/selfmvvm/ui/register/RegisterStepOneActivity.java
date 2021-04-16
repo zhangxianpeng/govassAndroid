@@ -33,6 +33,7 @@ import com.lihang.selfmvvm.utils.LogUtils;
 import com.lihang.selfmvvm.utils.NoDoubleClickListener;
 import com.lihang.selfmvvm.utils.ToastUtils;
 import com.lihang.selfmvvm.vo.req.FillEnterpriseReqVo;
+import com.lihang.selfmvvm.vo.res.EnterpriseVo;
 import com.lihang.selfmvvm.vo.res.UploadSingleResVo;
 import com.lihang.selfmvvm.vo.res.UserInfoVo;
 
@@ -89,31 +90,33 @@ public class RegisterStepOneActivity extends BaseActivity<RegisterStepOneViewMod
                 public void onSuccess(UserInfoVo data) {
                     if (data != null) {
                         enterpriseId = data.getEnterpriseId();
-                        String enterpriseName = data.getEnterpriseEntity().getEnterpriseName();
-                        String enterpriseCode = data.getEnterpriseEntity().getEnterpriseCode();
-                        String legalRepresentative = data.getEnterpriseEntity().getLegalRepresentative();
-                        String businessType = data.getEnterpriseEntity().getBusinessType();
-                        String businessScope = data.getEnterpriseEntity().getBusinessScope();
-                        String registeredCapital = data.getEnterpriseEntity().getRegisteredCapital();
-                        String setUpDate = data.getEnterpriseEntity().getSetUpDate();
-                        String businessTerm = data.getEnterpriseEntity().getBusinessTerm();
-                        String address = data.getEnterpriseEntity().getAddress();
-                        businessLicenseImg = data.getEnterpriseEntity().getBusinessLicenseImg();
-
-                        binding.etCompanyName.setText(enterpriseName);
-                        binding.etCompanyCode.setText(enterpriseCode);
-                        binding.etLegalRepresentative.setText(legalRepresentative);
-                        binding.etBusinessType.setText(businessType);
-                        binding.etBusinessScope.setText(businessScope);
-                        binding.etBusinessTerm.setText(businessTerm);
-                        binding.etRegisteredCapital.setText(registeredCapital);
-                        binding.etSetUpDate.setText(setUpDate);
-                        binding.etComAddress.setText(address);
-                        if (!TextUtils.isEmpty(businessLicenseImg))
-                            binding.ivAdd.setVisibility(View.GONE);
-                        binding.ivPreview.setVisibility(View.VISIBLE);
-                        Glide.with(RegisterStepOneActivity.this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + businessLicenseImg).placeholder(R.mipmap.default_img)
-                                .error(R.mipmap.default_img).into(binding.ivPreview);
+                        EnterpriseVo enterpriseVo = data.getEnterpriseEntity();
+                        if (enterpriseVo != null) {
+                            String enterpriseName = data.getEnterpriseEntity().getEnterpriseName();
+                            String enterpriseCode = data.getEnterpriseEntity().getEnterpriseCode();
+                            String legalRepresentative = data.getEnterpriseEntity().getLegalRepresentative();
+                            String businessType = data.getEnterpriseEntity().getBusinessType();
+                            String businessScope = data.getEnterpriseEntity().getBusinessScope();
+                            String registeredCapital = data.getEnterpriseEntity().getRegisteredCapital();
+                            String setUpDate = data.getEnterpriseEntity().getSetUpDate();
+                            String businessTerm = data.getEnterpriseEntity().getBusinessTerm();
+                            String address = data.getEnterpriseEntity().getAddress();
+                            businessLicenseImg = data.getEnterpriseEntity().getBusinessLicenseImg();
+                            binding.etCompanyName.setText(enterpriseName);
+                            binding.etCompanyCode.setText(enterpriseCode);
+                            binding.etLegalRepresentative.setText(legalRepresentative);
+                            binding.etBusinessType.setText(businessType);
+                            binding.etBusinessScope.setText(businessScope);
+                            binding.etBusinessTerm.setText(businessTerm);
+                            binding.etRegisteredCapital.setText(registeredCapital);
+                            binding.etSetUpDate.setText(setUpDate);
+                            binding.etComAddress.setText(address);
+                            if (!TextUtils.isEmpty(businessLicenseImg))
+                                binding.ivAdd.setVisibility(View.GONE);
+                            binding.ivPreview.setVisibility(View.VISIBLE);
+                            Glide.with(RegisterStepOneActivity.this).load(DEFAULT_SERVER + DEFAULT_FILE_SERVER + businessLicenseImg).placeholder(R.mipmap.default_img)
+                                    .error(R.mipmap.default_img).into(binding.ivPreview);
+                        }
                     }
                 }
 

@@ -55,7 +55,9 @@ public class MemberManagerAdapter extends RecyclerView.Adapter<MemberManagerAdap
                 .error(R.mipmap.default_tx_img).into(holder.headIv);
         String realName = memberDetailResVo.getRealname();
         String userName = memberDetailResVo.getUsername();
-        holder.nameTv.setText(TextUtils.isEmpty(realName) ? userName: realName);
+        String companyName = memberDetailResVo.getEnterpriseName();
+        String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
+        holder.nameTv.setText(result);
         holder.selectCb.setTag(position);
         holder.selectCb.setOnCheckedChangeListener(this);
     }

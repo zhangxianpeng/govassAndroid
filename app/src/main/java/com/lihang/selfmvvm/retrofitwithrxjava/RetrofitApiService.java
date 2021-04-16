@@ -601,12 +601,20 @@ public interface RetrofitApiService {
     Observable<ResponModel<String>> saveFeedBack(@Body AddFeedBackReqVo addFeedBackReqVo);
 
     /**
-     * 获取反馈列表
+     * 获取反馈列表  (企业反馈列表)
      *
      * @param page
      * @return
      */
     @GET("sys/feedback/list-me")
+    Observable<ResponModel<ListBaseResVo<CommunicateMsgVo>>> getFeedBackListMe(@Query("page") int page);
+
+    /**
+     * 政府需要答复列表
+     * @param page
+     * @return
+     */
+    @GET("sys/feedback/list")
     Observable<ResponModel<ListBaseResVo<CommunicateMsgVo>>> getFeedBackList(@Query("page") int page);
 
     /**
@@ -651,7 +659,7 @@ public interface RetrofitApiService {
      *
      * @return
      */
-    @POST("sys/plainmsg/save")
+        @POST("sys/plainmsg/save")
     Observable<ResponModel<String>> savePlainMsg(@Body PlainMsgReqVo plainMsgReqVo);
 
     /**

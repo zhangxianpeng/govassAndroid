@@ -25,16 +25,20 @@ public class CustomServerActivity extends BaseActivity<CustomServerViewModel, Ac
             res.handler(new OnCallback<CsDataInfoVo>() {
                 @Override
                 public void onSuccess(CsDataInfoVo data) {
-                    binding.tvPhone.setText(getString(R.string.phoneNumber) + "  " + data.getPhone());
-                    binding.tvEmail.setText(getString(R.string.email) + "  " + data.getEmail());
-                    binding.tvAddress.setText(getString(R.string.address) + "  " + data.getAddress());
+                    if (data != null) {
+                        binding.tvPhone.setText(getString(R.string.phoneNumber) + "  " + data.getPhone());
+                        binding.tvEmail.setText(getString(R.string.email) + "  " + data.getEmail());
+                        binding.tvAddress.setText(getString(R.string.address) + "  " + data.getAddress());
+                    }
                 }
             });
         });
     }
 
     @Override
-    protected void setListener() { binding.ivTitleBarBack.setOnClickListener(this::onClick); }
+    protected void setListener() {
+        binding.ivTitleBarBack.setOnClickListener(this::onClick);
+    }
 
     @Override
     public void onClick(View view) {

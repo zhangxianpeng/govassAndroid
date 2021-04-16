@@ -51,7 +51,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
         phone = getIntent().getStringExtra("phone");
         initView();
         initAdapter();
-        initData();
+//        initData();
         if (!TextUtils.isEmpty(phone)) {
             initAddMsgGroupDialog(getWindow().getDecorView());
         }
@@ -118,7 +118,7 @@ public class CommunicateActivity extends BaseActivity<CommunicateViewModel, Acti
 
     private void initAddMsgGroupDialog(View rootView) {
         new BottomMenuFragment(this)
-                .addMenuItems(new MenuItem(phone))
+                .addMenuItems(new MenuItem("呼叫 " + phone))
                 .setOnItemClickListener(new BottomMenuFragment.OnItemClickListener() {
                     @Override
                     public void onItemClick(TextView menu_item, int position) {

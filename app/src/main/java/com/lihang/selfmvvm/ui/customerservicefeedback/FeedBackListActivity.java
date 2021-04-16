@@ -7,6 +7,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityFeedBackListBinding;
 import com.lihang.selfmvvm.utils.ActivityUtils;
+import com.lihang.selfmvvm.utils.CheckPermissionUtils;
 import com.lihang.selfmvvm.vo.model.CommunicateMsgVo;
 import com.lihang.selfmvvm.vo.res.ListBaseResVo;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -14,6 +15,7 @@ import com.zhy.adapter.recyclerview.CommonAdapter;
 import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -54,7 +56,10 @@ public class FeedBackListActivity extends BaseActivity<FeedBackListViewModel, Ac
 
             @Override
             protected void convert(ViewHolder holder, CommunicateMsgVo communicateMsgVo, int position) {
-                holder.setText(R.id.tv_title, communicateMsgVo.getTitle());
+                // TODO: 2021/3/13  需要展示上报人和上报人所属企业
+//                String creater = ;
+//                holder.setText(R.id.tv_creater, communicateMsgVo.getTitle());
+                holder.setText(R.id.tv_title, communicateMsgVo.getContent());
                 holder.setText(R.id.tv_creattime, communicateMsgVo.getCreateTime());
                 holder.setText(R.id.tv_status, communicateMsgVo.getStatus() == 0 ? "待处理" : "已受理");
                 holder.setOnClickListener(R.id.rl_container, (view -> {
@@ -70,18 +75,34 @@ public class FeedBackListActivity extends BaseActivity<FeedBackListViewModel, Ac
     }
 
     private void initData(int page, boolean isClearData) {
-        mViewModel.getFeedBackList(page).observe(this, res -> {
-            res.handler(new OnCallback<ListBaseResVo<CommunicateMsgVo>>() {
-                @Override
-                public void onSuccess(ListBaseResVo<CommunicateMsgVo> data) {
-                    if (isClearData) {
-                        msgList.clear();
+        if (CheckPermissionUtils.getInstance().isGovernment()) {
+            mViewModel.getFeedBackList(page).observe(this, res -> {
+                res.handler(new OnCallback<ListBaseResVo<CommunicateMsgVo>>() {
+                    @Override
+                    public void onSuccess(ListBaseResVo<CommunicateMsgVo> data) {
+                        if (isClearData) {
+                            msgList.clear();
+                        }
+                        msgList.addAll(data.getList());
+                        msgAdapter.notifyDataSetChanged();
                     }
-                    msgList.addAll(data.getList());
-                    msgAdapter.notifyDataSetChanged();
-                }
+                });
             });
-        });
+        } else {
+            mViewModel.getFeedBackListMe(page).observe(this, res -> {
+                res.handler(new OnCallback<ListBaseResVo<CommunicateMsgVo>>() {
+                    @Override
+                    public void onSuccess(ListBaseResVo<CommunicateMsgVo> data) {
+                        if (isClearData) {
+                            msgList.clear();
+                        }
+                        msgList.addAll(data.getList());
+                        msgAdapter.notifyDataSetChanged();
+                    }
+                });
+            });
+        }
+
     }
 
     @Override

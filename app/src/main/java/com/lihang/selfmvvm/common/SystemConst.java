@@ -5,7 +5,7 @@ package com.lihang.selfmvvm.common;
  */
 public class SystemConst {
     //域名
-    public static final String DEFAULT_SERVER = "http://117.141.131.186:8005/govass/";
+    public static final String DEFAULT_SERVER = "http://117.141.152.186:8005/govass/";
     public static final String CAPTCHA = "captcha.jpg";
 
 }

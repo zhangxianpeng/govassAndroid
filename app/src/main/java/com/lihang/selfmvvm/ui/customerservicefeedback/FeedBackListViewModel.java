@@ -21,6 +21,10 @@ public class FeedBackListViewModel extends BaseViewModel<RepositoryImpl> {
         super(application);
     }
 
+    public LiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> getFeedBackListMe(int page) {
+        return getRepository().getFeedBackListMe(page);
+    }
+
     public LiveData<Resource<ListBaseResVo<CommunicateMsgVo>>> getFeedBackList(int page) {
         return getRepository().getFeedBackList(page);
     }

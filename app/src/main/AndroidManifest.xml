@@ -26,7 +26,6 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:screenOrientation="portrait"
         android:theme="@style/BlackFront_AppTheme">
-
         <activity android:name=".ui.filepreview.FilePreviewActivity" />
         <activity android:name=".ui.communicate.CommunicateActivity" />
         <activity android:name=".ui.communicationlist.CommunicationListActivity" />
@@ -39,6 +38,7 @@
         <activity android:name=".ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -47,10 +47,12 @@
         <meta-data
             android:name="android.notch_support"
             android:value="true" />
+
         <activity android:name=".ui.questionnaire.QuestionNaireActivity" />
         <activity android:name=".ui.newmsg.NewMsgActivity" />
         <activity android:name=".ui.register.RegisterStepOneActivity" />
         <activity android:name=".ui.register.RegisterStepTwoActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
@@ -61,6 +63,7 @@
                 android:resource="@xml/file_paths"
                 tools:replace="android:resource" />
         </provider>
+
         <activity android:name=".ui.customserver.CustomServerActivity" />
         <activity android:name=".ui.main.BottonNavigationActivity" />
         <activity android:name=".ui.mailist.MemberManagerActivity" />
@@ -86,7 +89,7 @@
         <activity android:name=".ui.globalsearch.GlobalSearchActivity" />
         <activity android:name=".ui.globalsearch.MoreSearchResultActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
-        <activity android:name=".ui.updatepwd.UpdatePwdActivity"></activity>
+        <activity android:name=".ui.updatepwd.UpdatePwdActivity" />
     </application>
 
 </manifest>

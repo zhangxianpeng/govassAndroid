@@ -21,6 +21,8 @@ import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.SearchValueResVo;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 /**
  * created by zhangxianpeng
  * 公告详情
@@ -104,7 +106,7 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         } else {
             settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NORMAL);
         }
-        binding.normalWebview.loadData(content, "text/html;charset=utf-8", "utf-8");
+        binding.normalWebview.loadData(StringEscapeUtils.unescapeHtml4(content), "text/html;charset=utf-8", "utf-8");
     }
 
     static class MyWebViewClient extends WebViewClient {
