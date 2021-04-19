@@ -30,20 +30,8 @@ import okhttp3.Response;
 import static com.lihang.selfmvvm.base.BaseConstant.DEFAULT_FILE_SERVER;
 import static com.lihang.selfmvvm.common.SystemConst.DEFAULT_SERVER;
 
-/**
- * created by zhangxianpeng
- * 文件预览
- */
 public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, ActivityFilePreviewBinding> {
 
-    /**
-     * 文件路徑
-     */
-    private String filePath;
-    /**
-     * 文件名
-     */
-    private String fileName;
     private TbsReaderView tbsReaderView;
 
     @Override
@@ -57,13 +45,12 @@ public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, Acti
     }
 
     private void initView() {
-        filePath = getIntent().getExtras().getString("fileUrl");
-        fileName = getIntent().getExtras().getString("fileName");
+        String filePath = getIntent().getExtras().getString("fileUrl");
+        String fileName = getIntent().getExtras().getString("fileName");
         binding.tvFileName.setText(fileName);
 
         tbsReaderView = new TbsReaderView(this, readerCallback);
         binding.rlRoot.addView(tbsReaderView, new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-
         downLoadFile(fileName, DEFAULT_SERVER + DEFAULT_FILE_SERVER + filePath);
     }
 
@@ -75,8 +62,8 @@ public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, Acti
         String filePath = Environment.getExternalStorageDirectory() + File.separator + "download";
         //先判断此文件是否已经下载过
         if (checkFileIsExist(fileName, filePath)) {
+            ToastUtils.showToast("附件保存到：" + filePath + "/" + fileName);
             openFile(fileName + "/" + filePath);
-            return;
         } else {
             OkHttpClient okHttpClient = new OkHttpClient();
             Request request = new Request.Builder()
@@ -113,6 +100,9 @@ public class FilePreviewActivity extends BaseActivity<FilePreviewViewModel, Acti
                         // 下载完成
 //                    listener.onDownloadSuccess();
                         //下载完成后发送消息
+                        runOnUiThread(() -> {
+                            ToastUtils.showToast("附件保存到：" + savePath + "/" + fileName);
+                        });
                         sendDownCompleteMsg(fileName, savePath);
                     } catch (Exception e) {
 //                    listener.onDownloadFailed();

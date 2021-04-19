@@ -29,6 +29,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.Variable;
+import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.bean.ChildModel;
 import com.lihang.selfmvvm.bean.GroupModel;
@@ -136,6 +138,55 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
     protected void processLogic(Bundle savedInstanceState) {
         initView();
         initData(defaultType);
+
+        if (defaultType == 0) {
+            getAllGovermentUser();
+        } else {
+            getAllEnterpriseUser();
+        }
+    }
+
+    private void getAllGovermentUser() {
+        mViewModel.getAllGovernment().observe(getActivity(), res -> {
+            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                @Override
+                public void onSuccess(List<MemberDetailResVo> data) {
+                    List<ChildModel> childModels = new ArrayList<>();
+                    for (int i = 0; i < data.size(); i++) {
+                        MemberDetailResVo memberDetailResVo = data.get(i);
+                        String realName = memberDetailResVo.getRealname();
+                        String userName = memberDetailResVo.getUsername();
+                        String companyName = memberDetailResVo.getEnterpriseName();
+                        String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
+                        childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
+                    }
+
+                    Variable.userList.clear();
+                    Variable.userList = childModels;
+                }
+            });
+        });
+    }
+
+    private void getAllEnterpriseUser() {
+        mViewModel.getAllEnterprise().observe(getActivity(), res -> {
+            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                @Override
+                public void onSuccess(List<MemberDetailResVo> data) {
+                    List<ChildModel> childModels = new ArrayList<>();
+                    for (int i = 0; i < data.size(); i++) {
+                        MemberDetailResVo memberDetailResVo = data.get(i);
+                        String realName = memberDetailResVo.getRealname();
+                        String userName = memberDetailResVo.getUsername();
+                        String companyName = memberDetailResVo.getEnterpriseName();
+                        String result = TextUtils.isEmpty(companyName) ? (TextUtils.isEmpty(realName) ? userName : realName) : ((TextUtils.isEmpty(realName) ? userName : realName) + "-" + companyName);
+                        childModels.add(new ChildModel(memberDetailResVo.getHeadUrl(), result, String.valueOf(memberDetailResVo.getUserId()), memberDetailResVo.getMobile()));
+                    }
+                    Variable.userList.clear();
+                    Variable.userList = childModels;
+                }
+            });
+        });
     }
 
     /**
@@ -658,6 +709,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 //选择企业后传参
                 defaultType = 1;
                 initData(defaultType);
+                getAllEnterpriseUser();
                 break;
             case R.id.tv_goverment_user:
                 binding.tvCompanyUser.setTextSize((float) 14.0);
@@ -666,6 +718,7 @@ public class MsgFragment extends BaseFragment<MsgFragmentViewModel, FragmentMsgB
                 collapseGroup();
                 defaultType = 0;
                 initData(defaultType);
+                getAllGovermentUser();
                 break;
             default:
                 break;

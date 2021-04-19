@@ -6,6 +6,7 @@ import android.content.ClipData;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -22,7 +23,9 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 
 import com.lihang.selfmvvm.R;
+import com.lihang.selfmvvm.Variable;
 import com.lihang.selfmvvm.base.BaseActivity;
+import com.lihang.selfmvvm.bean.ChildModel;
 import com.lihang.selfmvvm.databinding.ActivityMemberManagerBinding;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
 import com.lihang.selfmvvm.utils.FileUtils;
@@ -40,79 +43,56 @@ import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-/**
- * created by zhangxianpeng
- * 用户管理
- */
 public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, ActivityMemberManagerBinding> implements PopupWindow.OnDismissListener {
-    /**
-     * 分组id
-     */
+    private static final String TAG = "MemberManagerActivity";
     private int groupId = 0;
-    /**
-     * 类型
-     */
     private int type = 0;
-    /**
-     * 分组名
-     */
     private String groupName = "";
-    /**
-     * 界面标志  区分 新增和移除
-     */
+    //界面标志  区分 新增和移除
     private String flag = "";
 
+    //分组
     private List<GroupDetailsResVo> groupResVoList = new ArrayList<>();
     private GroupManagerAdapter groupManagerAdapter;
 
+    //成员
     private List<MemberDetailResVo> memberDetailResVoList = new ArrayList<>();
     private MemberManagerAdapter memberManagerAdapter;
 
-    private static final String TAG = "MemberManagerActivity";
-
-    private static final String REMOVE_MEMBER_FROM_CURRENT_GROUP = "removeMember";
-
-    private static final String ADD_MEMBER_TO_GROUP = "addMember";
-
-    private static final String SEND_GROUP_PLAIN_MSG = "sendGroupPlainMsg";
-
-    private static final String SEND_MEMBER_PLAIN_MSG = "sendMemberPlainMsg";
-
-    /**
-     * 发送消息弹框
-     */
-    private PopupWindow sendMsgPop;
-
-    /**
-     * 附件列表适配器
-     */
+    //附件
     private CommonAdapter attachmentAdapter;
     private List<AttachmentResVo> attachmentList = new ArrayList<>();
 
-    /**
-     * 发送消息请求VO
-     */
+    private static final String REMOVE_MEMBER_FROM_CURRENT_GROUP = "removeMember";
+    private static final String ADD_MEMBER_TO_GROUP = "addMember";
+    private static final String SEND_GROUP_PLAIN_MSG = "sendGroupPlainMsg";
+    private static final String SEND_MEMBER_PLAIN_MSG = "sendMemberPlainMsg";
+
+    //消息
+    private PopupWindow sendMsgPop;
+    private PlainMsgReqVo plainMsgReqVo = new PlainMsgReqVo();
     private String plainMsgContent = "";
     private String plainMsgTitle = "";
-
-    private PlainMsgReqVo plainMsgReqVo = new PlainMsgReqVo();
 
     private static final int REMOVE_REQUEST_CODE = 101;
     private static final int ADD_REQUEST_CODE = 102;
     private static final int REMOVE_RESPONSE_CODE = 103;
     private static final int ADD_RESPONSE_CODE = 104;
 
-    /**
-     * 选中的用户数组
-     */
+    //选中的用户数组
     private List<Integer> selectedUserList = new ArrayList<>();
 
     @Override
@@ -153,114 +133,67 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
         }
     }
 
-    /**
-     * 初始化数据
-     *
-     * @param flag 页面标志
-     */
     private void initData(String flag) {
-        if (flag.equals(REMOVE_MEMBER_FROM_CURRENT_GROUP)) {  //删除用户
-            switch (type) {
-                case 0: //政府
-                    mViewModel.getGovernmentFromId(groupId).observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                memberManagerAdapter.notifyDataSetChanged();
-                            }
-                        });
+        switch (flag) {
+            case REMOVE_MEMBER_FROM_CURRENT_GROUP:   //删除用户
+                if (type == 0) {
+                    getGovermentUserByGroupId(groupId, false);
+                } else {
+                    getEnterpriseUserByGroupId(groupId, false);
+                }
+                break;
+            case ADD_MEMBER_TO_GROUP:   //移动成员到分组
+                if (type == 0) {
+                    getGovermentUserByGroupId(groupId, true);
+                } else {
+                    getEnterpriseUserByGroupId(groupId, true);
+                }
+                break;
+            case SEND_GROUP_PLAIN_MSG:  //发送分组消息
+                mViewModel.getGroupList(type).observe(this, res -> {
+                    res.handler(new OnCallback<GroupResVo>() {
+                        @Override
+                        public void onSuccess(GroupResVo data) {
+                            groupResVoList.clear();
+                            groupResVoList.addAll(data.getList());
+                            if (groupManagerAdapter != null)
+                                groupManagerAdapter.notifyDataSetChanged();
+                        }
                     });
-                    break;
-                case 1: //企业
-                    mViewModel.getEnterpriseFromId(groupId).observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                memberManagerAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    });
-                    break;
-                default:
-                    break;
-            }
-        } else if (flag.equals(ADD_MEMBER_TO_GROUP)) {  //移动成员到分组
-            switch (type) {
-                case 0: //政府
-                    mViewModel.getGovernmentFromId(groupId).observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                memberManagerAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    });
-                    break;
-                case 1: //企业
-                    mViewModel.getEnterpriseFromId(groupId).observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                if (memberManagerAdapter != null)
-                                    memberManagerAdapter.notifyDataSetChanged();
-                            }
-                        });
-                    });
-                    break;
-                default:
-                    break;
-            }
-        } else if (flag.equals(SEND_GROUP_PLAIN_MSG)) { //发送分组消息
-            mViewModel.getGroupList(type).observe(this, res -> {
-                res.handler(new OnCallback<GroupResVo>() {
-                    @Override
-                    public void onSuccess(GroupResVo data) {
-                        groupResVoList.clear();
-                        groupResVoList.addAll(data.getList());
-                        if (groupManagerAdapter != null)
-                            groupManagerAdapter.notifyDataSetChanged();
-                    }
                 });
-            });
-        } else if (flag.equals(SEND_MEMBER_PLAIN_MSG)) { //成员消息
-            switch (type) {
-                case 0: //政府
-                    mViewModel.getAllGovernment().observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                if (memberManagerAdapter != null)
-                                    memberManagerAdapter.notifyDataSetChanged();
-                            }
+                break;
+            case SEND_MEMBER_PLAIN_MSG:  //成员消息
+                switch (type) {
+                    case 0: //政府
+                        mViewModel.getAllGovernment().observe(this, res -> {
+                            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                @Override
+                                public void onSuccess(List<MemberDetailResVo> data) {
+                                    memberDetailResVoList.clear();
+                                    memberDetailResVoList.addAll(data);
+                                    if (memberManagerAdapter != null)
+                                        memberManagerAdapter.notifyDataSetChanged();
+                                }
+                            });
                         });
-                    });
-                    break;
-                case 1: //企业
-                    mViewModel.getAllEnterprise().observe(this, res -> {
-                        res.handler(new OnCallback<List<MemberDetailResVo>>() {
-                            @Override
-                            public void onSuccess(List<MemberDetailResVo> data) {
-                                memberDetailResVoList.clear();
-                                memberDetailResVoList.addAll(data);
-                                if (memberManagerAdapter != null)
-                                    memberManagerAdapter.notifyDataSetChanged();
-                            }
+                        break;
+                    case 1: //企业
+                        mViewModel.getAllEnterprise().observe(this, res -> {
+                            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                                @Override
+                                public void onSuccess(List<MemberDetailResVo> data) {
+                                    memberDetailResVoList.clear();
+                                    memberDetailResVoList.addAll(data);
+                                    if (memberManagerAdapter != null)
+                                        memberManagerAdapter.notifyDataSetChanged();
+                                }
+                            });
                         });
-                    });
-                    break;
-                default:
-                    break;
-            }
+                        break;
+                    default:
+                        break;
+                }
+                break;
         }
     }
 
@@ -366,7 +299,7 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
                                 RemoveUserReqVo moveUserReqVo = new RemoveUserReqVo();
                                 moveUserReqVo.setGroupId(groupId);
                                 moveUserReqVo.setUserIdList(selectedUserList);
-                                mViewModel.removeUser(moveUserReqVo).observe(this, res -> {
+                                mViewModel.addUser(moveUserReqVo).observe(this, res -> {
                                     res.handler(new OnCallback<String>() {
                                         @Override
                                         public void onSuccess(String data) {
@@ -622,5 +555,98 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
     public void onDismiss() {
         backgroundAlpha(1.0f);
         if (sendMsgPop != null) sendMsgPop.dismiss();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    private void getNotInCurrentUserList(int userType) {
+        List<ChildModel> resultData = new ArrayList<>();
+        if (userType == 0) {
+            for (int i = 0; i < Variable.userList.size(); i++) {
+                for (int j = 0; j < Variable.govermentGroupUserList.size(); j++) {
+                    int a = Integer.parseInt(Variable.userList.get(i).getUserId());
+                    int b = Variable.enterpriseGroupUserList.get(j).getUserId();
+                    if (a == b) {
+                        continue;
+                    } else {
+                        ChildModel childModel = new ChildModel(Variable.userList.get(i).getHeadUrl(), Variable.userList.get(i).getName(),
+                                Variable.userList.get(i).getUserId(), Variable.userList.get(i).getPhone());
+                        resultData.add(childModel);
+                    }
+                }
+            }
+        } else if (userType == 1) {
+            for (int i = 0; i < Variable.userList.size(); i++) {
+                for (int j = 0; j < Variable.enterpriseGroupUserList.size(); j++) {
+                    int a = Integer.parseInt(Variable.userList.get(i).getUserId());
+                    int b = Variable.enterpriseGroupUserList.get(j).getUserId();
+                    if (a == b) {
+                        continue;
+                    } else {
+                        ChildModel childModel = new ChildModel(Variable.userList.get(i).getHeadUrl(), Variable.userList.get(i).getName(),
+                                Variable.userList.get(i).getUserId(), Variable.userList.get(i).getPhone());
+                        resultData.add(childModel);
+                    }
+                }
+            }
+        }
+
+        resultData = resultData.stream()
+                .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(f -> f.getUserId()))), ArrayList::new));
+
+        memberDetailResVoList.clear();
+        memberDetailResVoList.addAll(transferData(resultData));
+        if (memberManagerAdapter != null) memberManagerAdapter.notifyDataSetChanged();
+    }
+
+    private Collection<? extends MemberDetailResVo> transferData(List<ChildModel> originalData) {
+        List<MemberDetailResVo> resultData = new ArrayList<>();
+        for (int i = 0; i < originalData.size(); i++) {
+            MemberDetailResVo memberDetailResVo = new MemberDetailResVo();
+            memberDetailResVo.setHeadUrl(originalData.get(i).getHeadUrl());
+            memberDetailResVo.setUsername(originalData.get(i).getName());
+            memberDetailResVo.setUserId((Integer.parseInt(originalData.get(i).getUserId())));
+            memberDetailResVo.setMobile(originalData.get(i).getPhone());
+            resultData.add(memberDetailResVo);
+        }
+        return resultData;
+    }
+
+    private void getGovermentUserByGroupId(int groupId, boolean isGet) {
+        mViewModel.getGovernmentFromId(groupId).observe(this, res -> {
+            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onSuccess(List<MemberDetailResVo> data) {
+                    memberDetailResVoList.clear();
+                    memberDetailResVoList.addAll(data);
+                    memberManagerAdapter.notifyDataSetChanged();
+                    Variable.govermentGroupUserList.clear();
+                    Variable.govermentGroupUserList = memberDetailResVoList;
+                    if (isGet) {
+                        getNotInCurrentUserList(0);
+                    }
+                }
+            });
+        });
+    }
+
+    private void getEnterpriseUserByGroupId(int groupId, boolean isGet) {
+        mViewModel.getEnterpriseFromId(groupId).observe(this, res -> {
+            res.handler(new OnCallback<List<MemberDetailResVo>>() {
+                @RequiresApi(api = Build.VERSION_CODES.N)
+                @Override
+                public void onSuccess(List<MemberDetailResVo> data) {
+                    memberDetailResVoList.clear();
+                    memberDetailResVoList.addAll(data);
+                    memberManagerAdapter.notifyDataSetChanged();
+                    Variable.enterpriseGroupUserList.clear();
+                    Variable.enterpriseGroupUserList = memberDetailResVoList;
+
+                    if (isGet) {
+                        getNotInCurrentUserList(1);
+                    }
+                }
+            });
+        });
     }
 }

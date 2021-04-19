@@ -272,15 +272,14 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().updatePwd(bean), liveData);
     }
 
-    /**
-     * 移除用户
-     *
-     * @param removeUserReqVo
-     * @return
-     */
     public MutableLiveData<Resource<String>> removeUser(RemoveUserReqVo removeUserReqVo) {
         MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
         return observeGo(getApiService().removeUser(removeUserReqVo), liveData);
+    }
+
+    public MutableLiveData<Resource<String>> addUser(RemoveUserReqVo removeUserReqVo) {
+        MutableLiveData<Resource<String>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().addUser(removeUserReqVo), liveData);
     }
 
     /**

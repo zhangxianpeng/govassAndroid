@@ -251,14 +251,7 @@ public interface RetrofitApiService {
 
     //----------------------------------------------------政企通 通讯录 api------------------------------------------------------------
 
-    /**
-     * 添加用户到指定分组
-     *
-     * @param registerReqVo
-     * @return
-     */
-    @POST("sys/group/addUser")
-    Observable<ResponModel<String>> addUser(@Body RegisterReqVo registerReqVo);
+
 
     /**
      * 查询分组名是否重复
@@ -296,6 +289,15 @@ public interface RetrofitApiService {
      */
     @POST("sys/group/removeUser")
     Observable<ResponModel<String>> removeUser(@Body RemoveUserReqVo removeUserReqVo);
+
+    /**
+     * 添加用户到指定分组
+     *
+     * @param removeUserReqVo
+     * @return
+     */
+    @POST("sys/group/addUser")
+    Observable<ResponModel<String>> addUser(@Body RemoveUserReqVo removeUserReqVo);
 
     /**
      * 保存通讯录分组

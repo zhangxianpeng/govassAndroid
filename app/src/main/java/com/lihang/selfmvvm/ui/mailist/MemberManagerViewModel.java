@@ -43,14 +43,12 @@ public class MemberManagerViewModel extends BaseViewModel<RepositoryImpl> {
         return getRepository().getEnterpriseFromId(groupId);
     }
 
-    /**
-     * 从当前分组移除用户
-     *
-     * @param removeUserReqVo
-     * @return
-     */
     public LiveData<Resource<String>> removeUser(RemoveUserReqVo removeUserReqVo) {
         return getRepository().removeUser(removeUserReqVo);
+    }
+
+    public LiveData<Resource<String>> addUser(RemoveUserReqVo removeUserReqVo) {
+        return getRepository().addUser(removeUserReqVo);
     }
 
     /**
