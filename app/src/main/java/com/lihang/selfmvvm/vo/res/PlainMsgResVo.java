@@ -1,5 +1,7 @@
 package com.lihang.selfmvvm.vo.res;
 
+import java.util.List;
+
 public class PlainMsgResVo {
 //    "id": 4,
 //            "title": "测试企业用户",
@@ -25,7 +27,25 @@ public class PlainMsgResVo {
     private String content;
     private String lastUpdateTime;
     private String createTime;
+    private String createUser;
     private String plainMsgGroupEntityList;
+    private List<AttachmentResVo> attachmentList;
+
+    public List<AttachmentResVo> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentResVo> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public String getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(String createUser) {
+        this.createUser = createUser;
+    }
 
     public int getId() {
         return id;

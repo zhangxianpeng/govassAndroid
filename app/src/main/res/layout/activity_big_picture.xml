@@ -30,6 +30,15 @@
                 android:text="图片预览"
                 android:textColor="#222222"
                 android:textSize="18sp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_download"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_file_download_black_24dp"/>
         </RelativeLayout>
 
         <uk.co.senab.photoview.PhotoView

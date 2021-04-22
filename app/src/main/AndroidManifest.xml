@@ -90,6 +90,8 @@
         <activity android:name=".ui.globalsearch.MoreSearchResultActivity" />
         <activity android:name=".ui.register.RegisterActivity" />
         <activity android:name=".ui.updatepwd.UpdatePwdActivity" />
+        <activity android:name=".ui.PlaiMsgListActivity" />
+        <activity android:name=".ui.PlainMsgDetailInfoActivity"></activity>
     </application>
 
 </manifest>

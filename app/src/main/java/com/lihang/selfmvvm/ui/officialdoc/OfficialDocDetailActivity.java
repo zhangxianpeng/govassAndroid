@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Build;
+import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.webkit.SslErrorHandler;
@@ -15,19 +16,34 @@ import android.webkit.WebViewClient;
 import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseActivity;
 import com.lihang.selfmvvm.databinding.ActivityOfficialDocDetailBinding;
+import com.lihang.selfmvvm.ui.bigpicture.BigPictureActivity;
+import com.lihang.selfmvvm.ui.filepreview.FilePreviewActivity;
+import com.lihang.selfmvvm.utils.ActivityUtils;
 import com.lihang.selfmvvm.utils.ButtonClickUtils;
+import com.lihang.selfmvvm.vo.res.AttachmentResVo;
 import com.lihang.selfmvvm.vo.res.ImageDataInfo;
 import com.lihang.selfmvvm.vo.res.NoticeResVo;
 import com.lihang.selfmvvm.vo.res.OfficialDocResVo;
 import com.lihang.selfmvvm.vo.res.SearchValueResVo;
+import com.zhy.adapter.recyclerview.CommonAdapter;
+import com.zhy.adapter.recyclerview.base.ViewHolder;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * created by zhangxianpeng
  * 公告详情
  */
 public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailViewModel, ActivityOfficialDocDetailBinding> {
+
+    private CommonAdapter attachmentAdapter;
+    private List<AttachmentResVo> attachmentList = new ArrayList<>();
 
     @Override
     protected int getContentViewId() {
@@ -36,6 +52,7 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
 
     @Override
     protected void processLogic() {
+        initAttachmentAdapter();
         String flag = getIntent().getStringExtra("flag");
         NoticeResVo noticeResVo = (NoticeResVo) getIntent().getSerializableExtra("noticeResVo");  //公告
         ImageDataInfo imageDataInfo = (ImageDataInfo) getIntent().getSerializableExtra("imageDataInfo");   //轮播图
@@ -58,10 +75,64 @@ public class OfficialDocDetailActivity extends BaseActivity<OfficialDocDetailVie
         } else if (flag.equals("articallist")) {
             binding.tvTitle.setText(officialDocResVo.getTitle());
             initNormalWebView(officialDocResVo.getContent());
+            getAttachmentList(officialDocResVo.getId());
         } else if (flag.equals("commonSearch")) { //全局搜索
             binding.tvTitle.setText(searchValueResVo.getTitle());
             initNormalWebView(searchValueResVo.getContent());
         }
+    }
+
+    private void initAttachmentAdapter() {
+        attachmentAdapter = new CommonAdapter<AttachmentResVo>(this, R.layout.rv_attachment_item, attachmentList) {
+            @Override
+            protected void convert(ViewHolder holder, AttachmentResVo plainMsgAttachmentListResVo, int position) {
+                holder.setText(R.id.tv_project_title, plainMsgAttachmentListResVo.getName());
+                holder.setOnClickListener(R.id.rl_container, (view -> {
+                    Bundle bundle = new Bundle();
+                    bundle.putString("plainMsgAttachmentUrl", plainMsgAttachmentListResVo.getUrl());
+                    //图片文件跳转到图片预览界面
+                    if (plainMsgAttachmentListResVo.getName().endsWith("PNG") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("JPG") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("JEPG") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("png") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("jpg") ||
+                            plainMsgAttachmentListResVo.getName().endsWith("jepg")) {
+                        bundle.putString("fileName", plainMsgAttachmentListResVo.getName());
+                        bundle.putString("imgUrl", plainMsgAttachmentListResVo.getUrl());
+                        ActivityUtils.startActivityWithBundle(getContext(), BigPictureActivity.class, bundle);
+                    } else {
+                        bundle.putString("fileUrl", plainMsgAttachmentListResVo.getUrl());
+                        bundle.putString("fileName", plainMsgAttachmentListResVo.getName());
+                        ActivityUtils.startActivityWithBundle(getContext(), FilePreviewActivity.class, bundle);
+                    }
+                }));
+            }
+        };
+        binding.rvAttachment.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvAttachment.setAdapter(attachmentAdapter);
+    }
+
+    private void getAttachmentList(Integer id) {
+        mViewModel.getOfficalDocDetail(id).observe(this,res-> {
+            res.handler(new OnCallback<OfficialDocResVo>() {
+                @Override
+                public void onSuccess(OfficialDocResVo data) {
+                    if(data == null) {
+                        return;
+                    }
+                    if(!data.getAttachmentList().isEmpty()) {
+                        binding.rvAttachment.setVisibility(View.VISIBLE);
+                        attachmentList.clear();
+                        attachmentList.addAll(data.getAttachmentList());
+                        if(attachmentAdapter!=null) {
+                            attachmentAdapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        binding.rvAttachment.setVisibility(View.GONE);
+                    }
+                }
+            });
+        });
     }
 
     private void loadHtml(String content) {

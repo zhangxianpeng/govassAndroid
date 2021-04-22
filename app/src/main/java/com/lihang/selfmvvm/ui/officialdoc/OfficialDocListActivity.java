@@ -2,6 +2,7 @@ package com.lihang.selfmvvm.ui.officialdoc;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 
 import com.lihang.selfmvvm.R;
@@ -32,22 +33,11 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
     private List<NoticeResVo> officialDocList = new ArrayList<>(); //公告
     private List<OfficialDocResVo> articalsList = new ArrayList<>(); //收发文
 
-
-    /**
-     * 界面标志位
-     */
     private String uiFlag = "";
-    /**
-     * 是否请求公告
-     */
+
     private boolean isGetOfficeDoc = false;
-    /**
-     * 默认请求页码
-     */
+
     private int page = 1;
-    /**
-     * 是否删除源数据
-     */
     private boolean isClearData = true;
 
     @Override
@@ -59,6 +49,7 @@ public class OfficialDocListActivity extends BaseActivity<OfficialDocListViewMod
     protected void processLogic() {
         initFreshLayout();
         uiFlag = getIntent().getStringExtra("uiFlag");
+        Log.e("zhangxianpeng",uiFlag);
         if (!TextUtils.isEmpty(uiFlag) && uiFlag.equals("myArticles")) {  // 我的收文/发文
             binding.tvMsg.setText(CheckPermissionUtils.getInstance().isGovernment() ? getString(R.string.my_post):getString(R.string.my_receive_msg));
             initAdapter(isGetOfficeDoc);

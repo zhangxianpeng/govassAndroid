@@ -330,6 +330,11 @@ public class RepositoryImpl extends BaseModel {
         return observeGo(getApiService().getMsgMeList(page), liveData);
     }
 
+    public MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList(int page) {
+        MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> liveData = new MutableLiveData<>();
+        return observeGo(getApiService().getPlainMsgList(page), liveData);
+    }
+
     /**
      * 获取我的企业列表
      *
@@ -382,11 +387,6 @@ public class RepositoryImpl extends BaseModel {
 //        MutableLiveData<Resource<ListBaseResVo<MsgMeResVo>>> liveData = new MutableLiveData<>();
 //        return observeGo(getApiService().getProjectList(), liveData);
 //    }
-
-    public MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList() {
-        MutableLiveData<Resource<ListBaseResVo<PlainMsgResVo>>> liveData = new MutableLiveData<>();
-        return observeGo(getApiService().getPlainMsgList(), liveData);
-    }
 
     public MutableLiveData<Resource<QuestionNaireItemResVo>> getQuestionnairerecordData(int id) {
         MutableLiveData<Resource<QuestionNaireItemResVo>> liveData = new MutableLiveData<>();

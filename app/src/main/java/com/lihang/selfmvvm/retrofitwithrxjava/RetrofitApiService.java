@@ -688,7 +688,7 @@ public interface RetrofitApiService {
      * @return
      */
     @GET("sys/plainmsg/list")
-    Observable<ResponModel<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList();
+    Observable<ResponModel<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList(@Query("page") int page);
 
     /**
      * 查询普通消息管理附件列表

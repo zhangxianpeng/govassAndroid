@@ -14,6 +14,7 @@ import com.lihang.selfmvvm.R;
 import com.lihang.selfmvvm.base.BaseFragment;
 import com.lihang.selfmvvm.customview.iosdialog.NewIOSAlertDialog;
 import com.lihang.selfmvvm.databinding.FragmentHomeBinding;
+import com.lihang.selfmvvm.ui.PlaiMsgListActivity;
 import com.lihang.selfmvvm.ui.customerservicefeedback.FeedBackListActivity;
 import com.lihang.selfmvvm.ui.fragment.adapter.ProjectListAdapter;
 import com.lihang.selfmvvm.ui.globalsearch.GlobalSearchActivity;
@@ -117,7 +118,10 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
                 case 3:  //服务新功能
                     ActivityUtils.startActivity(getContext(), FeedBackListActivity.class);
                     break;
-                case 4:  //党建空卡片
+                case 4:
+                    if(CheckPermissionUtils.getInstance().isGovernment()) {
+                        ActivityUtils.startActivity(getContext(), PlaiMsgListActivity.class);
+                    }
                     break;
                 default:
                     break;
@@ -132,7 +136,7 @@ public class HomeFragment extends BaseFragment<HomeFragmentViewModel, FragmentHo
         data.add(new LocalImageInfo(R.mipmap.home_ic_xiangmu));
         data.add(new LocalImageInfo(R.mipmap.home_ic_wenjuan));
         data.add(new LocalImageInfo(R.mipmap.home_ic_fuwu));
-        data.add(new LocalImageInfo(R.mipmap.home_ic_dangjian));
+        data.add(new LocalImageInfo(R.mipmap.home_ic_xiaoxi));
         binding.horizontalBanner.setBannerData(data);
     }
 

@@ -21,7 +21,7 @@ public class CommunicateViewModel extends BaseViewModel<RepositoryImpl> {
 
 
     public LiveData<Resource<ListBaseResVo<PlainMsgResVo>>> getPlainMsgList() {
-        return getRepository().getPlainMsgList();
+        return getRepository().getPlainMsgList(0);
     }
 
     public LiveData<Resource<String>> deletePlainMsgList(List<Integer> idList) {

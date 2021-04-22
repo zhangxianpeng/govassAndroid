@@ -5,21 +5,19 @@ import java.util.List;
 
 public class OfficialDocResVo implements Serializable {
     private int id;
+    private String title;
+    private String content;
     private int publishType;
     private int status;
     private int auditorId;
     private int deleted;
     private int updateUserId;
-    private String title;
-    private String content;
     private String auditor;
     private String auditOpinion;
     private String lastUpdateTime;
-        private String createUser;
+    private String createUser;
     private String createTime;
     private List<AttachmentResVo> attachmentList;
-    private String officialDocumentLabelEntityList;
-    private String officialDocumentEnterpriseEntityList;
 
     public int getId() {
         return id;
@@ -131,21 +129,5 @@ public class OfficialDocResVo implements Serializable {
 
     public void setAttachmentList(List<AttachmentResVo> attachmentList) {
         this.attachmentList = attachmentList;
-    }
-
-    public String getOfficialDocumentLabelEntityList() {
-        return officialDocumentLabelEntityList;
-    }
-
-    public void setOfficialDocumentLabelEntityList(String officialDocumentLabelEntityList) {
-        this.officialDocumentLabelEntityList = officialDocumentLabelEntityList;
-    }
-
-    public String getOfficialDocumentEnterpriseEntityList() {
-        return officialDocumentEnterpriseEntityList;
-    }
-
-    public void setOfficialDocumentEnterpriseEntityList(String officialDocumentEnterpriseEntityList) {
-        this.officialDocumentEnterpriseEntityList = officialDocumentEnterpriseEntityList;
     }
 }

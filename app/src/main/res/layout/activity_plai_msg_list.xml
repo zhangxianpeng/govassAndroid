@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data></data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ui.PlaiMsgListActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_title_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_48">
+
+            <ImageView
+                android:id="@+id/iv_title_bar_back"
+                android:layout_width="@dimen/dp_22"
+                android:layout_height="@dimen/dp_22"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp_10"
+                android:src="@mipmap/nav_ic_back" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:ellipsize="end"
+                android:singleLine="true"
+                android:textColor="#222222"
+                android:textSize="18sp" />
+        </RelativeLayout>
+
+        <com.scwang.smart.refresh.layout.SmartRefreshLayout
+            android:id="@+id/smartfreshlayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_msg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#F1F2F6" />
+        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+    </LinearLayout>
+</layout>

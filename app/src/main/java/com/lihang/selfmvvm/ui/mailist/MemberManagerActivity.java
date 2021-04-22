@@ -56,6 +56,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
+import static java.util.stream.Collectors.toList;
+
 public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, ActivityMemberManagerBinding> implements PopupWindow.OnDismissListener {
     private static final String TAG = "MemberManagerActivity";
     private int groupId = 0;
@@ -561,37 +563,10 @@ public class MemberManagerActivity extends BaseActivity<MemberManagerViewModel, 
     private void getNotInCurrentUserList(int userType) {
         List<ChildModel> resultData = new ArrayList<>();
         if (userType == 0) {
-            for (int i = 0; i < Variable.userList.size(); i++) {
-                for (int j = 0; j < Variable.govermentGroupUserList.size(); j++) {
-                    int a = Integer.parseInt(Variable.userList.get(i).getUserId());
-                    int b = Variable.enterpriseGroupUserList.get(j).getUserId();
-                    if (a == b) {
-                        continue;
-                    } else {
-                        ChildModel childModel = new ChildModel(Variable.userList.get(i).getHeadUrl(), Variable.userList.get(i).getName(),
-                                Variable.userList.get(i).getUserId(), Variable.userList.get(i).getPhone());
-                        resultData.add(childModel);
-                    }
-                }
-            }
+            resultData = Variable.userList.stream().filter(item -> !Variable.govermentGroupUserList.contains(((ChildModel) item).getUserId())).collect(toList());
         } else if (userType == 1) {
-            for (int i = 0; i < Variable.userList.size(); i++) {
-                for (int j = 0; j < Variable.enterpriseGroupUserList.size(); j++) {
-                    int a = Integer.parseInt(Variable.userList.get(i).getUserId());
-                    int b = Variable.enterpriseGroupUserList.get(j).getUserId();
-                    if (a == b) {
-                        continue;
-                    } else {
-                        ChildModel childModel = new ChildModel(Variable.userList.get(i).getHeadUrl(), Variable.userList.get(i).getName(),
-                                Variable.userList.get(i).getUserId(), Variable.userList.get(i).getPhone());
-                        resultData.add(childModel);
-                    }
-                }
-            }
+            resultData = Variable.userList.stream().filter(item -> !Variable.enterpriseGroupUserList.contains(((ChildModel) item).getUserId())).collect(toList());
         }
-
-        resultData = resultData.stream()
-                .collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(f -> f.getUserId()))), ArrayList::new));
 
         memberDetailResVoList.clear();
         memberDetailResVoList.addAll(transferData(resultData));
